@@ -25,5 +25,13 @@
 		</param-value>
 	</context-param>
 	<!-- Load multiple file configuration -->
+	
+	<!-- Write a function in jstl -->
+	<jsp-config>
+		<taglib>
+			<taglib-uri>taglib_custom</taglib-uri>
+			<taglib-location>/WEB-INF/tags/taglib.tld</taglib-location>
+		</taglib>
+	</jsp-config>
   
 </web-app>

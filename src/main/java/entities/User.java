@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -74,6 +76,12 @@ public class User implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "owner_id", referencedColumnName = "id")
 	Set<Pitch> pitches;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable( name = "teamplayers",
+			joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, 
+	    inverseJoinColumns = {@JoinColumn(name = "team_id",  referencedColumnName = "id") } )
+	Set<Team> teams;
 
 	public int getId() {
 		return id;
@@ -249,6 +257,14 @@ public class User implements Serializable {
 
 	public void setPitches(Set<Pitch> pitches) {
 		this.pitches = pitches;
+	}
+
+	public Set<Team> getTeams() {
+		return teams;
+	}
+
+	public void setTeams(Set<Team> teams) {
+		this.teams = teams;
 	}
 	
 }

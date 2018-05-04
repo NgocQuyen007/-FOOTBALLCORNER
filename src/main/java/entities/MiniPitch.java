@@ -1,7 +1,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -26,8 +25,7 @@ public class MiniPitch implements Serializable {
 	private String name;
 	private String description;
 	private String image;
-	private Date hourStart;
-	private Date hourEnd;
+	
 	private int status;
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
@@ -70,22 +68,6 @@ public class MiniPitch implements Serializable {
 
 	public void setImage(String image) {
 		this.image = image;
-	}
-
-	public Date getHourStart() {
-		return hourStart;
-	}
-
-	public void setHourStart(Date hourStart) {
-		this.hourStart = hourStart;
-	}
-
-	public Date getHourEnd() {
-		return hourEnd;
-	}
-
-	public void setHourEnd(Date hourEnd) {
-		this.hourEnd = hourEnd;
 	}
 
 	public int getStatus() {

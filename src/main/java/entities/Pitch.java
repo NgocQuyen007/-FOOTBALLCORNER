@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,15 +22,32 @@ public class Pitch implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 
 	private String name;
-	private int status;
+	private Integer status;
+	
+	@Column(name="cover_avatar")
 	private String coverAvatar;
+	
 	private String description;
-	private float averageRating;
+	
+	@Column(name="hour_start")
+	private Date hourStart;
+	
+	@Column(name="hour_end")
+	private Date hourEnd;
+	
+	@Column(name="average_rating")
+	private Float averageRating;
+	
+	@Column(name="time_auto_reject")
 	private Date timeAutoReject;
+	
+	@Column(name="created_at")
 	private Timestamp createdAt;
+	
+	@Column(name="updated_at")
 	private Timestamp updatedAt;
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -44,11 +62,11 @@ public class Pitch implements Serializable {
 	@JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
 	User user;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -60,11 +78,11 @@ public class Pitch implements Serializable {
 		this.name = name;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
@@ -83,12 +101,28 @@ public class Pitch implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public Date getHourStart() {
+		return hourStart;
+	}
 
-	public float getAverageRating() {
+	public void setHourStart(Date hourStart) {
+		this.hourStart = hourStart;
+	}
+
+	public Date getHourEnd() {
+		return hourEnd;
+	}
+
+	public void setHourEnd(Date hourEnd) {
+		this.hourEnd = hourEnd;
+	}
+
+	public Float getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(float averageRating) {
+	public void setAverageRating(Float averageRating) {
 		this.averageRating = averageRating;
 	}
 
@@ -139,5 +173,12 @@ public class Pitch implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Pitch [id=" + id + ", name=" + name + ", status=" + status + ", coverAvatar=" + coverAvatar
+				+ ", description=" + description + ", hourStart=" + hourStart + ", hourEnd=" + hourEnd
+				+ ", averageRating=" + averageRating + ", timeAutoReject=" + timeAutoReject + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", addresses=" + addresses.iterator().next().getDetail() + "]";
+	}
 }

@@ -29,8 +29,6 @@ public class PitchDetail implements Serializable {
 	@JoinColumn(name = "pitch_id", referencedColumnName = "id", nullable = false)
 	Pitch pitch;
 
-	private float price;
-
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pitch_detail_id", referencedColumnName = "id")
 	Set<Promotion> promotions;
@@ -38,6 +36,10 @@ public class PitchDetail implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pitch_detail_id", referencedColumnName = "id")
 	Set<MiniPitch> miniPitchs;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "pdtail_id", referencedColumnName = "id")
+	Set<Cost> costs;
 
 	public int getId() {
 		return id;
@@ -63,14 +65,6 @@ public class PitchDetail implements Serializable {
 		this.pitch = pitch;
 	}
 
-	public float getPrice() {
-		return price;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
-	}
-
 	public Set<Promotion> getPromotions() {
 		return promotions;
 	}
@@ -85,6 +79,14 @@ public class PitchDetail implements Serializable {
 
 	public void setMiniPitchs(Set<MiniPitch> miniPitchs) {
 		this.miniPitchs = miniPitchs;
+	}
+
+	public Set<Cost> getCosts() {
+		return costs;
+	}
+
+	public void setCosts(Set<Cost> costs) {
+		this.costs = costs;
 	}
 	
 }

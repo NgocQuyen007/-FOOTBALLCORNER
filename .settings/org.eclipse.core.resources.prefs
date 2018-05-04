@@ -1,2 +1,15 @@
 eclipse.preferences.version=1
+encoding//src/main/webapp/WEB-INF/views/gui/comp-finding/compf-index.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/gui/comp-finding/compf-teams.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/gui/comp-finding/compf-waiting.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/gui/homepage/index.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-ajax.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-detail.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-district.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-index.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/management/datsan/stadium-booking.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/management/team/newteam.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/management/timdoi/danhsachdoibong.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/tiles/templates/footer.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/tiles/templates/header.jsp=UTF-8
 encoding/<project>=UTF-8

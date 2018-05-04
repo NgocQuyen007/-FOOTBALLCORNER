@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="tiles-definition" template="/WEB-INF/views/tiles/layouts/default.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/templates/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/templates/footer.jsp" />
+	</definition>
+	
+	<definition name="homepage.index" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/gui/homepage/index.jsp"></put-attribute>
+	</definition>
+	
+	<!-- PITCH BOOKING -->
+	<definition name="pitchb.index" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-index.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pitchb.detail" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-detail.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pitchb.district" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-district.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pitchb.ajax" extends="tiles-definition">
+		<put-attribute name="header" value="" />
+		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-ajax.jsp"></put-attribute>
+		<put-attribute name="footer" value="" />
+	</definition>
+	
+	<!-- COMP FINDING -->
+	<definition name="compf.index" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/gui/comp-finding/compf-index.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="compf.teams" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/gui/comp-finding/compf-teams.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="compf.waiting" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/gui/comp-finding/compf-waiting.jsp"></put-attribute>
+	</definition>
+	
+	<!-- ================ MANAGEMENT ================ -->
+	
+	<!-- ================ MANAGEMENT ================ -->
+	
+</tiles-definitions>

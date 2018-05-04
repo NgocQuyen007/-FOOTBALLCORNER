@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,23 +19,38 @@ public class Address implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 
 	private String detail;
-	private String city;
+	
+	@Column(name="phone_number")
 	private String phoneNumber;
+	
+	@Column(name="facebook")
+	private String facebook;
+	
+	@Column(name="website")
+	private String website;
+	
+	@Column(name="created_at")
 	private Timestamp createdAt;
+	
+	@Column(name="updated_at")
 	private Timestamp updatedAt;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "pitch_id", referencedColumnName = "id", nullable = false)
 	Pitch pitch;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "dzipcode", referencedColumnName = "zipcode", nullable = false)
+	District district;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -44,14 +60,6 @@ public class Address implements Serializable {
 
 	public void setDetail(String detail) {
 		this.detail = detail;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
 	}
 
 	public String getPhoneNumber() {
@@ -84,6 +92,30 @@ public class Address implements Serializable {
 
 	public void setPitch(Pitch pitch) {
 		this.pitch = pitch;
+	}
+
+	public District getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(District district) {
+		this.district = district;
+	}
+
+	public String getFacebook() {
+		return facebook;
+	}
+
+	public void setFacebook(String facebook) {
+		this.facebook = facebook;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
 	}
 	
 }
