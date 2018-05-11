@@ -2,12 +2,9 @@
 <%@page import="dto.PitchInfoDto"%>
 <%@page import="entities.PitchDetail"%>
 <%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="taglib_custom" prefix="tagfunc" %>   
 
-<c:set var="contextPath" value="${pageContext.request.contextPath}"></c:set>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
 <div class="col-md-12 l-30" id="stadium-list">
 	<div class="p-content">
@@ -39,6 +36,8 @@
 			
 			<c:set var="pitchDetails" value="${pitchDetails}"></c:set>
 			<c:set var="pitchInfodtos" value="${pitchInfodtos}"></c:set>
+			
+			<c:if test="${not empty pitchInfodtos}">
 			
 			<%
 				List<PitchDetail> pitchDetails = (List<PitchDetail>)pageContext.getAttribute("pitchDetails");
@@ -128,7 +127,11 @@
 					</li>
 					
 			</c:forEach>
+			</c:if>
 			
+			<c:if test="${empty pitchInfodtos}">
+				<strong> Không có sân bóng nào được tìm thấy </strong>
+			</c:if>
 		<!-- END PROCESSING -->	
 			
 		</ul>
@@ -140,13 +143,13 @@
 			<div class="pagination">
 				<c:choose>
 					<c:when test="${page==1}">
-						<span class="noLinkPager hnpageprev_inactive"> 
+						<span class="fix-pagination-padding noLinkPager hnpageprev_inactive"> 
 							<i class="fa fa-angle-left" aria-hidden="true"></i>
 						</span> 
 					</c:when>
 					<c:otherwise>
 						<a href="${contextPath}/san-bong?page=${page-1}" class="linkPager hnpagenext" title="Trang sau"> 
-							<span class="hnotherpage"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+							<span class="fix-pagination-padding hnotherpage"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
 						</a>
 					</c:otherwise>
 				</c:choose>
@@ -170,13 +173,13 @@
 				
 				<c:choose>
 					<c:when test="${page==totalPages}">
-						<span class="noLinkPager hnpageprev_inactive"> 
+						<span class="fix-pagination-padding noLinkPager hnpageprev_inactive"> 
 							<i class="fa fa-angle-right" aria-hidden="true"></i>
 						</span> 
 					</c:when>
 					<c:otherwise>
 						<a href="${contextPath}/san-bong?page=${page+1}" class="linkPager hnpagenext" title="Trang sau"> 
-							<span class="hnotherpage"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+							<span class="fix-pagination-padding hnotherpage"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
 						</a>
 					</c:otherwise>
 				</c:choose>

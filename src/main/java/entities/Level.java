@@ -24,6 +24,10 @@ public class Level implements Serializable{
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "level_id", referencedColumnName = "id")
 	Set<Team> teams;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "level_id", referencedColumnName = "id")
+	Set<Event> events;
 
 	public int getId() {
 		return id;

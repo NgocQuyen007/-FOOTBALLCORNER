@@ -4,21 +4,15 @@
 <%@page import="dto.PitchInfoDto"%>
 <%@page import="entities.PitchDetail"%>
 <%@page import="java.util.List"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib uri="taglib_custom" prefix="tagfunc" %>
-
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-
-<input type="hidden" id="provinceId" value="5" />
-<input type="hidden" id="typeId" value="1" />
+<%@ include file="/WEB-INF/tags/taglibs.jsp" %>
 
 <div class="breadcrum">
     <div class="container">
         <div class="breadcrum-line">
-            <a href="/">Trang chủ</a>
-            <a href="/san-bong" class="" title="Sân bóng">Sân bóng</a>
+            <a href="">Trang chủ</a>
+            <a href="" class="" title="Sân bóng">Sân bóng</a>
             <a>Sân bóng tại ${pitches.get(0).getDesName()}</a>
         </div>
     </div>
@@ -35,7 +29,7 @@
                     <div class="sidebar sidebar-tien-ich sidebar-province">
                         <p class="title-box"><i class="fa fa-map-marker" aria-hidden="true"></i> Quận / Huyện</p>
                         <ul class="list-left-links">
-                        	<c:forEach var="dqty" items="${districts}">
+                        	<c:forEach var="dqty" items="${districtdtos}">
                         	<c:set var="active" value=""></c:set>
                         	<c:choose>
                         		<c:when test="${dqty.name eq pitches.get(0).getDesName()}">
@@ -70,16 +64,16 @@
 					<form method="get" action="${contextPath}/san-bong-tai${dnameurl}-${zipcode}">
 										
                     <div class="sidebar sidebar-tim-doi ">
-                        <ul class="list-left-links list-left-check">
+                        <ul class="list-left-links list-left-check" id="btn-pitchb-district-search-all">
                             <li>
                                 <strong>Giá thuê / trận</strong>
                                 <ul>
                                 <c:forEach var="costqty" items="${costdtos}">
-                                    <li >
+                                    <li>
                                         <div class="checkbox">
                                             <label>
-                                                <input  name="foq" type="checkbox" value="true" />
-                                                <input  name="foxx" type="hidden" value="${costqty.price}"/> ${costqty.price} <span>000</span>
+                                                <input type="checkbox" name="fo-price" value="${costqty.price}" />
+                                                ${costqty.price} <span>000</span>
                                                 <span class="pull-right filter-count">${costqty.quantity}</span>
                                             </label>
                                         </div>
@@ -91,10 +85,11 @@
                                 <strong>Số người chơi</strong>
                                 <ul>
                                 <c:forEach var="ptypeqty" items="${pitchtypedtos}">
-                                    <li onclick="location.href='/san-bong?t=5';" >
+                                    <li>
                                         <div class="checkbox">
-                                            <label>
-                                                <input  name="foc" type="checkbox" value="true" /><input name="foc" type="hidden" value="false" /> ${ptypeqty.pitchTypeId}
+                                            <label >
+                                                <input type="checkbox" name="fo-type"  value="${ptypeqty.pitchTypeId}" />
+                                       			${ptypeqty.pitchTypeId}
                                                 <span class="pull-right filter-count">${ptypeqty.quantity}</span>
                                             </label>
                                         </div>
@@ -103,8 +98,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <div class="clear-check"><a href="https://www.timdoinhanh.com/san-bong"><i class="fa fa-close" aria-hidden="true"></i> Xóa lựa chọn</a></div>
-                            	<button class="btn btn-primary btn-primary-extra col-md-6" type="submit"><i class="fa fa-search" aria-hidden="true"></i>Tìm</button>
+                                <div class="clear-check"><a href="${contextPath}/san-bong-tai${dnameurl}-${zipcode}"><i class="fa fa-close" aria-hidden="true"></i> Xóa lựa chọn</a></div>
                             </li>
                         </ul>
                     </div>
@@ -113,6 +107,21 @@
                     
                 </div>
             </div>
+            <!-- Something is imporrtant -->
+            <c:if test="${not empty pitches}">
+	            <c:set var="name" value="${pitches.get(0).getDesName().substring(dqty.name.indexOf(' '))}"></c:set>
+	           	<%
+	           		String name = (String)pageContext.getAttribute("name");
+	           		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
+	           		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	           		pageContext.setAttribute("dnameurl", pattern.matcher(temp).replaceAll("").toLowerCase().replaceAll(" ", "-").replaceAll("đ", "d").replaceAll("quan", "").replaceAll("huyen", ""));
+	           	%>
+           	</c:if>
+           	
+           	<!-- Ajax url -->
+           	<input type = "hidden" id="id-district-name" value="${dnameurl}" />
+           	<input type = "hidden" id="id-district-id" value="${zipcode}" />
+           	
             <div class="col-md-9 l-30" id="stadium-list">
                 <div class="p-content">
                     <h1 id="a" class="title-intent title-pages"><i class="fa fa-futbol-o" aria-hidden="true"></i> Sân bóng tại ${pitches.get(0).getDesName()}</h1>
@@ -121,7 +130,7 @@
                         <form method="get" action="${contextPath}/san-bong-tai${dnameurl}-${zipcode}">
                             <div class="col-md-9 nopaddingleft">
                                 <div class="form-group">
-                                    <input class="form-control" name="keyword" placeholder="Nhập tên sân hoặc địa chỉ để tìm kiếm..." value="${keyword}"/>
+                                    <input class="form-control" name="keyword" id="keyword" placeholder="Nhập tên sân hoặc địa chỉ để tìm kiếm..." value="${keyword}"/>
                                 </div>
                             </div>
                             <div class="col-md-3 nopadding">
@@ -136,6 +145,7 @@
 						<c:set var="pitchDetails" value="${pitchDetails}"></c:set>
 						<c:set var="pitchInfodtos" value="${pitchInfodtos}"></c:set>
 						
+						<c:if test="${pitchInfodtos.size() > 0}">
 						<%
 							List<PitchDetail> pitchDetails = (List<PitchDetail>)pageContext.getAttribute("pitchDetails");
 							List<PitchInfoDto> pitchInfodtos = (List<PitchInfoDto>)pageContext.getAttribute("pitchInfodtos");
@@ -223,7 +233,10 @@
 								</li>
 								
 						</c:forEach>
-						
+						</c:if>
+						<c:if test="${pitchInfodtos.size() == 0}">
+							<strong>Không có sân bóng nào được tìm thấy</strong>
+						</c:if>
 					<!-- END PROCESSING -->	
 						
 					</ul>
@@ -243,12 +256,12 @@
 									<c:choose>
 										<c:when test="${empty keyword}">
 											<a href="${contextPath}/san-bong-tai${dnameurl}-${zipcode}?page=${page-1}" class="linkPager hnpagenext" title="Trang sau"> 
-												<span class="fix-pagination-paddinghnotherpage fix-pagination-padding"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+												<span class="fix-pagination-padding hnotherpage"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
 											</a>
 										</c:when>
 										<c:otherwise>
 											<a href="${contextPath}/san-bong-tai${dnameurl}-${zipcode}?keyword=${keyword}&page=${page-1}" class="linkPager hnpagenext" title="Trang sau"> 
-												<span class="fix-pagination-padding hnotherpage fix-pagination-padding"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+												<span class="fix-pagination-padding hnotherpage"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
 											</a>
 										</c:otherwise>
 									</c:choose>
@@ -256,6 +269,7 @@
 							</c:choose>
 							
 							<c:forEach var="i" begin="1" end="${totalPages}">
+							<!-- SET URL PAGE -->
 								<c:choose>
 									<c:when test="${empty keyword}">
 										<c:set var="urlPage" value="${contextPath}/san-bong-tai${dnameurl}-${zipcode}?page=${i}"></c:set>

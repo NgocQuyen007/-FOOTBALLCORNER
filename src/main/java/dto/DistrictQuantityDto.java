@@ -17,6 +17,9 @@ public class DistrictQuantityDto implements Serializable{
 	
 	public static final String PROP_NAME = "name";
 	
+	/**
+	 * It can be the number of pitches or number of teams of each district
+	 */
 	public static final String PROP_QUANTITY = "quantity";
 	
 	private int zipcode;

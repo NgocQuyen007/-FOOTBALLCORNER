@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -34,10 +35,19 @@ public class Team implements Serializable {
 	private Level level;
 
 	private String logo;
+	
+	@Column(name="team_image")
 	private String teamImage;
+	
+	@Column(name="min_age")
 	private int minAge;
+	
+	@Column(name="max_age")
 	private int maxAge;
+	
 	private String description;
+	
+	@Column(name="created_at")
 	private Timestamp createdAt;
 
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -134,4 +144,11 @@ public class Team implements Serializable {
 		this.users = users;
 	}
 
+	@Override
+	public String toString() {
+		return "Team [id=" + id + ", name=" + name + ", district=" + district + ", level=" + level + ", logo=" + logo
+				+ ", teamImage=" + teamImage + ", minAge=" + minAge + ", maxAge=" + maxAge + ", description="
+				+ description + ", createdAt=" + createdAt + ", users=" + users + "]";
+	}
+	
 }

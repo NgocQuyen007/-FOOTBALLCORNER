@@ -26,6 +26,19 @@
 	</context-param>
 	<!-- Load multiple file configuration -->
 	
+	 <filter>
+	    <filter-name>encoding-filter</filter-name>
+	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	    <init-param>
+	       <param-name>encoding</param-name>
+	       <param-value>UTF-8</param-value>
+	    </init-param>
+	 </filter>
+	 <filter-mapping>
+	    <filter-name>encoding-filter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	 </filter-mapping>
+	
 	<!-- Write a function in jstl -->
 	<jsp-config>
 		<taglib>

@@ -24,7 +24,21 @@ public class PitchService implements IPitch {
 	@Override
 	@Transactional
 	public List<PitchInfoDto> getListPitchInfo(int offset, int rowCount) {
-		return pitchDao.getListPitchInfo(offset, rowCount);
+		List<PitchInfoDto> dtos = pitchDao.getListPitchInfo(offset, rowCount);
+		if (dtos.size() > 0) {
+			return dtos;
+		}
+		return Collections.emptyList();
+	}
+	
+	@Override
+	@Transactional
+	public List<PitchInfoDto> getListPitchInfo(int zipcode, String pricesKey, String numberofplayersKey, String keyword) {
+		List<PitchInfoDto> dtos = pitchDao.getListPitchInfo(zipcode, pricesKey,numberofplayersKey,keyword);
+		if (dtos.size() > 0) {
+			return dtos;
+		}
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -42,14 +56,20 @@ public class PitchService implements IPitch {
 	@Override
 	@Transactional
 	public List<PitchInfoDto> getListPitchInfo() {
-		return pitchDao.getListPitchInfo();
+		List<PitchInfoDto> dtos = pitchDao.getListPitchInfo();
+		if (dtos.size() > 0) {
+			return dtos;
+		}
+		return Collections.emptyList();
+		
 	}
 	
 	@Override
 	@Transactional
 	public List<PitchInfoDto> getListPitchInfoByNameOrAdress(String key) {
-		if (pitchDao.getListPitchInfoByNameOrAdress(key).size() > 0) {
-			return pitchDao.getListPitchInfoByNameOrAdress(key);
+		List<PitchInfoDto> dtos = pitchDao.getListPitchInfoByNameOrAdress(key);
+		if (dtos.size() > 0) {
+			return dtos;
 		}
 		return Collections.emptyList();
 	}
@@ -57,13 +77,32 @@ public class PitchService implements IPitch {
 	@Override
 	@Transactional
 	public List<PitchInfoDto> getListPitchInfoByZipCode(int zipcode) {
-		if (pitchDao.getListPitchInfoByZipCode(zipcode).size() > 0) {
-			return pitchDao.getListPitchInfoByZipCode(zipcode);
+		List<PitchInfoDto> dtos = pitchDao.getListPitchInfoByZipCode(zipcode);
+		if (dtos.size() > 0) {
+			return dtos;
 		}
 		return Collections.emptyList();
 	}
 	
-	
+	@Override
+	@Transactional
+	public List<PitchInfoDto> getListPitchInfoByNameOrAdressAndZipcode(int zipcode, String keyword) {
+		List<PitchInfoDto> dtos = pitchDao.getListPitchInfoByNameOrAdressAndZipcode(zipcode, keyword);
+		if (dtos.size() > 0) {
+			return dtos;
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	@Transactional
+	public List<PitchInfoDto> getListPitchInfo(String pricesKey, String numberofplayersKey, String keyword) {
+		List<PitchInfoDto> dtos = pitchDao.getListPitchInfo(pricesKey,numberofplayersKey,keyword);
+		if (dtos.size() > 0) {
+			return dtos;
+		}
+		return Collections.emptyList();
+	}
 	
 	
 }

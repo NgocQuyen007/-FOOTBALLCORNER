@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
@@ -7,17 +8,27 @@
       <uri>taglib_custom</uri>
 
       <function>
-          <name>getList</name>
-          <function-class>common.TagLibFunctions</function-class>
-          <function-signature>java.lang.String getList(java.lang.String)</function-signature>
-      </function>  
-      
-      
-      <function>
           <name>getWday</name>
           <function-class>common.TagLibFunctions</function-class>
           <function-signature>java.lang.String getWday(java.lang.Integer,java.lang.Integer)</function-signature>
       </function>
       
+      <function>
+          <name>getAgeUtils</name>
+          <function-class>common.TagLibFunctions</function-class>
+          <function-signature>java.lang.String getAgeUtils(java.lang.Integer,java.lang.Integer)</function-signature>
+      </function>
+      
+      <function>
+          <name>getFCNameFromFullName</name>
+          <function-class>common.TagLibFunctions</function-class>
+          <function-signature>java.lang.String getFCNameFromFullName(java.lang.String)</function-signature>
+      </function>
+      
+      <function>
+          <name>getMatchTime</name>
+          <function-class>common.TagLibFunctions</function-class>
+          <function-signature>java.lang.String getMatchTime(java.lang.String)</function-signature>
+      </function>
       
 </taglib>

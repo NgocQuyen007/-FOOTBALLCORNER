@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!--  header -->
+<%@ include file="/WEB-INF/tags/taglibs.jsp" %>
 
+<!--  header -->
 <div class="top-hero-box">
     <div class="container">
         <div class="row">

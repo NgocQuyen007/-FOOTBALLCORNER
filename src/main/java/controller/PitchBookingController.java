@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +19,14 @@ import dto.DistrictQuantityDto;
 import dto.PitchInfoDto;
 import dto.PitchTypeQuantityDto;
 import entities.Cost;
+import entities.District;
+import entities.Handicap;
+import entities.Level;
 import entities.PitchDetail;
 import service.CostService;
 import service.DistrictService;
+import service.HandicapService;
+import service.LevelService;
 import service.PitchDetailService;
 import service.PitchService;
 
@@ -42,27 +45,75 @@ public class PitchBookingController {
 
 	@Autowired
 	PitchService pitchService;
+	
+	@Autowired
+	HandicapService handicapService;
+	
+	@Autowired
+	LevelService levelService;
 
 	@ModelAttribute
 	public void common(ModelMap modelMap) {
+		/** Common left bar = Thông tin Số sân bóng theo Quận - Giá - Loại sân*/
 		List<DistrictQuantityDto> districtdtos = districtService.getPitchesQuantityofDistricts();
 		List<CostQuantityDto> costdtos = costService.getPitchesQuantityofCosts();
 		List<PitchTypeQuantityDto> pitchtypedtos = pitchDetailService.getPitchesQuantityofPitchType();
 
-		modelMap.addAttribute("districts", districtdtos);
+		modelMap.addAttribute("districtdtos", districtdtos);
 		modelMap.addAttribute("costdtos", costdtos);
 		modelMap.addAttribute("pitchtypedtos", pitchtypedtos);
+		
+		/** Mời đối giao lưu => Quận kèo trình độ */
+		List<District> allofdistrict = districtService.getDistricts();
+		List<Handicap> handicaps = handicapService.getHandicaps();
+		List<Level> levels = levelService.getLevels();
+
+		modelMap.addAttribute("allofdistrict", allofdistrict);
+		modelMap.addAttribute("handicaps", handicaps);
+		modelMap.addAttribute("levels", levels);
+		
+		modelMap.addAttribute("PITCH_BOOKING_TIME_MAP", DataStaticModel.PITCH_BOOKING_TIME_MAP);
+		
 
 	}
 
 	@GetMapping("san-bong")
 	public String index(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(required = false, value = "keyword") String keyword) {
+			@RequestParam(required = false, value = "keyword") String keyword,
+			@RequestParam(required = false, value= "type") String numberofplayersKey,
+			@RequestParam(required = false, value= "price") String priceKey) {
 
 		List<PitchInfoDto> pitchInfodtos = new ArrayList<>();
 		int rowCount = DataStaticModel.STATE_ROWCOUNT;
 		int offset = (page - 1) * rowCount;
 
+		if(numberofplayersKey != null || priceKey != null) {
+			
+			pitchInfodtos = pitchService.getListPitchInfo(priceKey,numberofplayersKey, keyword);
+			
+			if(pitchInfodtos.size() > 0) {
+				int totalRows = getPitches(pitchInfodtos).size();
+				int totalPages = (int) Math.ceil((float) totalRows / rowCount);
+				
+				modelMap.addAttribute("pitchInfodtos", pitchInfodtos);
+				
+				List<PitchInfoDto> pitches = getPitches(pitchInfodtos, offset, rowCount);
+				modelMap.addAttribute("pitches", pitches);
+
+				List<PitchDetail> pitchDetails = pitchDetailService.getPitchDetails();
+				modelMap.addAttribute("pitchDetails", pitchDetails);
+				
+				modelMap.addAttribute("page", page);
+				modelMap.addAttribute("totalPages", totalPages);
+				modelMap.addAttribute("keyword", keyword);
+			} else {
+				int totalPages = 0;
+				modelMap.addAttribute("totalPages", totalPages);
+				modelMap.addAttribute("keyword", keyword);
+			}
+			return "pitchb.index.ajax";
+		}
+		
 		if (keyword != null) {
 			pitchInfodtos = pitchService.getListPitchInfoByNameOrAdress(keyword);
 			modelMap.addAttribute("pitchInfodtos", pitchInfodtos);
@@ -132,39 +183,69 @@ public class PitchBookingController {
 		return "pitchb.detail";
 	}
 
-	@GetMapping("/san-bong-tai{dnameurl}-{zipcode}")
+	@GetMapping("san-bong-tai{dnameurl}-{zipcode}")
 	public String zipcode(ModelMap modelMap, @PathVariable String dnameurl, @PathVariable int zipcode,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(required = false, value = "keyword") String keyword,
-			@RequestParam(required = false, value = "foxx") String foxx) {
-
-		System.err.println("========== Vao day choi ===========> " + zipcode + " === " + dnameurl);
+			@RequestParam(required = false, value= "type") String numberofplayersKey,
+			@RequestParam(required = false, value= "price") String priceKey) {
 		
-		System.err.println("fox x: " + foxx);
-
 		List<PitchInfoDto> pitchInfodtos = new ArrayList<>();
 		int rowCount = DataStaticModel.STATE_ROWCOUNT;
 		int offset = (page - 1) * rowCount;
+		
+		if(numberofplayersKey != null || priceKey != null) {
+			
+			pitchInfodtos = pitchService.getListPitchInfo(zipcode, priceKey,numberofplayersKey, keyword);
+			
+			if(pitchInfodtos.size() > 0) {
+				int totalRows = getPitches(pitchInfodtos).size();
+				int totalPages = (int) Math.ceil((float) totalRows / rowCount);
+				
+				modelMap.addAttribute("pitchInfodtos", pitchInfodtos);
+				
+				List<PitchInfoDto> pitches = getPitches(pitchInfodtos, offset, rowCount);
+				modelMap.addAttribute("pitches", pitches);
 
+				List<PitchDetail> pitchDetails = pitchDetailService.getPitchDetails();
+				modelMap.addAttribute("pitchDetails", pitchDetails);
+				
+				modelMap.addAttribute("page", page);
+				modelMap.addAttribute("totalPages", totalPages);
+				modelMap.addAttribute("keyword", keyword);
+			} else {
+				int totalPages = 0;
+				modelMap.addAttribute("totalPages", totalPages);
+				modelMap.addAttribute("keyword", keyword);
+			}
+			return "pitchb.district.ajax";
+		}
+		
 		if (keyword != null) {
-			pitchInfodtos = pitchService.getListPitchInfoByNameOrAdress(keyword);
+			pitchInfodtos = pitchService.getListPitchInfoByNameOrAdressAndZipcode(zipcode, keyword);
 			modelMap.addAttribute("pitchInfodtos", pitchInfodtos);
+			
+			if(pitchInfodtos .size() > 0) {
+				int totalRows = getPitches(pitchInfodtos).size();
+				int totalPages = (int) Math.ceil((float) totalRows / rowCount);
 
-			int totalRows = getPitches(pitchInfodtos).size();
-			int totalPages = (int) Math.ceil((float) totalRows / rowCount);
+				// Danh sách sân bóng
+				List<PitchInfoDto> pitches = getPitches(pitchInfodtos, offset, rowCount);
+				modelMap.addAttribute("pitches", pitches);
 
-			// Danh sách sân bóng
-			List<PitchInfoDto> pitches = getPitches(pitchInfodtos, offset, rowCount);
-			modelMap.addAttribute("pitches", pitches);
+				// Danh sách chi tiết sân bóng => get from database no overlap
+				List<PitchDetail> pitchDetails = pitchDetailService.getPitchDetails();
+				modelMap.addAttribute("pitchDetails", pitchDetails);
 
-			// Danh sách chi tiết sân bóng => get from database no overlap
-			List<PitchDetail> pitchDetails = pitchDetailService.getPitchDetails();
-			modelMap.addAttribute("pitchDetails", pitchDetails);
-
-			modelMap.addAttribute("page", page);
-			modelMap.addAttribute("totalPages", totalPages);
-			modelMap.addAttribute("keyword", keyword);
-
+				modelMap.addAttribute("page", page);
+				modelMap.addAttribute("totalPages", totalPages);
+				modelMap.addAttribute("keyword", keyword);
+			} else {
+				int totalPages = 0;
+				modelMap.addAttribute("totalPages", totalPages);
+				modelMap.addAttribute("keyword", keyword);
+			}
+			
 			return "pitchb.district";
 		}
 
@@ -185,7 +266,7 @@ public class PitchBookingController {
 
 		modelMap.addAttribute("page", page);
 		modelMap.addAttribute("totalPages", totalPages);
-
+		
 		return "pitchb.district";
 	}
 

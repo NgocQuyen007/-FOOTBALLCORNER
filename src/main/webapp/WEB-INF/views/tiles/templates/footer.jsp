@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 	 <meta charset="utf-8" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="/WEB-INF/tags/taglibs.jsp" %>
 
 <footer class="footer">
     <div class="container">
@@ -146,7 +147,7 @@
 
 
 
-<!--login-->
+<!-- =================== login modal =================== -->
 
 <div id="loginModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
@@ -159,7 +160,6 @@
 
                 <form id="frmSignIn" class="modal-forms ng-pristine ng-valid">
                     <div class="login-error">
-
 
                     </div>
                     <input name="UserName" type="text" placeholder="Số điện thoại hoặc email" required="" id="UserName" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" data-msg-require="Tài khoản đăng nhập không được để trống">
@@ -190,6 +190,136 @@
     </div>
 </div>
 <!--#login-->
+
+<!--================= Mời đội giao lưu ======================-->
+<div id="commonModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                
+                <h4 class="modal-title">
+	                <i class="fa fa-beer"></i>
+	                Mời đội giao lưu
+                </h4>
+            </div>
+            <div class="modal-body">
+
+
+    <form action="${contextPath}/moi-doi-giao-luu" method="post" class="form-horizontal ng-pristine ng-scope ng-invalid ng-invalid-required ngloaded" >
+        <div id="makerMatchFindingRequest">
+            <div class="form-group" style="margin-bottom: 0px;">
+            	<label class="control-label col-sm-3">Thông tin <span class="required">*</span></label>
+                <div class="col-sm-9">
+                	<div style="margin-bottom:5px;">
+                    	<input type="text" class="form-control input-sm width-100p ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" readonly placeholder="Họ tên - SĐT" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-3">
+                        Sân bóng: <span class="required">*</span>
+                </label>
+                <div class="col-sm-9">
+                    <label class="control-label pull-left" style="margin-right: 20px">
+                        <input type="radio" onchange="$('#modalPName').show();" id="modalCbxHasStadium" name="CbxHasStadium" class="ng-pristine ng-untouched ng-valid ng-not-empty" value="true">
+                        Đã có sân
+                    </label>
+                    <label class="control-label">
+                        <input type="radio" onchange="$('#modalPName').hide();" id="modalCbxHasNotStadium" name="CbxHasStadium" class="ng-pristine ng-untouched ng-valid ng-not-empty" value="false" checked="checked">
+                        Đi khách
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 10px; display:none" id="modalPName">
+            	<label class="control-label col-sm-3">Tên sân <span class="required">*</span></label>
+                <div class="col-sm-9">
+                	<div style="margin-bottom:5px;">
+                    	<input type="text" name="pname" class="form-control input-sm width-100p ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" placeholder="Nhập tên sân bóng ..." />
+                    </div>
+                </div>
+            </div>
+			
+			<div class="form-group">
+                <label class="control-label col-sm-3">Quận/Huyện: <span class="required">*</span></label>
+                <div class="col-sm-4">
+                    <select name="dzipcode" class="form-control input-sm select2-style-enabled ng-pristine ng-untouched ng-valid ng-not-empty" style="width: 100%;">
+                        <c:forEach var="district" items="${allofdistrict}">
+	                        <option value="${district.zipcode}">${district.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-3">Thời gian: <span class="required">*</span></label>
+                <div class="col-sm-4">
+                    <select name="created_at_hour" onmousedown="if(this.options.length>6){this.size=4;}" onchange='this.size=0;' onblur="this.size=0;" class="form-control input-sm select2-style-enabled ng-pristine ng-untouched ng-valid ng-not-empty"> 
+                        <c:forEach var="map" items="${PITCH_BOOKING_TIME_MAP}">
+                        	<option  value="${map.key}">${map.value}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-sm-5 form-inline">
+                    <div>
+                    	<input name="created_at_date" type="text" id="datepicker" class="form-control input-sm" value="05/16/2018">
+                        <h1 class="form-control input-sm">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-3">Kèo: <span class="required">*</span></label>
+                <div class="col-sm-4">
+                    <select name="handicap_id" class="form-control input-sm select2-style-enabled ng-pristine ng-untouched ng-valid ng-not-empty" style="width: 100%;">
+                        <c:forEach var="handicap" items="${handicaps}">
+                        	<option value="${handicap.id}" >${handicap.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-3">Trình độ: <span class="required">*</span></label>
+                <div class="col-sm-4">
+                    <select name="level_id" class="form-control input-sm select2-style-enabled ng-pristine ng-untouched ng-valid ng-not-empty" style="width: 100%;">
+                        <c:forEach var="level" items="${levels}">
+                        	<option value="${level.id}" >${level.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-3">Lời mời <span class="required">*</span></label>
+                <div class="col-sm-9">
+                    <textarea name="message" required rows="3" cols="5" class="form-control input-sm width-100p ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" placeholder="Lời mời giao lưu"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="alert alert-danger ng-hide">
+                    <strong>Lỗi!</strong>
+                    <div class="ng-binding"></div>
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button class="btn btn-primary btn-primary-extra" type="submit">
+                    <i class="fa fa-send"></i>
+                    Đăng
+                </button>
+                
+            </div>
+        </div>
+    </form>
+</div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- #Mời đội giao lưu-->
 
 
 <div id="modalNotAuthorize" class="modal modal-styled fade" style="display: none;">
@@ -222,6 +352,7 @@
 </div>
 
 <!--Libraries-->
+<script src='<c:url value="/resources/common/js/jquery-3.2.1.min.js"/>'></script>
 <script src='<c:url value="/resources/common/js/libs.js"/>'></script>
 <script src='<c:url value="/resources/common/js/custom.js"/>'></script>
 <script src='<c:url value="/resources/common/js/papp.js"/>'></script>

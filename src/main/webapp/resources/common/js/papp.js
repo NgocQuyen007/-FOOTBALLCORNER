@@ -1,14 +1,122 @@
-function showCalendar(isShow) {
-	if(isShow == 1){
-		document.getElementById("divID").style.display = "block";
-		isShow = 0;
-	} else {
-		document.getElementById("divID").style.display = "none";
-		isShow = 1;
-	}
+$(document).ready(function(){
+	$("#btn-pitchb-index-search").click(function(){
+		var input = $("#keyword").val();
+		$.ajax({
+			url : "san-bong",
+			type: "GET",
+			
+			data: {
+				keyword: input
+			},
+			success: function(value) {
+				$("#stadium-list").html(value);
+			},
+			
+			error: function(value) {
+				alert("appear error !");
+			}
+		})
+	});
+	
+	$("#btn-pitchb-district-search-all").click(function(){
+		
+		var stype = getCheckedBoxes("fo-type");
+		var sprice = getCheckedBoxes("fo-price");
+		var skeyword = $("#keyword").val();
+		
+		var sdname = $("#id-district-name").val();
+		var sdid = $("#id-district-id").val();
+		
+		$.ajax({
+			url : "san-bong-tai"+sdname+"-"+sdid,
+			type: "GET", 
+			data: {
+				type: stype,
+				price: sprice,
+				keyword: skeyword
+			},
+				
+			success: function(value) {
+				$("#stadium-list").html(value);
+			},
+			
+			error: function() {
+				alert("error !");
+			}
+		})
+	});
+	
+	$("#btn-pitchb-index-search-all").click(function(){
+		
+		var stype = getCheckedBoxes("fo-type");
+		var sprice = getCheckedBoxes("fo-price");
+		var skeyword = $("#keyword").val();
+		
+		$.ajax({
+			url : "san-bong",
+			type: "GET", 
+			data: {
+				type: stype,
+				price: sprice,
+				keyword: skeyword
+			},
+				
+			success: function(value) {
+				$("#stadium-list").html(value);
+			},
+			
+			error: function() {
+				alert("error !");
+			}
+		})
+	});
+	
+	$("#btn-compf-teams-search-all").click(function(){
+		
+		var slevel = getCheckedBoxes("fo-level");
+		var skeyword = $("#keyword").val();
+		
+		if (slevel != null) {
+			$.ajax({
+				url : "doi-bong-tai-da-nang",
+				type: "GET", 
+				data: {
+					level: slevel,
+					keyword: skeyword
+				},
+					
+				success: function(value) {
+					$("#team-list").html(value);
+				},
+				
+				error: function() {
+					alert("error !");
+				}
+			})
+		}
+	});
+	
+})
+
+
+function getCheckedBoxes(chkboxName) {
+  var checkboxes = document.getElementsByName(chkboxName);
+  var checkboxesChecked = [];
+  // loop over them all
+  for (var i=0; i<checkboxes.length; i++) {
+     // And stick the checked ones onto an array...
+     if (checkboxes[i].checked) {
+        checkboxesChecked.push(checkboxes[i].value);
+     }
+  }
+  // Return the array if it is non-empty, or null
+  return checkboxesChecked.length > 0 ? checkboxesChecked.toString() : null;
 }
 
-//Search news index
+/**
+ * 
+ * @returns list pitches
+ */
 function SearchPitchByNameOrAddress() {
 	var input = document.getElementById('keyword').value;
 	var xhttp;
@@ -36,4 +144,5 @@ function SearchPitchByNameOrAddress() {
 	}
 	// or put it here
 }
+
 

@@ -29,28 +29,36 @@ public class User implements Serializable {
 	private String account;
 	private String password;
 	private String email;
+	
+	@Column(name="phone_number")
 	private String phoneNumber;
+	
 	private String avatar;
+	
+	@Column(name="created_at")
 	private Timestamp createdAt;
+	
+	@Column(name="updated_at")
 	private Timestamp updatedAt;
-	private boolean status;
+	
+	private Boolean status;
 
-	@Column(name = "reset_password_token", nullable = true)
+	@Column(name = "reset_password_token")
 	private String resetPasswordToken;
 
-	@Column(name = "reset_password_send_at", nullable = true)
-	private String resetPasswordSendAt;
+	/*@Column(name = "reset_password_send_at")
+	private String resetPasswordSendAt;*/
 
-	@Column(name = "current_sign_in_at", nullable = true)
+	@Column(name = "current_sign_in_at")
 	private String currentSigninAt;
 
-	@Column(name = "last_sign_in_at", nullable = true)
+	@Column(name = "last_sign_in_at")
 	private String lastSigninAt;
 
-	@Column(name = "current_sign_in_ip", nullable = true)
+	@Column(name = "current_sign_in_ip")
 	private String currentSigninIP;
 
-	@Column(name = "last_sign_in_ip", nullable = true)
+	@Column(name = "last_sign_in_ip")
 	private String lastSigninIP;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -155,11 +163,11 @@ public class User implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	public boolean isStatus() {
+	public Boolean isStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(Boolean status) {
 		this.status = status;
 	}
 
@@ -171,13 +179,13 @@ public class User implements Serializable {
 		this.resetPasswordToken = resetPasswordToken;
 	}
 
-	public String getResetPasswordSendAt() {
+	/*public String getResetPasswordSendAt() {
 		return resetPasswordSendAt;
 	}
 
 	public void setResetPasswordSendAt(String resetPasswordSendAt) {
 		this.resetPasswordSendAt = resetPasswordSendAt;
-	}
+	}*/
 
 	public String getCurrentSigninAt() {
 		return currentSigninAt;

@@ -27,9 +27,15 @@
 		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-district.jsp"></put-attribute>
 	</definition>
 	
-	<definition name="pitchb.ajax" extends="tiles-definition">
+	<definition name="pitchb.index.ajax" extends="tiles-definition">
 		<put-attribute name="header" value="" />
-		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-ajax.jsp"></put-attribute>
+		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-index-ajax.jsp"></put-attribute>
+		<put-attribute name="footer" value="" />
+	</definition>
+	
+	<definition name="pitchb.district.ajax" extends="tiles-definition">
+		<put-attribute name="header" value="" />
+		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-district-ajax.jsp"></put-attribute>
 		<put-attribute name="footer" value="" />
 	</definition>
 	
@@ -40,6 +46,12 @@
 	
 	<definition name="compf.teams" extends="tiles-definition">
 		<put-attribute name="content" value="/WEB-INF/views/gui/comp-finding/compf-teams.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="compf.teams.ajax" extends="tiles-definition">
+		<put-attribute name="header" value="" />
+		<put-attribute name="content" value="/WEB-INF/views/gui/comp-finding/compf-teams-ajax.jsp"></put-attribute>
+		<put-attribute name="footer" value="" />
 	</definition>
 	
 	<definition name="compf.waiting" extends="tiles-definition">

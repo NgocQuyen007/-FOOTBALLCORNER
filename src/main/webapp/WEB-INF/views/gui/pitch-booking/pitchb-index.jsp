@@ -1,17 +1,13 @@
+<%@page import="java.text.Normalizer"%>
+<%@page import="java.util.regex.Pattern"%>
 <%@page import="entities.PitchDetail"%>
 <%@page import="entities.Cost"%>
 <%@page import="dto.PitchInfoDto"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="taglib_custom" prefix="tagfunc" %> 
-
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-
-<input type="hidden" id="provinceId" value="0" />
-<input type="hidden" id="typeId" value="1" />
-
+<%@ include file="/WEB-INF/tags/taglibs.jsp" %>
 
 <div class="breadcrum">
     <div class="container">
@@ -23,6 +19,7 @@
 </div>
 
 
+
 <div class="content-wrap">
     <div class="container">
         <div class="row">
@@ -31,29 +28,38 @@
                     <div class="m-btn-expand-holder mobile-only">
                         <span class="form-filter-san-span">Lọc kết quả <i class="fa fa-filter" aria-hidden="true"></i></span>
                     </div>
+                    
                     <div class="sidebar sidebar-tien-ich sidebar-province">
                         <p class="title-box"><i class="fa fa-map-marker" aria-hidden="true"></i> Quận / Huyện</p>
                         <ul class="list-left-links">
-                        	<c:forEach var="dqty" items="${districts}">
-                            <li >
-                            	<a href="/san-bong-tai-lien-chieu">${dqty.name}
+                        	<c:forEach var="dqty" items="${districtdtos}">
+                        	<c:set var="name" value="${dqty.name.substring(dqty.name.indexOf(' '))}"></c:set>
+		                    	<%
+		                    		String name = (String)pageContext.getAttribute("name");
+		                    		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
+		                    		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		                    		pageContext.setAttribute("dnameurl", pattern.matcher(temp).replaceAll("").toLowerCase().replaceAll(" ", "-").replaceAll("đ", "d"));
+		                    	%>
+                            <li>
+                            	<a href="${contextPath}/san-bong-tai${dnameurl}-${dqty.zipcode}">${dqty.name}
                             		<span>${dqty.quantity}</span>
                             	</a>
                             </li>
                             </c:forEach>
                         </ul>
                     </div>
+                    
                     <div class="sidebar sidebar-tim-doi ">
-                        <ul class="list-left-links list-left-check">
+                        <ul class="list-left-links list-left-check" id="btn-pitchb-index-search-all">
                             <li>
                                 <strong>Giá thuê / trận</strong>
                                 <ul>
                                 <c:forEach var="costqty" items="${costdtos}">
-                                    <li onclick="location.href='/san-bong?p=100000';" >
+                                    <li>
                                         <div class="checkbox">
                                             <label>
-                                                <input  name="fo" type="checkbox" value="true" /><input name="fo" type="hidden" value="false" /> ${costqty.price}
-                                                <span>000</span>
+                                                <input type="checkbox" name="fo-price" value="${costqty.price}" />
+                                                ${costqty.price} <span>000</span>
                                                 <span class="pull-right filter-count">${costqty.quantity}</span>
                                             </label>
                                         </div>
@@ -65,10 +71,11 @@
                                 <strong>Số người chơi</strong>
                                 <ul>
                                 <c:forEach var="ptypeqty" items="${pitchtypedtos}">
-                                    <li onclick="location.href='/san-bong?t=5';" >
+                                    <li>
                                         <div class="checkbox">
-                                            <label>
-                                                <input  name="fo" type="checkbox" value="true" /><input name="fo" type="hidden" value="false" /> ${ptypeqty.pitchTypeId}
+                                            <label >
+                                                <input type="checkbox" name="fo-type"  value="${ptypeqty.pitchTypeId}" />
+                                       			${ptypeqty.pitchTypeId}
                                                 <span class="pull-right filter-count">${ptypeqty.quantity}</span>
                                             </label>
                                         </div>
@@ -77,10 +84,11 @@
                                 </ul>
                             </li>
                             <li>
-                                <div class="clear-check"><a href="https://www.timdoinhanh.com/san-bong"><i class="fa fa-close" aria-hidden="true"></i> Xóa lựa chọn</a></div>
+                                <div class="clear-check"><a href="${contextPath}/san-bong-tai${dnameurl}-${zipcode}"><i class="fa fa-close" aria-hidden="true"></i> Xóa lựa chọn</a></div>
                             </li>
                         </ul>
                     </div>
+                    
                 </div>
             </div>
             <div class="col-md-9 l-30" id="stadium-list">
@@ -90,7 +98,6 @@
 						Sân bóng
 					</h1>
 
-
 					<div class="list-search-top">
 						<div class="col-md-9 nopaddingleft">
 							<div class="form-group">
@@ -99,8 +106,7 @@
 							</div>
 						</div>
 						<div class="col-md-3 nopadding" >
-							<button class="btn btn-primary btn-primary-extra col-md-6"
-								onclick="SearchPitchByNameOrAddress()">
+							<button class="btn btn-primary btn-primary-extra col-md-6" id="btn-pitchb-index-search">
 								<i class="fa fa-search" aria-hidden="true"></i>Tìm
 							</button>
 							<a href="${contextPath}/san-bong"

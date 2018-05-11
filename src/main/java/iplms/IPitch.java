@@ -19,7 +19,10 @@ public interface IPitch {
 	 */
 	public List<PitchInfoDto> getListPitchInfo(int offset, int rowCount);
 	
-
+	/**
+	 * get list of pitch by zipcode and (|| pricesKey || numberofplayersKey) = != null 
+	 */
+	public List<PitchInfoDto> getListPitchInfo(int zipcode, String pricesKey, String numberofplayersKey, String keyword);
 	
 	/**
 	 * get pitch info by pid
@@ -40,8 +43,15 @@ public interface IPitch {
 	public List<PitchInfoDto> getListPitchInfoByZipCode(int zipcode);
 	
 	/**
+	 * get pitch info by Name or Adrress at each zipcode
+	 */
+	public List<PitchInfoDto> getListPitchInfoByNameOrAdressAndZipcode(int zipcode, String keyword);
+	
+	/**
 	 * count rows
 	 * @return
 	 */
 	public int countAllRows();
+
+	List<PitchInfoDto> getListPitchInfo(String pricesKey, String numberofplayersKey, String keyword);
 }

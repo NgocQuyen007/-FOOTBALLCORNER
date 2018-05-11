@@ -17,7 +17,7 @@ public class District implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int zipCode;
+	private int zipcode;
 	
 	private String name;
 	
@@ -29,12 +29,12 @@ public class District implements Serializable{
 	@JoinColumn(name="dzipcode", referencedColumnName="zipcode")
 	Set<Team> teams;
 
-	public int getZipCode() {
-		return zipCode;
+	public int getZipcode() {
+		return zipcode;
 	}
 
-	public void setZipCode(int zipCode) {
-		this.zipCode = zipCode;
+	public void setZipcode(int zipcode) {
+		this.zipcode = zipcode;
 	}
 
 	public String getName() {

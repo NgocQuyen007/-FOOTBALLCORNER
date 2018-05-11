@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<div class="content-wrap" ng-controller="matchFindingCtrl">
+<div class="content-wrap">
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -25,7 +25,7 @@
                     <div class="sidebar sidebar-tim-doi">
                         <ul class="list-left-links list-left-check">
                             <li>
-                                <strong>S&#226;n nh&#224;</strong>
+                                <strong>Sân nhà</strong>
                                 <ul>
                                     <li onclick="location.href='/tim-doi-da-bong-tai-ha-noi?hasstadium=1';" >
                                         <div class="checkbox">
