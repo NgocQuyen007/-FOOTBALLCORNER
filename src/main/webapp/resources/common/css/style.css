@@ -54,3 +54,17 @@
 .fix-pagination-padding {
 	padding: 9px;
 }
+
+.fix-notification-padding {
+	padding-top: 22px;
+}
+
+.modal.fade {
+  opacity: 1;
+}
+
+.modal.fade .modal-dialog, .modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+}

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	
 	$("#btn-pitchb-index-search").click(function(){
 		var input = $("#keyword").val();
 		$.ajax({
@@ -98,6 +99,47 @@ $(document).ready(function(){
 	
 })
 
+/** HANDLE LOGIN FOR SYSTEM */ 
+$(document).ready(function(){
+	
+	$("#btnSignIn").click(function(){
+		
+		var semail = $("#Email").val();
+		var spassword = $("#Password").val();
+		
+		$.ajax({
+			url : "ModalLogin",
+			type: "POST", 
+			data: {
+				email: semail,
+				password: spassword
+			},
+				
+			success: function(response) {
+				if(response == 'fail') {
+					// showFormError(response.errorMessageList);
+					$("#loginresponse").text(" Lỗi! Mật khẩu không đúng !");
+					$(".login-error").show();
+				} else {
+					$("#loginresponse").text(" Đăng nhập thành công !");
+					$(".login-error").show();
+					$('#loginModal').modal('hide');
+ 						window.location.reload();
+					}
+			},
+			
+			error: function(ex) {
+				console.log(ex);
+			}
+			
+		})
+	})
+})
+
+function sleep(delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+}
 
 function getCheckedBoxes(chkboxName) {
   var checkboxes = document.getElementsByName(chkboxName);

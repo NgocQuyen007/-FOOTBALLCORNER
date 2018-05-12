@@ -2,22 +2,28 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.Query;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.StringUtils;
 
 import entities.Event;
+import entities.Team;
 import iplms.IEvent;
 
 @Repository
@@ -35,6 +41,37 @@ public class EventDao implements IEvent {
 		Query query = session.createQuery(sql);
 		@SuppressWarnings("unchecked")
 		List<Event> events= query.getResultList();
+		return events;
+	}
+	
+	@Override
+	public List<Event> getEvents(int offset, int rowcount, String keyword, String keytime) {
+		Session session = sessionFactory.getCurrentSession();
+		String sql = " FROM events WHERE 1=1 ";
+		if (!StringUtils.isEmpty(keyword)) {
+			sql += " AND pname LIKE :pname" ;
+		}
+		
+		if (!StringUtils.isEmpty(keytime)) {
+			sql += " AND created_at LIKE :created_at" ;
+		}
+		
+		sql += " ORDER BY id DESC ";
+		
+		Query query = session.createQuery(sql);
+		
+		if (!StringUtils.isEmpty(keyword)) {
+			query.setParameter("pname", '%'+keyword+'%');
+		}
+		
+		if (!StringUtils.isEmpty(keytime)) {
+			query.setParameter("created_at", '%'+keytime+'%');
+		}
+		query.setFirstResult(offset).setMaxResults(rowcount);
+		
+		@SuppressWarnings("unchecked")
+		List<Event> events= query.getResultList();
+		
 		return events;
 	}
 
@@ -62,9 +99,38 @@ public class EventDao implements IEvent {
 		}
 	}
 	
+	@Override
+	public int countAllRows() {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Event.class).setProjection(Projections.rowCount());
+		return Integer.parseInt(criteria.uniqueResult().toString());
+	}
+	
+	@Override
+	public int countAllRows(String keyword, String created_at) {
+		int rows = 0;
+		final Connection conn = getConnection();
+		final String queryString =  " SELECT *"
+							+ " FROM events "
+							+ " WHERE pname LIKE ? AND created_at LIKE ?";
+		try {
+			try(PreparedStatement pst = conn.prepareStatement(queryString)) {
+				pst.setString(1, '%'+keyword+'%');
+				pst.setString(2, '%'+created_at+'%');
+				ResultSet rs = pst.executeQuery();
+				while(rs.next()) {
+					rows++;
+				}
+				return rows;
+			}
+		} catch (final SQLException e) {
+			throw new HibernateException(e);
+		}
+		
+	}
+	
 	private Connection getConnection() {
 		return ((SessionImpl) sessionFactory.getCurrentSession()).connection();
 	}
 
-	
 }

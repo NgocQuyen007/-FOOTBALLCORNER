@@ -73,9 +73,30 @@ public class CompetitorFindingController {
 	
 	
 	@GetMapping("tim-doi-da-bong-tai-da-nang")
-	public String index(ModelMap modelMap) {
-		List<Event> events= eventService.getEvents();
+	public String index(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") int page,
+						@RequestParam(required = false, value = "keyword") String keyword,
+						@RequestParam(required = false, value = "created_at") String created_at) {
+		int rowcount = DataStaticModel.STATE_ROWCOUNT;
+		int offset = (page - 1) * rowcount;
+		
+		int totalRows = 0;
+		if (!StringUtils.isEmpty(keyword) || !StringUtils.isEmpty(created_at)) {
+			totalRows = eventService.countAllRows(keyword, created_at);
+		} else {
+			totalRows = eventService.countAllRows();
+		}
+		int totalPages = (int) Math.ceil((float)totalRows/rowcount);
+		
+		System.out.println("rows: " + totalRows);
+		
+		List<Event> events= eventService.getEvents(offset,rowcount, keyword, created_at);
+		
+		modelMap.addAttribute("totalPages", totalPages);
 		modelMap.addAttribute("events", events);
+		modelMap.addAttribute("page", page);
+		modelMap.addAttribute("keyword", keyword);
+		modelMap.addAttribute("created_at", created_at);
+		
 		return "compf.index";
 	}
 

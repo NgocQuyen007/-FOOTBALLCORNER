@@ -2,6 +2,8 @@ package controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -43,10 +45,15 @@ public class HomepageController {
 		modelMap.addAttribute("handicaps", handicaps);
 		modelMap.addAttribute("levels", levels);
 		modelMap.addAttribute("PITCH_BOOKING_TIME_MAP", DataStaticModel.PITCH_BOOKING_TIME_MAP);
+		
+		
 	}
 	
 	@GetMapping
-	public String index(ModelMap modelMap) {
+	public String index(ModelMap modelMap, HttpSession httpSession) {
+		if (httpSession.getAttribute("sessionUserInfo") != null) {
+			return "redirect:/team/management/newteam";
+		}
 		return "homepage.index";
 	}
 }

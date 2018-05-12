@@ -133,7 +133,7 @@ public class PitchBookingController {
 			modelMap.addAttribute("totalPages", totalPages);
 			modelMap.addAttribute("keyword", keyword);
 
-			return "pitchb.ajax";
+			return "pitchb.index.ajax";
 		} else {
 			pitchInfodtos = pitchService.getListPitchInfo();
 			modelMap.addAttribute("pitchInfodtos", pitchInfodtos);

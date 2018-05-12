@@ -27,9 +27,22 @@ public class TagLibFunctions {
 		return pattern.matcher(temp).replaceAll("").toLowerCase().replaceAll(" ", "-").replaceAll("đ", "d");
 	}
 	
+	/**
+	 * @param input Tên của session user info
+	 * @return result => Tên trong danh sách đội đang chờ
+	 */
 	public static String getFCNameFromFullName(String input) {
 		String [] elements = input.split("[ ,;:+.]+");
 		return "FC " + elements[elements.length-1] + " " + elements[0];
+	}
+	
+	/**
+	 * @param input Tên của session user info
+	 * @return Tên tài khoản sau khi Login
+	 */
+	public static String getLastAndFirstOfFullName(String input) {
+		String [] elements = input.split("[ ,;:+.]+");
+		return convertVNMesetoEnglish(elements[elements.length-1]) + " " + convertVNMesetoEnglish(elements[0]);
 	}
 	
 	/**

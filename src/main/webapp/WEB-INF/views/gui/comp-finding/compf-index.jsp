@@ -84,14 +84,14 @@
                 <div class="p-content">
                     <h1 id="a" class="title-intent title-pages"><i class="fa fa-futbol-o" aria-hidden="true"></i>Tìm đội đá bóng tại Đà Nẵng</h1>
                     <div class="form-group list-search-top">
-                        <form method="get" action="https://www.timdoinhanh.com/tim-doi-da-bong" class="search-form">
+                        <form method="get" action="${contextPath}/tim-doi-da-bong-tai-da-nang" class="search-form">
                             <div class="col-md-6 nopaddingleft">
-                                <input type="text" class="form-control input-sm" name="keyword" placeholder="Nhập tên khu vực, đội bóng hoặc sân bóng..." />
+                                <input type="text" class="form-control input-sm" name="keyword" value="${keyword}" placeholder="Nhập tên sân bóng hoặc khu vực ..." />
                             </div>
 
                             <div class="col-md-4 nopaddingleft">
                                 <div class="input-group date frm-date-time">
-                                    <input id="matchFindingListSearchTime" placeholder="Thời gian" name="time" type='text' class="form-control input-sm jqueryDateTimePickerEnabled" />
+                                    <input id="datepicker1" placeholder="Thời gian" name="created_at" value="${created_at}" type='text' class="form-control input-sm" />
                                     <label class="input-group-addon btn" for="matchFindingListSearchTime">
                                         <span class="glyphicon glyphicon-calendar">
                                         </span>
@@ -116,7 +116,7 @@
                                     <div class="header-item-doi header-tim-doi ">
                                         <div class="match-header-texts">
                                             <h2>
-                                                <a href="/fc-ki-luat.html?matchId=38281" title="Fc kỉ luật">${tagfunc:getFCNameFromFullName(event.getUser().getFullname())} - ${event.getUser().getPhoneNumber()}<i class="fa fa-caret-right" aria-hidden="true"></i>${event.getPname()}</a>
+                                                <a href="" title="" >${tagfunc:getFCNameFromFullName(event.getUser().getFullname())} - ${event.getUser().getPhoneNumber()}<i class="fa fa-caret-right" aria-hidden="true"></i>${event.getPname()}</a>
                                             </h2>
                                             <p class="captain-item noborder">
                                                 <a href="/user/profile/1572"><i class="fa fa-user" aria-hidden="true"></i> ${event.getUser().getFullname()}</a>
@@ -125,7 +125,6 @@
                                             </p>
                                         </div>
                                         <div class="btn-doi-top pull-right">
-
                                             <div class="dropdown pull-right dropdown-match-btn-more mobile-hidden">
 										    <span class="dropdown-toggle" data-toggle="dropdown">
 										        <i class="fa fa-angle-down" aria-hidden="true"></i>
@@ -135,16 +134,14 @@
                                                     <li><a href="#">Chia sẻ</a></li>
                                                 </ul>
                                             </div>
-
-                                            <button class="btn btn-sm btn-default pull-right btn-batdoi modal-link-angularjs" data-modal-tpl="match.recipientMaker"
-                                                     data-modal-qs="toTeamId=8925&toUserId=1572&toMatchId=38281&matchId=38281&teamId=8925&toTeamName=Fc kỉ luật">
+                                            <button class="btn btn-sm btn-default pull-right btn-batdoi" data-toggle="modal" onclick="openModalBatDoi();" >
                                                 <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
                                             </button>
-
                                         </div>
                                     </div>
-
-                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o" aria-hidden="true"></i><strong>Thời gian:</strong>${tagfunc:getMatchTime(event.getCreatedAt())}</p>
+                                    
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                    <strong>Thời gian:</strong>${tagfunc:getMatchTime(event.getCreatedAt())}</p>
 									
                                     <p class="item-stadium-p">
                                     	<c:if test="${event.getPname().contains('Cần đi khách')}">
@@ -187,47 +184,111 @@
                                             </ul>
                                         </div>
 
-                                        <button class="btn btn-sm btn-default pull-right btn-batdoi modal-link-angularjs" data-modal-tpl="match.recipientMaker"
-                                                login-required="true" data-modal-qs="toTeamId=8925&toUserId=1572&toMatchId=38281&matchId=38281&teamId=8925&toTeamName=Fc kỉ luật">
+                                        <button class="btn btn-sm btn-default pull-right btn-batdoi modal-link-angularjs" data-toggle="modal" onclick="openModalBatDoi();">
                                             <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
                                         </button>
-
-
-
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        
+                        <span id="userPhoneNumber">${tagfunc:getFCNameFromFullName(event.getUser().getFullname())} - ${event.getUser().getPhoneNumber()}</span>
 					</c:forEach>
-					
                     </ul>
+                    <script type="text/javascript">
+						function openModalBatDoi() {
+							alert("XXX");
+							var someValue = $('#userPhoneNumber').html();
+							 $(".modal-body #myPhoneId").val(someValue);
+							 $('#modalBatDoi').modal('show'); 
+						}
+						//triggered when modal is about to be shown
+						/* $('#modalBatDoi').on('show.bs.modal', function(e) {
+
+						    //get data-id attribute of the clicked element
+						    var bookId = $(e.relatedTarget).data('book-id');
+
+						    //populate the textbox
+						    $(e.currentTarget).find('input[name="bookId"]').val(bookId);
+						}); */
+					</script>
+                    
+                    
                     <div class="col-md-12">
-                        <div class="pagination_container">
-	                        <div class="pagination">
-		                        <span class="fix-pagination-padding noLinkPager hnpageprev_inactive">
-		                        	<i class="fa fa-angle-left" aria-hidden="true"> </i>
-		                        </span>
-		                        <span class="noLinkPager hncurrpage">1</span>
-		                        
-		                        <a href="/tim-doi-da-bong?pi=2" class="linkPager hnpagelink" title="2">
-		                        	<span class="hnotherpage">2</span>
-		                        </a>
-		                        
-		                        <a href="/tim-doi-da-bong?pi=3" class="linkPager hnpagelink" title="3">
-		                        	<span class="hnotherpage">3</span>
-		                        </a>
-		                        <a href="/tim-doi-da-bong?pi=19" class="linkPager hnpagelink" title="19">
-		                        	<span class="hnotherpage">19</span>
-		                        </a>
-		                        <a href="/tim-doi-da-bong?pi=2" class="linkPager hnpagenext" title="Trang sau">
-		                        	<span class="fix-pagination-padding hnotherpage">
-		                        	<i class="fa fa-angle-right" aria-hidden="true"></i>
-		                        </span>
-		                        </a>
-	                        </div>
-                        </div>
+                    <c:if test="${totalPages > 1}">
+						<div class="pagination_container">
+							<div class="pagination">
+								<c:choose>
+									<c:when test="${page==1}">
+										<span class="fix-pagination-padding noLinkPager hnpageprev_inactive"> 
+											<i class="fa fa-angle-left" aria-hidden="true"></i>
+										</span> 
+									</c:when>
+									<c:otherwise>
+										<c:choose>
+											<c:when test="${empty keyword and empty created_at}">
+												<a href="${contextPath}/tim-doi-da-bong-tai-da-nang?page=${page-1}" class="linkPager hnpagenext" title="Trang sau"> 
+													<span class="fix-pagination-padding hnotherpage"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+												</a>
+											</c:when>
+											<c:otherwise>
+												<a href="${contextPath}/tim-doi-da-bong-tai-da-nang?keyword=${keyword}&created_at=${created_at}&page=${page-1}" class="linkPager hnpagenext" title="Trang sau"> 
+													<span class="fix-pagination-padding hnotherpage"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+												</a>
+											</c:otherwise>
+										</c:choose>
+									</c:otherwise>
+								</c:choose>
+								
+								<c:forEach var="i" begin="1" end="${totalPages}">
+									<c:choose>
+										<c:when test="${empty keyword and empty created_at}">
+											<c:set var="urlPage" value="${contextPath}/tim-doi-da-bong-tai-da-nang?page=${i}"></c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="urlPage" value="${contextPath}/tim-doi-da-bong-tai-da-nang?keyword=${keyword}&created_at=${created_at}&page=${i}"></c:set>
+										</c:otherwise>
+									</c:choose>
+									
+									<c:choose>
+										<c:when test="${page==i}">
+											<a href="${urlPage}" class="noLinkPager hncurrpage" title="${i}">
+												<span class="hnotherpage">${i}</span>
+											</a>
+										</c:when>
+										<c:otherwise>
+											<a href="${urlPage}" class="linkPager hnpagelink" title="${i}">
+											<span class="hnotherpage">${i}</span>
+										</a>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								
+								<c:choose>
+									<c:when test="${page==totalPages}">
+										<span class="fix-pagination-padding noLinkPager hnpageprev_inactive"> 
+											<i class="fa fa-angle-right" aria-hidden="true"></i>
+										</span> 
+									</c:when>
+									<c:otherwise>
+										<c:choose>
+											<c:when test="${empty keyword and empty created_at}">
+												<a href="${contextPath}/tim-doi-da-bong-tai-da-nang?page=${page+1}" class="linkPager hnpagenext" title="Trang sau"> 
+													<span class="fix-pagination-padding hnotherpage"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+												</a>
+											</c:when>
+											<c:otherwise>
+												<a href="${contextPath}/tim-doi-da-bong-tai-da-nang?keyword=${keyword}&created_at=${created_at}&page=${page+1}" class="linkPager hnpagenext" title="Trang sau"> 
+													<span class="fix-pagination-padding hnotherpage fix-pagination-padding"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+												</a>
+											</c:otherwise>
+										</c:choose>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</c:if>
                     </div>
+                    
 
                     <div class="form-filter-doi">
                         <div class="title-btn-moi-doi">
@@ -252,3 +313,57 @@
         $('#searchMatchStadiumId').val(data.params.data.id);
     }
 </script>
+
+
+
+<!-- ================  MODAL BẮT ĐỐI ============== -->
+
+<div id="modalBatDoi" class="modal fade" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+			   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+			   <h4 class="modal-title"> <i class="fa fa-send" aria-hidden="true"></i> Bắt đối</h4> 
+			</div>
+            
+			<div class="modal-body">
+				<div class="ng-scope">
+				    <form class="form-horizontal ng-pristine ng-scope ng-invalid ng-invalid-required ngloaded" id="formMatchFindingRecipientCreate"  style="display: none;" >
+				        <div class="form-group ng-scope">
+				            <label class="control-label col-md-3">Điện thoại:</label>
+				            <div class="col-md-9">
+				                <input id="myPhoneId" type="text" class="form-control noborder" value="" readonly="readonly">
+				            </div>
+				
+				        </div>
+				        <hr  class="ng-scope">
+				
+				        <div class="form-group">
+				            <label class="control-label col-md-3">Thông tin của bạn: <span class="required">*</span></label>
+				            <div class="col-md-9">
+				                <div style="margin-bottom:5px">
+						              <input type="text" class="form-control" value="" placeholder="Nhập thông tin để đối thủ liên hệ ...">
+				                </div>
+				            </div>
+				        </div>
+				
+				        <div class="form-group">
+				            <label class="control-label col-md-3">Lời nhắn: <span class="required">*</span></label>
+				            <div class="col-md-9">
+				                <textarea required rows="3" cols="5" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" placeholder="Lời mời giao lưu"></textarea>
+				            </div> 
+				        </div> 
+				
+				        <div class="modal-footer">
+				            <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+				            <button class="btn btn-primary btn-primary-extra ng-scope"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> Đang xử lý..." type="button">
+				                <i class="fa fa-send"></i> Gửi
+				            </button>
+				        </div> 
+				
+				    </form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

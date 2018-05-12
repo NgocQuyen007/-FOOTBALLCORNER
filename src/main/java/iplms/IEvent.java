@@ -20,4 +20,20 @@ public interface IEvent {
 	 */
 	public List<Event> getEvents();
 	
+	/**
+	 * get List Events
+	 * @return events
+	 */
+	public List<Event> getEvents(int offset, int rowcount, String keyword, String created_at);
+	
+	/**
+	 * count all rows
+	 */
+	public int countAllRows();
+	
+	/**
+	 * count all rows
+	 */
+	public int countAllRows(String keyword, String created_at);
+	
 }

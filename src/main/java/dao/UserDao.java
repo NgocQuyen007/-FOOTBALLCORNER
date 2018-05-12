@@ -27,9 +27,10 @@ public class UserDao implements IUser {
 	@Override
 	public User login(User user) {
 		Session session = sessionFactory.getCurrentSession();
-		String sql = " FROM user" + " WHERE account = :account AND password = :password";
+		String sql =  " FROM users" 
+					+ " WHERE email = :email AND password = :password";
 		Query sqlQ = session.createQuery(sql);
-		sqlQ.setParameter("account", user.getAccount());
+		sqlQ.setParameter("email", user.getEmail());
 		sqlQ.setParameter("password", user.getPassword());
 
 		try {
@@ -37,9 +38,9 @@ public class UserDao implements IUser {
 			if (!StringUtils.isEmpty(user)) {
 				return user;
 			}
-		} catch (Exception ex) {
-		}
-		return user;
+		} catch (Exception ex) {}
+		
+		return null;
 	}
 
 	@Override

@@ -14,37 +14,26 @@
     <link rel="icon" type="image/png" href="https://www.timdoinhanh.com/Assets/img/favicons/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://www.timdoinhanh.com/Assets/img/favicons/favicon-16x16.png" sizes="16x16">
     <link rel="manifest" href="https://www.timdoinhanh.com/Assets/img/favicons/manifest.json">
-    <link rel="mask-icon" href="https://www.timdoinhanh.com/Assets/img/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="mask-icon" href="https://www.timdoinhanh.com/Assets/img/favicons/safari-pinned-tab.svg">
     <meta name="theme-color" content="#ffffff">
     <!--Booking verify-->
-
     <title>Tìm đối đá bóng</title>
-
     <!-- Google Font -->
     <link href='<c:url value="/resources/common/css/css.css" />' rel="stylesheet" type="text/css">
     <link href='<c:url value="/resources/common/css/font-awesome.min.css"/>' rel="stylesheet">
-
     <!--Stylesheets-->
     <link href='<c:url value="/resources/common/css/plugins.css"/>' rel="stylesheet">
-
     <link href='<c:url value="/resources/common/css/main.css"/>' rel="stylesheet">
-
     <link href='<c:url value="/resources/common/css/style.css"/>' rel="stylesheet">
     
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link rel="stylesheet" href="/resources/demos/style.css">
-	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script>
-		$(function() {
-			$("#datepicker").datepicker();
-		});
-	</script>
-
+	
 </head>
+
 <body class="page-frontpage  ng-scope">
 
-<!--0.nav-mobile-->
+<!--0.nav-mobile MOBILE -->
 <div id="left-sidebar" class="only-mobile">
     <div class="n-mobi-nav">
         <span class="menu-closer"></span>
@@ -60,9 +49,18 @@
                         <a href="https://www.timdoinhanh.com/doi-bong" title="Danh sách đội bóng">Danh sách đội bóng</a>
                     </li>
                     <li class="navbar-invite">
-                        <a href="javascript:void(0);" data-toggle="modal" data-target="#commonModal" login-required="true">
-                            Mời đối giao lưu
-                        </a>
+	                    <c:choose>
+							<c:when test="${empty sessionScope.sessionUserInfo}"> 
+								<a href="javascript:void(0);" data-toggle="modal" data-target="#modalNotAuthorize">
+		                            Mời đối giao lưu
+		                        </a>
+							</c:when>
+							<c:otherwise>
+								<a href="javascript:void(0);" data-toggle="modal" data-target="#commonModal">
+		                            Mời đối giao lưu
+		                        </a>
+							</c:otherwise>
+						</c:choose> 	
                     </li>
 
                     <li style="display:none">View more</li>
@@ -91,84 +89,94 @@
         </ul>
     </div>
 </div>
-<div id="right-sidebar" class="only-mobile right-user">
-    <div class="n-mobi-nav">
-        <span class="menu-closer"></span>
-        <a href="https://www.timdoinhanh.com/#" class="user-title" data-toggle="dropdown">
-        </a>
-        <ul class="n-nav-ul-mobile">
-            <li>
-                <a href="https://www.timdoinhanh.com/#frmRegister" onclick="location.href =''" title="Đăng ký thành viên">
-                    <i class="fa fa-user" aria-hidden="true"></i> Đăng ký
-                </a>
-            </li>
-            <li>
-                <a href="https://www.timdoinhanh.com/#" data-toggle="modal" data-target="#loginModal" title="Đăng nhập">
-                    <i class="fa fa-lock" aria-hidden="true"></i> Đăng nhập
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
 
-<!-- LOGIN - ED -->
-<div id="right-sidebar" class="only-mobile right-user">
 
-    <div class="n-mobi-nav">
-        <span class="menu-closer"></span>
-        <a href="#" class="user-title" data-toggle="dropdown">
-            <img class="avatar-nav" src='<c:url value="/resources/common/img/default-user.png" />' alt="avatar">
-            Quyen Phan        </a>
-        <ul class="n-nav-ul-mobile">
-            <li class="nav-bar-notification">
-                <a>
-                    <i class="fa fa-bell"></i>
-                    Thông báo
-                    <b class="badge badge-primary bg-red" style="display:none"> </b>
-                </a>
-            </li>
-            <li>
-                <a href="/user/profile">
-                    <i class="fa fa-user"></i>
-                    Thông tin tài khoản
-                </a>
-            </li>
-            <li>
-                <a href="/match/inviting">
-                    <i class="fa fa-futbol-o"></i>
-                    Trận đấu của tôi
-                </a>
-            </li>
-            <li>
-                <a href="{{ firstTeamUrl() }}">
-                    <i class="fa fa-group"></i>
-                    Đội bóng của tôi
-                </a>
-            </li>
-            <li>
-                <a href="/stadium/bookinghistory">
-                    <i class="fa fa-history"></i>
-                    Lịch sử đặt sân
-                </a>
-            </li>
-            <li>
-                <a href="/stadium/management">
-                    <i class="fa fa-th-large"></i>
-                    Quản lý sân
-                </a>
-            </li>
-            <li>
-                <a href="/User/logout">
-                    <i class="fa fa-sign-out" aria-hidden="true"></i>
-                    Đăng xuất
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
+
+
+<c:choose>
+	<c:when test="${empty sessionScope.sessionUserInfo}">
+		<div id="right-sidebar" class="only-mobile right-user">
+		    <div class="n-mobi-nav">
+		        <span class="menu-closer"></span>
+		        <a href="https://www.timdoinhanh.com/#" class="user-title" data-toggle="dropdown">
+		        </a>
+		        <ul class="n-nav-ul-mobile">
+		            <li>
+		                <a href="https://www.timdoinhanh.com/#frmRegister" onclick="location.href =''" title="Đăng ký thành viên">
+		                    <i class="fa fa-user" aria-hidden="true"></i> Đăng ký
+		                </a>
+		            </li>
+		            <li>
+		                <a href="https://www.timdoinhanh.com/#" data-toggle="modal" data-target="#loginModal" title="Đăng nhập">
+		                    <i class="fa fa-lock" aria-hidden="true"></i> Đăng nhập
+		                </a>
+		            </li>
+		        </ul>
+		    </div>
+		</div>
+	</c:when>
+	
+	<c:otherwise>
+		<div id="right-sidebar" class="only-mobile right-user">
+		    <div class="n-mobi-nav">
+		        <span class="menu-closer"></span>
+		        <a href="#" class="user-title" data-toggle="dropdown">
+		            <img class="avatar-nav" src='<c:url value="/resources/common/img/default-user.png" />' alt="avatar">
+		            ${tagfunc:getLastAndFirstOfFullName(sessionScope.sessionUserInfo.fullname)}        
+		        </a>
+		        <ul class="n-nav-ul-mobile">
+		            <li class="nav-bar-notification">
+		                <a>
+		                    <i class="fa fa-bell"></i>
+		                    Thông báo
+		                    <b class="badge badge-primary bg-red" style="display:none"> </b>
+		                </a>
+		            </li>
+		            <li>
+		                <a href="/user/profile">
+		                    <i class="fa fa-user"></i>
+		                    Thông tin tài khoản
+		                </a>
+		            </li>
+		            <li>
+		                <a href="/match/inviting">
+		                    <i class="fa fa-futbol-o"></i>
+		                    Trận đấu của tôi
+		                </a>
+		            </li>
+		            <li>
+		                <a href="{{ firstTeamUrl() }}">
+		                    <i class="fa fa-group"></i>
+		                    Đội bóng của tôi
+		                </a>
+		            </li>
+		            <li>
+		                <a href="/stadium/bookinghistory">
+		                    <i class="fa fa-history"></i>
+		                    Lịch sử đặt sân
+		                </a>
+		            </li>
+		            <li>
+		                <a href="/stadium/management">
+		                    <i class="fa fa-th-large"></i>
+		                    Quản lý sân
+		                </a>
+		            </li>
+		            <li>
+		                <a href="${contextPath}/logout">
+		                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+		                    Đăng xuất
+		                </a>
+		            </li>
+		        </ul>
+		    </div>
+		</div>
+	</c:otherwise>
+</c:choose>
+
 
 <div class="overlay-nav"></div>
-<!--#0.nav-mobile-->
+<!--#0.nav-mobile spend for mobile-->
 
 <header class="n-nav navbar nav-down" role="banner">
     <div class="container">
@@ -182,11 +190,13 @@
             <i class="fa fa-user" aria-hidden="true"></i>
             <b class="badge badge-primary bg-red ng-binding" style="display:none" ></b>
         </span>
-        </div> <!-- /.navbar-header -->
+        </div> 
+        <!-- /.navbar-header -->
         <nav class="mobi-none" role="navigation">
             <ul class="nav navbar-nav navbar-right ng-scope" >
+            	<!-- ===================== HEADER TIM DOI =========================  -->
                 <li>
-                    <a href="${contextPath}/tim-doi-da-bong-tai-da-nang" title="">Tìm đối</a>
+                    <a href="${contextPath}/tim-doi-da-bong-tai-da-nang" title="">Tìm đối thủ</a>
                     <ul class="navbar-nav-dropdown">
                         <li class="navbar-match-finding">
                             <a href="${contextPath}/tim-doi-da-bong-tai-da-nang" title="">
@@ -201,17 +211,29 @@
                             </a>
                         </li>
                         <li class="navbar-invite">
-                            <a href="javascript:void(0);" class="btn-link-moi-doi modal-link-angularjs" data-modal-tpl="match.create"  data-toggle="modal" data-target="#commonModal">
-                                <i class="fa fa-beer"></i>
-                                Mời đối giao lưu
-                            </a>
-                        </li>
+		                    <c:choose>
+								<c:when test="${empty sessionScope.sessionUserInfo}"> 
+									<a href="javascript:void(0);" data-toggle="modal" data-target="#modalNotAuthorize">
+										<i class="fa fa-beer"></i>
+			                            Mời đối giao lưu
+			                        </a>
+								</c:when>
+								<c:otherwise>
+									<a href="javascript:void(0);" data-toggle="modal" data-target="#commonModal">
+										<i class="fa fa-beer"></i>
+			                            Mời đối giao lưu
+			                        </a>
+								</c:otherwise>
+							</c:choose> 	
+	                    </li>
 
                         <li style="display:none">View more</li>
 
                     </ul>
                 </li>
+                
                 <li style="display:none"></li>
+                
                 <li class="navbar-stadium">
                     <a href="${contextPath}/san-bong" title="">
                     	<i class="fa fa-futbol-o" aria-hidden="true"></i>Đặt sân
@@ -236,15 +258,97 @@
                         <li style="display:none">View more</li>
                     </ul>
                 </li>
-
-                <li>
-                    <a href="javascript:;" id="loginBtn" data-toggle="modal" data-target="#loginModal">
-                        Đăng nhập
-                    </a>
-                </li>
+				
+				
+				
+				<c:choose>
+					<c:when test="${empty sessionScope.sessionUserInfo}">
+						<li>
+		                    <a href="javascript:;" id="loginBtn" data-toggle="modal" data-target="#loginModal">
+		                        Đăng nhập
+		                    </a>
+		                </li>	
+					</c:when>
+					<c:otherwise>
+		                <li class="fix-notification-padding dropdown navbar-notification">
+		                      <a href="" class="dropdown-toggle" data-toggle="dropdown" ng-click="onShowNotifications();">
+		                          <i class="fa fa-bell navbar-notification-icon"></i>
+		                          <span class="visible-xs-inline">&nbsp;Notifications</span>
+		                          <b class="badge badge-primary" style="display:none"  ng-class="{'ngloaded-inline':notiItemCount}">{{ notiItemCount }}</b>
+		                      </a>
+		                      <div class="dropdown-menu">
+		                          <div class="dropdown-header">Thông báo</div>
+		                          <p ng-if="!isNotificationLoaded" class="text-center" style="padding-top:25px;">
+		                              <span>
+		                                  <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
+		                              </span>
+		                          </p>
+		                          <div class="notification-list scrollbar-enabled">
+		                              <div class="force-overflow" ng-show="isNotificationLoaded">
+		                                  <a href="{{ getNotiUrl(noti.itemType,noti.itemId) }}" class="notification" ng-repeat="noti in notiItemListDisplay | orderBy:'-time'">
+		                                      <span class="notification-icon"><img ng-src="{{ noti.image }}" class="text-primary" /></span>
+		                                      <span class="notification-title">{{ noti.title }}</span>
+		                                      <span class="notification-description" ng-bind-html="noti.content | to_trusted"></span>
+		                                      <span class="notification-time">{{ calTimeAgo(noti.time); }}</span>
+		                                  </a>
+		                              </div>
+		                          </div> 
+		                          <a href="/notification/history" class="notification-link-all text-center">Xem tất cả</a>
+		                      </div> 
+		                  </li>
+		                  <li class="dropdown navbar-profile">
+		                       <a class="dropdown-toggle user-menu" data-toggle="dropdown" href="javascript:;">
+		                           <img src='<c:url value="/resources/common/img/default-user.png" />' class="navbar-profile-avatar" alt="">
+		                           <span class="visible-xs-inline user-name">${tagfunc:getLastAndFirstOfFullName(sessionScope.sessionUserInfo.fullname)}   &nbsp;</span>
+		                           <i class="fa fa-caret-down"></i>
+		                       </a>
+		                       <ul class="navbar-nav-dropdown" role="menu">
+		
+		                           <li>
+		                               <a href="/user/profile">
+		                                   <i class="fa fa-user"></i>
+		                                   Thông tin tài khoản
+		                               </a>
+		                           </li>
+		                           <li>
+		                               <a href="/match/inviting">
+		                                   <i class="fa fa-futbol-o"></i>
+		                                   Trận đấu của tôi
+		                               </a>
+		                           </li>
+		                           <li>
+		                               <a href="/stadium/bookinghistory">
+		                                   <i class="fa fa-history"></i>
+		                                   Lịch sử đặt sân
+		                               </a>
+		                           </li>
+		                           <li>
+		                               <a href="{{ firstTeamUrl() }}">
+		                                   <i class="fa fa-futbol-o"></i>
+		                                   Đội bóng của tôi
+		                               </a>
+		                           </li>
+		                           <li>
+		                               <a href="/stadium/management">
+		                                   <i class="fa fa-th-large"></i>
+		                                   Sân bóng của tôi
+		                               </a>
+		                           </li>
+		                           <li>
+		                               <a href="${contextPath}/logout">
+		                                   <i class="fa fa-sign-out" aria-hidden="true"></i>
+		                                   Đăng xuất
+		                               </a>
+		                           </li>
+		                           <li style="display:none"></li>
+		                       </ul>
+		                   </li>
+					</c:otherwise>
+				</c:choose> 
+                 
             </ul>
         </nav>
-    </div> <!-- /.container -->
+    </div> 
     <div id="loadingBar" class="load-bar hidden">
         <div class="bar"></div>
         <div class="bar"></div>

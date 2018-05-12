@@ -17,6 +17,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 @Entity(name = "users")
 public class User implements Serializable {
 	private static final long serialVersionUID = 8048316863241179933L;
@@ -27,7 +30,12 @@ public class User implements Serializable {
 	
 	private String fullname;
 	private String account;
+	
+	@NotEmpty(message="Password cannot be empty!")
 	private String password;
+	
+	@Email(regexp="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="Invalid email!")
+	@NotEmpty(message="Email cannot be empty!")
 	private String email;
 	
 	@Column(name="phone_number")
@@ -274,5 +282,14 @@ public class User implements Serializable {
 	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", fullname=" + fullname + ", account=" + account + ", password=" + password
+				+ ", email=" + email + ", phoneNumber=" + phoneNumber + ", avatar=" + avatar + ", createdAt="
+				+ createdAt + ", updatedAt=" + updatedAt + ", status=" + status + ", teams=" + teams + "]";
+	}
+	
+	
 	
 }

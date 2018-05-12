@@ -8,6 +8,10 @@ public class DataStaticModel {
 	
 	public static final int STATE_ROWCOUNT = 5;
 	
+	public static final String SUCCESS_LOGIN_STATUS_CONST = "success";
+	
+	public static final String FAIL_LOGIN_STATUS_CONST = "fail";
+	
 	@SuppressWarnings("serial")
 	public static final TreeMap<String, String> PITCH_BOOKING_TIME_MAP = new TreeMap<String, String>()
 	{{

@@ -60,6 +60,62 @@
 	
 	<!-- ================ MANAGEMENT ================ -->
 	
+	<!-- ================ QUẢN LÝ ĐỘI BÓNG ================ -->
+	<definition name="team.newteam" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/team/team-newteam.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="team.timdoi.tab" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/team/team-tim-doi-tab.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="team.thanhvien.tab" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/team/team-thanh-vien-tab.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="team.gioithieu.tab" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/team/team-gioi-thieu-tab.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="update.info.quanlyquy" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/update-info/update-info-quan-ly-quy.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="update.info.quanlyquy" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/update-info/update-info-quan-ly-quy.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="update.info.thanhvien" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/update-info/update-info-thanh-vien.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="update.info.thongtindoi" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/update-info/update-infox-thong-tin-doi.jsp"></put-attribute>
+	</definition>
+	
+	<!-- ================ ACCOUNT PROFILE ================ -->
+	<definition name="account.profile" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/account/account-profile.jsp"></put-attribute>
+	</definition>
+	
+	<!-- ================ ACCOUNT PROFILE ================ -->
+	<definition name="stadium.list" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/stadium/stadium-list.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Khác với yêu cầu đặt sân -->
+	<definition name="stadium.booking" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/stadium/stadium-booking.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="stadium.new" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/stadium/stadium-new.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="stadium.update.info" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/stadium/stadium-update-info.jsp"></put-attribute>
+	</definition>
+	
 	<!-- ================ MANAGEMENT ================ -->
 	
 </tiles-definitions>

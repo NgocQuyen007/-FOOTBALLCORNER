@@ -6,7 +6,7 @@
 <footer class="footer">
     <div class="container">
         <div class="col-xs-12 col-sm-2 col-md-3 col-1-footer">
-            <a href="https://www.timdoinhanh.com/#" class="footer-logo"><img class="img-responsive" src='<c:url value="/resources/common/img/logo-gray.png"/>' align="logo tim doi nhanh"/></a>
+            <a href="https://www.timdoinhanh.com/#" class="footer-logo"><img class="img-responsive" src='<c:url value="/resources/common/img/logo-gray.png"/>' /></a>
             <div class="login-social-footer">
                 <a class="" href="javascript:void(0)">
                     <i class="fa fa-facebook-square"></i>
@@ -159,11 +159,17 @@
             <div class="modal-body">
 
                 <form id="frmSignIn" class="modal-forms ng-pristine ng-valid">
-                    <div class="login-error">
-
-                    </div>
-                    <input name="UserName" type="text" placeholder="Số điện thoại hoặc email" required="" id="UserName" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" data-msg-require="Tài khoản đăng nhập không được để trống">
-                    <input type="password" name="Password" placeholder="Mật khẩu" required="" id="Password" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" data-msg-require="Mật khẩu không được để trống">
+                    <div class="login-error" style='display:none'>
+	                    <div class="alert alert-danger fade in" role="alert">
+			            	<a class="close">×</a>
+				            <strong id="loginresponse"></strong>
+				        </div>
+					</div>
+                    <input type="text" name="Email" placeholder="Email ... " required id="Email" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" data-msg-require="Tài khoản đăng nhập không được để trống">
+                    <form:errors path="user.email" cssStyle="color:green"></form:errors>
+                    
+                    <input type="password" name="Password" placeholder="Mật khẩu ..." required id="Password" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" data-msg-require="Mật khẩu không được để trống">
+                    <form:errors path="user.password" cssStyle="color:green"></form:errors>
 
                     <input type="hidden" id="facebookId" value="930986897045312">
                     <input type="hidden" id="googleClientId" value="894662634145-oge0jk4ofsq4afq81niurkh4potclkl9.apps.googleusercontent.com">
@@ -173,13 +179,13 @@
                 <div class="a-btn-modal">
                     <div class="social-login-group">
                         <p>Hoặc đăng nhập với</p>
-                        <a class="logon-facebook" href="https://www.timdoinhanh.com/#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
-                        <a class="login-google" href="https://www.timdoinhanh.com/#"><i class="fa fa-google-plus-square" aria-hidden="true"></i></a>
+                        <a class="logon-facebook" href="${contextPath}/#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+                        <a class="login-google" href="${contextPath}/#"><i class="fa fa-google-plus-square" aria-hidden="true"></i></a>
 
                     </div>
                     <p class="footer-group" style="margin-top:15px;">
-                        <a href="https://www.timdoinhanh.com/user/forgotpassword" class="forgot-pass">Quên mật khẩu</a>
-                        <a href="javascript:location.href=&#39;/&#39;" class="register-link pull-right">Tạo tài khoản mới</a>
+                        <a href="${contextPath}/user/forgotpassword" class="forgot-pass">Quên mật khẩu</a>
+                        <a href="${contextPath}" class="register-link pull-right">Tạo tài khoản mới</a>
                     </p>
                 </div>
             </div>
@@ -316,8 +322,8 @@
         </div>
     </form>
 </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+        </div>
+    </div>
 </div>
 <!-- #Mời đội giao lưu-->
 
@@ -337,26 +343,37 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <a data-dismiss="modal" href="javascript:;" onclick="global.showModalLoginPopup();" class="btn btn-success">Đăng nhập</a>
-                                <a href="https://www.timdoinhanh.com/#" onclick="location.href =''" class="btn btn-danger">Đăng kí</a>
+                                <a href="javascript:void(0);" onclick="$('#modalNotAuthorize').hide(); $('#loginModal').show();" class="btn btn-success">Đăng nhập</a>
+                                <a href="${contextPath}/#" onclick="location.href =''" class="btn btn-danger">Đăng kí</a>
                             </div>
                         </div>
-                    </div> <!-- /.portlet-body -->
+                    </div>
                 </form>
-            </div> <!-- /.modal-body -->
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-            </div> <!-- /.modal-footer -->
+            </div> 
         </div> 
     </div>
 </div>
 
 <!--Libraries-->
+<script src='<c:url value="/resources/common/js/jquery-1.12.4.js"/>'></script>
+<script src='<c:url value="/resources/common/js/jquery-ui.js"/>'></script>
 <script src='<c:url value="/resources/common/js/jquery-3.2.1.min.js"/>'></script>
 <script src='<c:url value="/resources/common/js/libs.js"/>'></script>
 <script src='<c:url value="/resources/common/js/custom.js"/>'></script>
 <script src='<c:url value="/resources/common/js/papp.js"/>'></script>
+<script src='<c:url value="/resources/common/js/papp.js"/>'></script>
 
+<script>
+	$(function() {
+		$("#datepicker").datepicker();
+	});
+	$(function() {
+		$("#datepicker1").datepicker();
+	});
+</script>
 </body>
 </html>
 
