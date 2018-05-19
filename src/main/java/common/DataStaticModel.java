@@ -1,16 +1,23 @@
 package common;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeMap;
 
 public class DataStaticModel {
 	
-	public static final int STATE_ROWCOUNT = 5;
+	public static final int STATE_ROWCOUNT = 2;
 	
 	public static final String SUCCESS_LOGIN_STATUS_CONST = "success";
 	
 	public static final String FAIL_LOGIN_STATUS_CONST = "fail";
+	
+	public static final String URL_PAGE_CONSTATNT = "http://localhost:8080/datkeonhanh/";
+	
+	public static final String EMPTY_SPACE = "";
+	
 	
 	@SuppressWarnings("serial")
 	public static final TreeMap<String, String> PITCH_BOOKING_TIME_MAP = new TreeMap<String, String>()
@@ -27,7 +34,7 @@ public class DataStaticModel {
 		put("09:00", "09:00"); put("09:30", "09:30");
 		put("10:00", "10:00"); put("10:30", "10:30");
 		put("11:00", "11:00"); put("11:30", "11:30");
-		put("12:00", "11:00"); put("12:30", "12:30");
+		put("12:00", "12:00"); put("12:30", "12:30");
 		put("13:00", "13:00"); put("13:30", "13:30");
 		put("14:00", "14:00"); put("14:30", "14:30");
 		put("15:00", "15:00"); put("15:30", "15:30");
@@ -42,6 +49,18 @@ public class DataStaticModel {
 	}};
 	
 	@SuppressWarnings("serial")
+	public static final TreeMap<String, Integer> PITCH_BEGIN_END_HOUR_MAP = new TreeMap<String, Integer>()
+	{{
+		
+		put("05:00", 5); put("06:00", 6); put("07:00", 7); put("08:00", 8); 
+		put("09:00", 9); put("10:00", 10); put("11:00", 11); put("12:00", 12); 
+		put("13:00", 13); put("14:00", 14); put("15:00", 15); put("16:00", 16); 
+		put("17:00", 17); put("18:00", 18); put("19:00", 19); put("20:00", 20); 
+		put("21:00", 21); put("22:00", 22); 
+		 
+	}};
+	
+	@SuppressWarnings("serial")
 	public static final HashMap<Integer, String> WEEKLY_DATE = new HashMap<Integer, String>()
 	{{
 		put(Calendar.SUNDAY, "Chủ nhật");
@@ -52,5 +71,11 @@ public class DataStaticModel {
 		put(Calendar.FRIDAY, "Thứ sáu");
 		put(Calendar.SATURDAY, "Thứ bảy");
 	}};
+	
+	public static String getCurrentTimetoSecond() {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return sdf.format(date);
+	}
 	
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import common.DataStaticModel;
 import dto.CostQuantityDto;
@@ -22,11 +25,14 @@ import entities.Cost;
 import entities.District;
 import entities.Handicap;
 import entities.Level;
+import entities.Notification;
 import entities.PitchDetail;
+import entities.User;
 import service.CostService;
 import service.DistrictService;
 import service.HandicapService;
 import service.LevelService;
+import service.NotificationService;
 import service.PitchDetailService;
 import service.PitchService;
 
@@ -51,9 +57,12 @@ public class PitchBookingController {
 	
 	@Autowired
 	LevelService levelService;
+	
+	@Autowired
+	NotificationService notificationService;
 
 	@ModelAttribute
-	public void common(ModelMap modelMap) {
+	public void common(ModelMap modelMap, HttpSession httpSession) {
 		/** Common left bar = Thông tin Số sân bóng theo Quận - Giá - Loại sân*/
 		List<DistrictQuantityDto> districtdtos = districtService.getPitchesQuantityofDistricts();
 		List<CostQuantityDto> costdtos = costService.getPitchesQuantityofCosts();
@@ -73,6 +82,13 @@ public class PitchBookingController {
 		modelMap.addAttribute("levels", levels);
 		
 		modelMap.addAttribute("PITCH_BOOKING_TIME_MAP", DataStaticModel.PITCH_BOOKING_TIME_MAP);
+		
+		/** Thông báo bắt đối trận đấu*/
+		if (httpSession.getAttribute("sessionUserInfo") != null) {
+			User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
+			List<Notification> findingRecipientNotifications = notificationService.getNotificationsByUserId(sessionUserInfo.getId());
+			modelMap.addAttribute("findingRecipientNotifications", findingRecipientNotifications);
+		}
 		
 
 	}

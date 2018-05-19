@@ -36,4 +36,12 @@ public interface IEvent {
 	 */
 	public int countAllRows(String keyword, String created_at);
 	
+	/**
+	 * When click 'Gửi' button
+	 * 1. insert notification
+	 * 2. update event's status to 2 : Đang bắt đối ....
+	 * @return
+	 */
+	public int updateStatusToBe2(int eventId) ;
+	
 }

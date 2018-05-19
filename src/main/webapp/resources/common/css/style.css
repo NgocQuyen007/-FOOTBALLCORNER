@@ -59,6 +59,11 @@
 	padding-top: 22px;
 }
 
+.color-red {
+	color: red;
+}
+
+
 .modal.fade {
   opacity: 1;
 }

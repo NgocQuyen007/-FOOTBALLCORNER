@@ -134,9 +134,41 @@
                                                     <li><a href="#">Chia sẻ</a></li>
                                                 </ul>
                                             </div>
-                                            <button class="btn btn-sm btn-default pull-right btn-batdoi" data-toggle="modal" onclick="openModalBatDoi();" >
-                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
-                                            </button>
+                                            
+                                            <c:if test="${event.status == 0}"> 
+                                            	<c:choose>
+	                                            	<c:when test="${tagfunc:isDateBeforeNow(event.createdAt, cnow) == 1}">
+	                                        				<button class="btn btn-sm btn-default pull-right " >
+					                                                <i class="fa fa-send" aria-hidden="true"></i> <span class='color-red'> Quá hạn </span>
+					                                        </button>	
+	                                        			</c:when>
+	                                        			<c:otherwise>
+	                                        				<c:choose>
+																<c:when test="${empty sessionScope.sessionUserInfo}">
+																	<button class="btn btn-sm btn-default pull-right btn-batdoi" data-toggle="modal" data-target="#modalNotAuthorize" >
+						                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+						                                            </button>
+																</c:when>
+																<c:otherwise>
+																	<c:choose>
+																		<c:when test="${sessionScope.sessionUserInfo.id != event.getUser().getId()}">
+																			<button class="btn btn-sm btn-default pull-right btn-batdoi" data-toggle="modal" onclick="InitialFindingRecipientModal('${tagfunc:getFCNameFromFullName(event.getUser().getFullname())} - ${event.getUser().getPhoneNumber()}', '${event.id}')" >
+								                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+								                                            </button>	
+								                                        </c:when> 
+								                                        <c:otherwise>
+								                                        	<button class="btn btn-sm btn-default pull-right " >
+								                                                <i class="fa fa-send" aria-hidden="true"></i> <span class='color-red'> Hủy trận </span>
+								                                            </button>	
+								                                        </c:otherwise>
+							                                        </c:choose>   
+																</c:otherwise>
+															</c:choose> 
+	                                        			</c:otherwise>	
+	                                            </c:choose>
+                                            </c:if>
+                                            
+                                            
                                         </div>
                                     </div>
                                     
@@ -166,12 +198,33 @@
                                     </p>
                                     <p>
                                         <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng thái:</strong>
-                                        <span class="red">Đang chờ</span>
+                                        
+                                        
+                                        <c:choose>
+                                        	<c:when test="${event.status == 0}">
+                                        		<c:choose>
+                                        			<c:when test="${tagfunc:isDateBeforeNow(event.createdAt, cnow) == 1}">
+                                        				<span class="red">Quá hạn</span>	
+                                        			</c:when>
+                                        			<c:otherwise>
+                                        				<span class="red">Đang chờ</span>
+                                        			</c:otherwise>
+                                        		</c:choose>
+                                        	</c:when>
+                                        	<c:when test="${event.status == 2}">
+                                        			<span class="red">Quá trình bắt đối đang diễn ra .... </span>
+                                        	</c:when>
+                                        	<c:otherwise>
+                                        		<span class="red">Đã có kèo. Hẹn trận khác: ${event.getUser().getPhoneNumber()}</span>
+                                        	</c:otherwise>
+                                        </c:choose>
+                                        
                                     </p>
                                     <p class="quost-doi">
                                         ${event.getMessage()}
                                     </p>
-
+									
+									<!-- Responsive mobile -->
                                     <div class="btn-doi-bottom mobile-only mobile-only">
 
                                         <div class="dropdown pull-right dropdown-match-btn-more mobile-hidden">
@@ -183,34 +236,49 @@
                                                 <li><a href="#">Chia sẻ</a></li>
                                             </ul>
                                         </div>
-
-                                        <button class="btn btn-sm btn-default pull-right btn-batdoi modal-link-angularjs" data-toggle="modal" onclick="openModalBatDoi();">
-                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
-                                        </button>
+											<!-- Chỉ có status == 0 mới hiển thị cờ Bắt đối để bắt đối với Event đó -->
+											<c:if test="${event.status == 0}"> 
+                                            	<c:choose>
+	                                            	<c:when test="${tagfunc:isDateBeforeNow(event.createdAt, cnow) == 1}">
+	                                        				<button class="btn btn-sm btn-default pull-right " >
+					                                                <i class="fa fa-send" aria-hidden="true"></i> <span class='color-red'> Quá hạn </span>
+					                                        </button>	
+	                                        			</c:when>
+	                                        			<c:otherwise>
+	                                        				<c:choose>
+																<c:when test="${empty sessionScope.sessionUserInfo}">
+																	<button class="btn btn-sm btn-default pull-right btn-batdoi" data-toggle="modal" data-target="#modalNotAuthorize" >
+						                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+						                                            </button>
+																</c:when>
+																<c:otherwise>
+																	<c:choose>
+																		<c:when test="${sessionScope.sessionUserInfo.id != event.getUser().getId()}">
+																			<button class="btn btn-sm btn-default pull-right btn-batdoi" data-toggle="modal" onclick="InitialFindingRecipientModal('${tagfunc:getFCNameFromFullName(event.getUser().getFullname())} - ${event.getUser().getPhoneNumber()}')" >
+								                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+								                                            </button>	
+								                                        </c:when> 
+								                                        <c:otherwise>
+								                                        	<button class="btn btn-sm btn-default pull-right " >
+								                                                <i class="fa fa-send" aria-hidden="true"></i> <span class='color-red'> Hủy trận </span>
+								                                            </button>	
+								                                        </c:otherwise>
+							                                        </c:choose>   
+																</c:otherwise>
+															</c:choose> 
+	                                        			</c:otherwise>	
+	                                            </c:choose>
+                                            </c:if>
+										
                                     </div>
                                 </div>
                             </div>
+                            
                         </li>
-                        <span id="userPhoneNumber">${tagfunc:getFCNameFromFullName(event.getUser().getFullname())} - ${event.getUser().getPhoneNumber()}</span>
+                        
 					</c:forEach>
                     </ul>
-                    <script type="text/javascript">
-						function openModalBatDoi() {
-							alert("XXX");
-							var someValue = $('#userPhoneNumber').html();
-							 $(".modal-body #myPhoneId").val(someValue);
-							 $('#modalBatDoi').modal('show'); 
-						}
-						//triggered when modal is about to be shown
-						/* $('#modalBatDoi').on('show.bs.modal', function(e) {
-
-						    //get data-id attribute of the clicked element
-						    var bookId = $(e.relatedTarget).data('book-id');
-
-						    //populate the textbox
-						    $(e.currentTarget).find('input[name="bookId"]').val(bookId);
-						}); */
-					</script>
+                    
                     
                     
                     <div class="col-md-12">
@@ -314,6 +382,15 @@
     }
 </script>
 
+<!-- Mở modal bắt đối -->
+<script type="text/javascript">
+	function InitialFindingRecipientModal(contact, eventId) {
+		$(".modal-body #contact-info").val(contact);
+		$(".modal-body #event-id").val(eventId);
+		$('#modalBatDoi').modal('show');
+	}
+</script>
+
 
 
 <!-- ================  MODAL BẮT ĐỐI ============== -->
@@ -328,11 +405,19 @@
             
 			<div class="modal-body">
 				<div class="ng-scope">
-				    <form class="form-horizontal ng-pristine ng-scope ng-invalid ng-invalid-required ngloaded" id="formMatchFindingRecipientCreate"  style="display: none;" >
+				    <form action="${contextPath}/match-frecipient"  method="post" class="form-horizontal ng-pristine ng-scope ng-invalid ng-invalid-required ngloaded" id="formMatchFindingRecipientCreate"  style="display: none;" >
+				        
+				        <input type ="hidden" name="event_id" id="event-id" value="" />
+				        <input type ="hidden" name="curl" id='current-url' value="" />
+				        <script type="text/javascript">
+				        	var curl = window.location.href;
+				        	document.getElementById("current-url").value = curl;
+				        </script>
+				        
 				        <div class="form-group ng-scope">
-				            <label class="control-label col-md-3">Điện thoại:</label>
+				            <strong class="control-label col-md-3 color-red">Liên hệ đối:</strong>
 				            <div class="col-md-9">
-				                <input id="myPhoneId" type="text" class="form-control noborder" value="" readonly="readonly">
+				                <strong><input id="contact-info" name="info-mock" type="text" class="form-control noborder" value="" readonly="readonly"></strong>
 				            </div>
 				
 				        </div>
@@ -342,21 +427,21 @@
 				            <label class="control-label col-md-3">Thông tin của bạn: <span class="required">*</span></label>
 				            <div class="col-md-9">
 				                <div style="margin-bottom:5px">
-						              <input type="text" class="form-control" value="" placeholder="Nhập thông tin để đối thủ liên hệ ...">
+						              <strong><input name="information" type="text" class="form-control" value="${sessionScope.sessionUserInfo.fullname} - ${sessionScope.sessionUserInfo.phoneNumber} " placeholder="Nhập thông tin để đối thủ liên hệ ..."></strong>
 				                </div>
 				            </div>
 				        </div>
-				
+						
 				        <div class="form-group">
 				            <label class="control-label col-md-3">Lời nhắn: <span class="required">*</span></label>
 				            <div class="col-md-9">
-				                <textarea required rows="3" cols="5" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" placeholder="Lời mời giao lưu"></textarea>
+				                <textarea name="message" required rows="3" cols="5" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" placeholder="Lời mời giao lưu"></textarea>
 				            </div> 
 				        </div> 
 				
 				        <div class="modal-footer">
 				            <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
-				            <button class="btn btn-primary btn-primary-extra ng-scope"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> Đang xử lý..." type="button">
+				            <button class="btn btn-primary btn-primary-extra ng-scope" type="submit">
 				                <i class="fa fa-send"></i> Gửi
 				            </button>
 				        </div> 

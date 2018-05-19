@@ -37,4 +37,20 @@
           <function-signature>java.lang.String getLastAndFirstOfFullName(java.lang.String)</function-signature>
       </function>
       
+      <function>
+          <name>isDateBeforeNow</name>
+          <function-class>common.TagLibFunctions</function-class>
+          <function-signature>java.lang.Integer isDateBeforeNow(java.lang.String,java.lang.String)</function-signature>
+      </function>
+      
+      <function>
+          <name>getTimesAge</name>
+          <function-class>common.TagLibFunctions</function-class>
+          <function-signature>java.lang.String getTimesAge(java.lang.String)</function-signature>
+      </function>
+      
+      
+      
+      
+      
 </taglib>

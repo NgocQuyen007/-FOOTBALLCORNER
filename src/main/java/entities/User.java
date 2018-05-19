@@ -83,7 +83,7 @@ public class User implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	Set<Comment> comments;
+	Set<Notification> comments;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -251,11 +251,11 @@ public class User implements Serializable {
 		this.matchUsers = matchUsers;
 	}
 
-	public Set<Comment> getComments() {
+	public Set<Notification> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<Comment> comments) {
+	public void setComments(Set<Notification> comments) {
 		this.comments = comments;
 	}
 

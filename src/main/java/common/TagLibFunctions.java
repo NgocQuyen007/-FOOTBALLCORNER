@@ -1,8 +1,13 @@
 package common;
 
 import java.text.Normalizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Pattern;
+
+import org.ocpsoft.prettytime.PrettyTime;
 
 public class TagLibFunctions {
 
@@ -89,6 +94,37 @@ public class TagLibFunctions {
 		String hour = time.substring(time.indexOf(" ")+1);
 		String weekday = getDayOfWeek(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(date));
 		return hour + " " + weekday + " ngày " + date + "/" + month + "/" + year;
+	}
+	
+	public static Integer isDateBeforeNow(String stringDate1, String stringNow) {
+		int result = 0;
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+		try {
+			Date date1 = sdf.parse(stringDate1);
+			Date now = sdf.parse(stringNow);
+			result = date1.before(now) ? 1 : 0;
+		} catch (ParseException e) {
+			System.err.println("Happened Exception !");
+			result = 0;
+		}
+		return result;
+	}
+	
+	public static Date convertStringToDateUtils(String input) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		try {
+			return sdf.parse(input);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static String getTimesAge(String input) {
+		PrettyTime p = new PrettyTime();
+		Date date = convertStringToDateUtils(input);
+		return p.format(date);
+		
 	}
 	
 }

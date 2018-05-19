@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +13,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import common.DataStaticModel;
 import dto.DistrictQuantityDto;
@@ -22,16 +23,17 @@ import entities.District;
 import entities.Event;
 import entities.Handicap;
 import entities.Level;
+import entities.Notification;
 import entities.Team;
 import entities.User;
 import service.DistrictService;
 import service.EventService;
 import service.HandicapService;
 import service.LevelService;
+import service.NotificationService;
 import service.TeamService;
 
 @Controller
-@RequestMapping("")
 public class CompetitorFindingController {
 	
 	@Autowired
@@ -48,13 +50,16 @@ public class CompetitorFindingController {
 	
 	@Autowired
 	LevelService levelService;
-
+	
+	@Autowired
+	NotificationService notificationService;
+	
 	@ModelAttribute
-	public void common(ModelMap modelMap) {
+	public void common(ModelMap modelMap, HttpSession httpSession) {
 		List<DistrictQuantityDto> districtdtos = districtService.getPitchesQuantityofDistricts();
 		List<DistrictQuantityDto> teamsofeachdistrict = teamService.getTeamsQuantityofDistricts();
 		List<LevelQuantityDto> teamsofeachlevel = teamService.getTeamsQuantityofLevels();
-
+		
 		modelMap.addAttribute("districtdtos", districtdtos);
 		modelMap.addAttribute("teamsofeachdistrict", teamsofeachdistrict);
 		modelMap.addAttribute("teamsofeachlevel", teamsofeachlevel);
@@ -69,6 +74,14 @@ public class CompetitorFindingController {
 		modelMap.addAttribute("levels", levels);
 		
 		modelMap.addAttribute("PITCH_BOOKING_TIME_MAP", DataStaticModel.PITCH_BOOKING_TIME_MAP);
+		
+		/** Thông báo bắt đối trận đấu*/
+		if (httpSession.getAttribute("sessionUserInfo") != null) {
+			User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
+			List<Notification> findingRecipientNotifications = notificationService.getNotificationsByUserId(sessionUserInfo.getId());
+			modelMap.addAttribute("findingRecipientNotifications", findingRecipientNotifications);
+		}
+		
 	}
 	
 	
@@ -87,7 +100,6 @@ public class CompetitorFindingController {
 		}
 		int totalPages = (int) Math.ceil((float)totalRows/rowcount);
 		
-		System.out.println("rows: " + totalRows);
 		
 		List<Event> events= eventService.getEvents(offset,rowcount, keyword, created_at);
 		
@@ -99,13 +111,6 @@ public class CompetitorFindingController {
 		
 		return "compf.index";
 	}
-
-	
-	@GetMapping("tim-doi-bong-tai-quan-xxx")
-	public String waiting() {
-		return "compf.waiting";
-	}
-
 	
 	@GetMapping("doi-bong-tai-da-nang")
 	public String teams(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") int page,
@@ -127,7 +132,6 @@ public class CompetitorFindingController {
 		if (keyword != null) {
 			teams = teamService.getTeams(keyword, offset, rowcount);
 			int totalRows = teamService.countAllRows(keyword);
-			System.err.println("totalRows: " + totalRows);
 			int totalPages = (int) Math.ceil((float)totalRows/rowcount);
 			
 			modelMap.addAttribute("page", page);
@@ -158,6 +162,38 @@ public class CompetitorFindingController {
 			return "redirect:/tim-doi-da-bong-tai-da-nang";
 		}
 		return "redirect:/";
+	}
+	
+	/**
+	 * Tìm đội bóng tại đà nẵng - bắt đối 
+	 */
+	@PostMapping("match-frecipient")
+	public String findingRecipient(@RequestParam(name="event_id") int eventId
+		, @RequestParam(name="curl") String currentUrl
+		, @ModelAttribute("notification") Notification notification, @SessionAttribute("sessionUserInfo") User sessionUserInfo) {
+		
+		int sent_user_id = sessionUserInfo.getId();
+		initialNotification(notification, eventId, sent_user_id);
+		
+		notificationService.insertNotification(notification);
+		eventService.updateStatusToBe2(eventId);
+		
+		return "redirect:/"+currentUrl.replace(DataStaticModel.URL_PAGE_CONSTATNT, DataStaticModel.EMPTY_SPACE);
+	}
+	
+	private void initialNotification(Notification notification, int eventId, int sent_user_id) {
+		
+		Event event = new Event();
+		event.setId(eventId);
+		
+		User user = new User();
+		user.setId(sent_user_id);
+		
+		notification.setEvent(event);
+		notification.setUser(user);
+		notification.setStatus(0);
+		notification.setCreatedAt(DataStaticModel.getCurrentTimetoSecond());
+		notification.setUpdatedAt(DataStaticModel.getCurrentTimetoSecond());
 	}
 	
 	private void initialEvent(Event event,int dzipcode,String created_at_date,String created_at_hour,int handicap_id,int level_id, HttpServletRequest request) {

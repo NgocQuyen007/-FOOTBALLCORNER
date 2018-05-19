@@ -177,8 +177,8 @@ public class Pitch implements Serializable {
 	@Override
 	public String toString() {
 		return "Pitch [id=" + id + ", name=" + name + ", status=" + status + ", coverAvatar=" + coverAvatar
-				+ ", description=" + description + ", hourStart=" + hourStart + ", hourEnd=" + hourEnd
-				+ ", averageRating=" + averageRating + ", timeAutoReject=" + timeAutoReject + ", createdAt=" + createdAt
-				+ ", updatedAt=" + updatedAt + ", addresses=" + addresses.iterator().next().getDetail() + "]";
+				+ ", description=" + description + ", createdAt=" + createdAt + ", addresses=" + addresses + "]";
 	}
+
+	
 }

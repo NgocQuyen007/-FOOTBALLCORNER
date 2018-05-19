@@ -115,7 +115,7 @@
 </footer>
 <div class="copyright">
     <div class="container">
-        <p>Timdoinhanh © 2016. All rights reserved</p>
+        <p>DatKeoNhanh © 2018. All rights reserved</p>
     </div>
 </div>
 
@@ -149,11 +149,11 @@
 
 <!-- =================== login modal =================== -->
 
-<div id="loginModal" class="modal fade" role="dialog">
+<div id="loginModal" class="modal fade in" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button"  onclick="$('#loginModal').hide(); window.location.reload()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 <h4 class="modal-title">Đăng nhập</h4>
             </div>
             <div class="modal-body">
@@ -343,7 +343,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <a href="javascript:void(0);" onclick="$('#modalNotAuthorize').hide(); $('#loginModal').show();" class="btn btn-success">Đăng nhập</a>
+                                <a href="javascript:void(0);" onclick="$('#loginModal').show(); $('#modalNotAuthorize').hide(); " class="btn btn-success">Đăng nhập</a>
                                 <a href="${contextPath}/#" onclick="location.href =''" class="btn btn-danger">Đăng kí</a>
                             </div>
                         </div>
@@ -359,12 +359,14 @@
 
 <!--Libraries-->
 <script src='<c:url value="/resources/common/js/jquery-1.12.4.js"/>'></script>
-<script src='<c:url value="/resources/common/js/jquery-ui.js"/>'></script>
 <script src='<c:url value="/resources/common/js/jquery-3.2.1.min.js"/>'></script>
+<script src='<c:url value="/resources/common/js/jquery-ui.js"/>'></script>
+
+
 <script src='<c:url value="/resources/common/js/libs.js"/>'></script>
 <script src='<c:url value="/resources/common/js/custom.js"/>'></script>
 <script src='<c:url value="/resources/common/js/papp.js"/>'></script>
-<script src='<c:url value="/resources/common/js/papp.js"/>'></script>
+
 
 <script>
 	$(function() {
@@ -373,6 +375,19 @@
 	$(function() {
 		$("#datepicker1").datepicker();
 	});
+	
+	$(document).ready(function () {
+        $('.textbox-timepicker').datetimepicker2({
+            datepicker: false,
+            format: 'H:i',
+		  //value: '6:00',
+		  allowTimes: ['16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30',
+		  '5:00', '5:30', '6:00', '6:30', '7:00', '7:30', '8:00', '8:30',
+		  '9:00', '9:30', '10:00', '10:30', '14:00', '14:30',
+		  '15:00', '15:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30']
+		});
+	});
+	
 </script>
 </body>
 </html>

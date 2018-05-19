@@ -1,9 +1,10 @@
 $(document).ready(function(){
 	
 	$("#btn-pitchb-index-search").click(function(){
+		var contextPath = $("#contextPath").val();
 		var input = $("#keyword").val();
 		$.ajax({
-			url : "san-bong",
+			url : contextPath+"/san-bong",
 			type: "GET",
 			
 			data: {
@@ -20,7 +21,7 @@ $(document).ready(function(){
 	});
 	
 	$("#btn-pitchb-district-search-all").click(function(){
-		
+		var contextPath = $("#contextPath").val();
 		var stype = getCheckedBoxes("fo-type");
 		var sprice = getCheckedBoxes("fo-price");
 		var skeyword = $("#keyword").val();
@@ -29,7 +30,7 @@ $(document).ready(function(){
 		var sdid = $("#id-district-id").val();
 		
 		$.ajax({
-			url : "san-bong-tai"+sdname+"-"+sdid,
+			url : contextPath+"/san-bong-tai"+sdname+"-"+sdid,
 			type: "GET", 
 			data: {
 				type: stype,
@@ -48,13 +49,13 @@ $(document).ready(function(){
 	});
 	
 	$("#btn-pitchb-index-search-all").click(function(){
-		
+		var contextPath = $("#contextPath").val();
 		var stype = getCheckedBoxes("fo-type");
 		var sprice = getCheckedBoxes("fo-price");
 		var skeyword = $("#keyword").val();
 		
 		$.ajax({
-			url : "san-bong",
+			url : contextPath+"/san-bong",
 			type: "GET", 
 			data: {
 				type: stype,
@@ -73,13 +74,13 @@ $(document).ready(function(){
 	});
 	
 	$("#btn-compf-teams-search-all").click(function(){
-		
+		var contextPath = $("#contextPath").val();
 		var slevel = getCheckedBoxes("fo-level");
 		var skeyword = $("#keyword").val();
 		
 		if (slevel != null) {
 			$.ajax({
-				url : "doi-bong-tai-da-nang",
+				url : contextPath+"/doi-bong-tai-da-nang",
 				type: "GET", 
 				data: {
 					level: slevel,
@@ -103,12 +104,12 @@ $(document).ready(function(){
 $(document).ready(function(){
 	
 	$("#btnSignIn").click(function(){
-		
+		var contextPath = $("#contextPath").val();
 		var semail = $("#Email").val();
 		var spassword = $("#Password").val();
 		
 		$.ajax({
-			url : "ModalLogin",
+			url : contextPath+"/ModalLogin",
 			type: "POST", 
 			data: {
 				email: semail,
@@ -135,6 +136,38 @@ $(document).ready(function(){
 		})
 	})
 })
+
+/** Handle for notification */
+
+$(document).ready(function(){
+	
+	$("#btn-notification").click(function(){
+		
+		$(".badge").css("display", "none");
+		$(".navbar-notification-icon").addClass("fix-notification-padding");
+		
+		var contextPath = $("#contextPath").val();
+		
+		$.ajax({
+			url : contextPath+"/seen-notifications",
+			type: "GET", 
+			data: {
+				
+			},
+				
+			success: function(response) {
+				console.log(response);
+			},
+			
+			error: function(ex) {
+				console.log(ex);
+			}
+			
+		})
+		
+	})
+})
+
 
 function sleep(delay) {
     var start = new Date().getTime();

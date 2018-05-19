@@ -120,7 +120,7 @@ public class Event implements Serializable{
 	@Override
 	public String toString() {
 		return "Event [id=" + id + ", pname=" + pname + ", message=" + message + ", status=" + status + ", createdAt="
-				+ createdAt + ", user=" + user.getId() + ", level=" + level.getId() + ", handicap=" + handicap.getId() + ", district="
-				+ district.getZipcode() + "]";
+				+ createdAt + ", user=" + user + ", level=" + level + ", handicap=" + handicap + ", district="
+				+ district + "]";
 	}
 }

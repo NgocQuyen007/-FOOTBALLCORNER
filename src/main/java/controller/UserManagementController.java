@@ -23,10 +23,12 @@ import dto.DistrictQuantityDto;
 import entities.District;
 import entities.Handicap;
 import entities.Level;
+import entities.Notification;
 import entities.User;
 import service.DistrictService;
 import service.HandicapService;
 import service.LevelService;
+import service.NotificationService;
 import service.UserService;
 
 @Controller
@@ -44,9 +46,12 @@ public class UserManagementController {
 
 	@Autowired
 	UserService userService;
-
+	
+	@Autowired
+	NotificationService notificationService;
+	
 	@ModelAttribute
-	public void common(ModelMap modelMap) {
+	public void common(ModelMap modelMap, HttpSession httpSession) {
 		List<DistrictQuantityDto> districtdtos = districtService.getPitchesQuantityofDistricts();
 		List<District> allofdistrict = districtService.getDistricts();
 		List<Handicap> handicaps = handicapService.getHandicaps();
@@ -57,6 +62,14 @@ public class UserManagementController {
 		modelMap.addAttribute("handicaps", handicaps);
 		modelMap.addAttribute("levels", levels);
 		modelMap.addAttribute("PITCH_BOOKING_TIME_MAP", DataStaticModel.PITCH_BOOKING_TIME_MAP);
+		
+		
+		/** Thông báo bắt đối trận đấu*/
+		if (httpSession.getAttribute("sessionUserInfo") != null) {
+			User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
+			List<Notification> findingRecipientNotifications = notificationService.getNotificationsByUserId(sessionUserInfo.getId());
+			modelMap.addAttribute("findingRecipientNotifications", findingRecipientNotifications);
+		}
 	}
 
 	@PostMapping("ModalLogin")

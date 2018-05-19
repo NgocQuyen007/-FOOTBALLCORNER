@@ -1,17 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
-<script src="js/summernote.min.js"></script>
-<link href="css/summernote.css" rel="stylesheet">
 
-<!-- ngView: --><div ng-view="" class="ng-scope" style="">
+
+<div>
 <div class="breadcrum ng-scope">
     <div class="container">
         <div class="breadcrum-line">
-            <a href="https://www.timdoinhanh.com/">Trang chủ</a>
-            <a href="https://www.timdoinhanh.com/stadium/management">Danh sách sân</a>
-            <a ng-show="!isCreate" href="https://www.timdoinhanh.com/stadium/management#/stadium-info/" class="ng-binding ng-hide"></a>
-            <a ng-show="isCreate" class="">Thêm mới</a>
+            <a href="${contextPath}/">Trang chủ</a>
+            <a href="${contextPath}/stadium/management">Danh sách sân</a>
+            <a href="${contextPath}/stadium/management#/stadium-info/" class="ng-binding ng-hide"></a>
+            <a class="">Thêm mới</a>
         </div>
     </div>
 </div>
@@ -25,13 +24,13 @@
 
                         <ul id="myTab" class="nav nav-tabs" role="tablist">
                             <li ng-controller="StadiumBookingNotificationCtrl" class="ng-scope">
-                                <a href="https://www.timdoinhanh.com/stadium/management#/booking" data-toggle="tab" aria-expanded="true">
+                                <a href="${contextPath}/stadium/management#/booking" data-toggle="tab" aria-expanded="true">
                                     <i class="fa fa-list" aria-hidden="true"></i>
                                     Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">2</b>
                                 </a>
                             </li>
                             <li class="active">
-                                <a href="https://www.timdoinhanh.com/stadium/virtual.html#detail" data-toggle="tab" aria-expanded="true" class="ng-binding">
+                                <a href="${contextPath}/stadium/virtual.html#detail" data-toggle="tab" aria-expanded="true" class="ng-binding">
                                     <i class="glyphicon glyphicon-info-sign"></i>
                                     &nbsp;&nbsp;Thêm sân bóng mới
                                 </a>
@@ -41,43 +40,37 @@
                         </ul>
                         <div id="myTab1Content" class="tab-content">
                             <div class="tab-pane fade active in" id="detail">
-                                <form name="frmStadiumInfo" class="ng-invalid ng-invalid-required ng-dirty ng-valid-parse ng-valid-min" style="">
+                            
+                            
+<form action="${contextPath}/stadium/management/addNew" method="post" name="frmStadiumInfo" class="ng-invalid ng-invalid-required ng-dirty ng-valid-parse ng-valid-min" style="">
     <div class="col-md-12">
+    
         <div class="form-group row">
             <label class="col-md-3 control-label"><strong>Thông tin cơ bản</strong></label>
         </div>
         <div class="form-group row">
             <label class="col-md-3 col-form-label">Tên sân</label>
             <div class="col-md-9">
-                <input type="text" ng-model="form.Name" id="name" name="stadiumName" style="font-weight: bold;" placeholder="Nhập tên sân" required="" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" data-msg-require="Bạn phải nhập tên sân" class="form-control ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched">
-
+                <input type="text" name="name" style="font-weight: bold;" placeholder="Nhập tên sân" required="" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" data-msg-require="Bạn phải nhập tên sân" class="form-control ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched">
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-md-3 col-form-label">Giới thiệu ngắn</label>
             <div class="col-md-9">
-                <textarea id="summernote-basic-demo" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="form.Summary" rows="5"></textarea>
+                <textarea name="description" id="summernote" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="form.Summary" rows="5"></textarea>
             </div>
-
         </div>
-
-        <div class="form-group row" style="display:none">
-            <label class="col-md-3 col-form-label">Loại</label>
-            <div class="col-md-5">
-                <select id="ddlType" ng-model="form.selectedType" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-options="item.name for item in typeList track by item.id" style=""><option label="Bóng đá" value="1" selected="selected">Bóng đá</option><option label="Tennis" value="2">Tennis</option><option label="Bóng chuyền" value="3">Bóng chuyền</option><option label="Bóng bàn" value="4">Bóng bàn</option><option label="Cầu Lông" value="5">Cầu Lông</option><option label="Bơi lội" value="6">Bơi lội</option></select>
-            </div>
-
-        </div>
-
-        <!-- ngIf: form.selectedType.id==1 --><div class="form-group row ng-scope" ng-if="form.selectedType.id==1" style="">
-            <label class="col-md-3 col-form-label">Mặt sân</label>
-            <div class="col-md-5">
-                <select id="ddlStadiumType" ng-model="form.selectedStadiumType" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-options="item as item.Text for item in stadiumTypes track by item.Value"><option label="Sân cỏ nhân tạo" value="1" selected="selected">Sân cỏ nhân tạo</option><option label="Sân cỏ tự nhiên" value="2">Sân cỏ tự nhiên</option><option label="Sân cát" value="3">Sân cát</option></select>
-            </div>
-        </div><!-- end ngIf: form.selectedType.id==1 -->
-
-
+        
+        <script>
+	      $('#summernote').summernote({
+	        placeholder: 'Giới thiệu về sân bóng ... ',
+	        tabsize: 2,
+	        height: 100
+	      });
+	    </script>
+        
+        
         <div class="form-group row">
             <div class="clear-bordered"></div>
         </div>
@@ -87,42 +80,28 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-3 control-label">Tỉnh / Thành phố</label>
+            <label class="col-md-3 control-label">Quận / Huyện</label>
             <div class="col-md-5">
-                <select id="ddlProvinces" ng-model="form.selectedProvince" ng-change="form.selectedCounty = form.selectedProvince.Children[0];" class="form-control select2-enabled ng-pristine ng-untouched ng-valid select2-hidden-accessible ng-not-empty" ng-options="item as item.Name for item in provinces track by item.Id" tabindex="-1" aria-hidden="true" style=""><option label="Cần Thơ" value="1">Cần Thơ</option><option label="Đà Nẵng" value="2">Đà Nẵng</option><option label="Hà Nội" value="3" selected="selected">Hà Nội</option><option label="Hải Phòng" value="4">Hải Phòng</option><option label="Hồ Chí Minh" value="5">Hồ Chí Minh</option><option label="An Giang" value="6">An Giang</option><option label="Bà Rịa - Vũng Tàu" value="7">Bà Rịa - Vũng Tàu</option><option label="Bắc Giang" value="8">Bắc Giang</option><option label="Bắc Kạn" value="9">Bắc Kạn</option><option label="Bạc Liêu" value="10">Bạc Liêu</option><option label="Bắc Ninh" value="11">Bắc Ninh</option><option label="Bến Tre" value="12">Bến Tre</option><option label="Bình Định" value="13">Bình Định</option><option label="Bình Dương" value="14">Bình Dương</option><option label="Bình Phước" value="15">Bình Phước</option><option label="Bình Thuận" value="16">Bình Thuận</option><option label="Cà Mau" value="17">Cà Mau</option><option label="Cao Bằng" value="18">Cao Bằng</option><option label="Đắk Lắk" value="19">Đắk Lắk</option><option label="Đắk Nông" value="20">Đắk Nông</option><option label="Điện Biên" value="21">Điện Biên</option><option label="Đồng Nai" value="22">Đồng Nai</option><option label="Đồng Tháp" value="23">Đồng Tháp</option><option label="Gia Lai" value="24">Gia Lai</option><option label="Hà Giang" value="25">Hà Giang</option><option label="Hà Nam" value="26">Hà Nam</option><option label="Hà Tĩnh" value="27">Hà Tĩnh</option><option label="Hải Dương" value="28">Hải Dương</option><option label="Hậu Giang" value="29">Hậu Giang</option><option label="Hoà Bình" value="30">Hoà Bình</option><option label="Hưng Yên" value="31">Hưng Yên</option><option label="Khánh Hòa" value="32">Khánh Hòa</option><option label="Kiên Giang" value="33">Kiên Giang</option><option label="Kon Tum" value="34">Kon Tum</option><option label="Lai Châu" value="35">Lai Châu</option><option label="Lâm Đồng" value="36">Lâm Đồng</option><option label="Lạng Sơn" value="37">Lạng Sơn</option><option label="Lào Cai" value="38">Lào Cai</option><option label="Long An" value="39">Long An</option><option label="Nam Định" value="40">Nam Định</option><option label="Nghệ An" value="41">Nghệ An</option><option label="Ninh Bình" value="42">Ninh Bình</option><option label="Ninh Thuận" value="43">Ninh Thuận</option><option label="Phú Thọ" value="44">Phú Thọ</option><option label="Phú Yên" value="45">Phú Yên</option><option label="Quảng Bình" value="46">Quảng Bình</option><option label="Quảng Nam" value="47">Quảng Nam</option><option label="Quảng Ngãi" value="48">Quảng Ngãi</option><option label="Quảng Ninh" value="49">Quảng Ninh</option><option label="Quảng Trị" value="50">Quảng Trị</option><option label="Sóc Trăng" value="51">Sóc Trăng</option><option label="Sơn La" value="52">Sơn La</option><option label="Tây Ninh" value="53">Tây Ninh</option><option label="Thái Bình" value="54">Thái Bình</option><option label="Thái Nguyên" value="55">Thái Nguyên</option><option label="Thanh Hóa" value="56">Thanh Hóa</option><option label="Thừa Thiên Huế" value="57">Thừa Thiên Huế</option><option label="Tiền Giang" value="58">Tiền Giang</option><option label="Trà Vinh" value="59">Trà Vinh</option><option label="Tuyên Quang" value="60">Tuyên Quang</option><option label="Vĩnh Long" value="61">Vĩnh Long</option><option label="Vĩnh Phúc" value="62">Vĩnh Phúc</option><option label="Yên Bái" value="63">Yên Bái</option></select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 460px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-ddlProvinces-container"><span class="select2-selection__rendered" id="select2-ddlProvinces-container" title="Hà Nội">Hà Nội</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+               	<select name="dzipcode" class="form-control input-sm select2-style-enabled ng-pristine ng-untouched ng-valid ng-not-empty" style="width: 100%;">
+                       <c:forEach var="district" items="${allofdistrict}">
+                        <option value="${district.zipcode}">${district.name}</option>
+                       </c:forEach>
+                   </select>
             </div>
         </div>
-        <div class="form-group row">
-            <label class="col-md-3 control-label">Quận / huyện</label>
-            <div class="col-md-5">
-                <select required="" id="ddlCounties" ng-model="form.selectedCounty" class="form-control select2-enabled ng-pristine ng-untouched select2-hidden-accessible ng-not-empty ng-valid ng-valid-required" ng-options="item as item.Name for item in form.selectedProvince.Children track by item.Id" tabindex="-1" aria-hidden="true" style=""><option label="Quận Ba Đình" value="115" selected="selected">Quận Ba Đình</option><option label="Quận Hoàn Kiếm" value="116">Quận Hoàn Kiếm</option><option label="Quận Tây Hồ" value="117">Quận Tây Hồ</option><option label="Quận Long Biên" value="118">Quận Long Biên</option><option label="Quận Cầu Giấy" value="119">Quận Cầu Giấy</option><option label="Quận Đống Đa" value="120">Quận Đống Đa</option><option label="Quận Hai Bà Trưng" value="121">Quận Hai Bà Trưng</option><option label="Quận Hoàng Mai" value="122">Quận Hoàng Mai</option><option label="Quận Thanh Xuân" value="123">Quận Thanh Xuân</option><option label="Huyện Sóc Sơn" value="124">Huyện Sóc Sơn</option><option label="Huyện Đông Anh" value="125">Huyện Đông Anh</option><option label="Huyện Gia Lâm" value="126">Huyện Gia Lâm</option><option label="Quận Nam Từ Liêm" value="127">Quận Nam Từ Liêm</option><option label="Huyện Thanh Trì" value="128">Huyện Thanh Trì</option><option label="Quận Bắc Từ Liêm" value="129">Quận Bắc Từ Liêm</option><option label="Huyện Mê Linh" value="130">Huyện Mê Linh</option><option label="Quận Hà Đông" value="131">Quận Hà Đông</option><option label="Thị xã Sơn Tây" value="132">Thị xã Sơn Tây</option><option label="Huyện Ba Vì" value="133">Huyện Ba Vì</option><option label="Huyện Phúc Thọ" value="134">Huyện Phúc Thọ</option><option label="Huyện Đan Phượng" value="135">Huyện Đan Phượng</option><option label="Huyện Hoài Đức" value="136">Huyện Hoài Đức</option><option label="Huyện Quốc Oai" value="137">Huyện Quốc Oai</option><option label="Huyện Thạch Thất" value="138">Huyện Thạch Thất</option><option label="Huyện Chương Mỹ" value="139">Huyện Chương Mỹ</option><option label="Huyện Thanh Oai" value="140">Huyện Thanh Oai</option><option label="Huyện Thường Tín" value="141">Huyện Thường Tín</option><option label="Huyện Phú Xuyên" value="142">Huyện Phú Xuyên</option><option label="Huyện Ứng Hòa" value="143">Huyện Ứng Hòa</option><option label="Huyện Mỹ Đức" value="144">Huyện Mỹ Đức</option><option label="Tất cả" value="828">Tất cả</option></select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 460px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-ddlCounties-container"><span class="select2-selection__rendered" id="select2-ddlCounties-container" title="Quận Ba Đình">Quận Ba Đình</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-            </div>
-        </div>
+        
 
         <div class="form-group row">
             <label class="col-md-3 control-label">Số nhà / ngõ / tên đường</label>
             <div class="col-md-5">
-                <input required="" oninvalid="sport.account.validateControl(this);" placeholder="Địa chỉ sân" oninput="sport.account.validateControl(this);" data-msg-require="Ví dụ: Số 88 Lê Văn Lương" ng-model="form.Address" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required">
+                <input name="detail" required oninvalid="sport.account.validateControl(this);" placeholder="Địa chỉ sân" oninput="sport.account.validateControl(this);" data-msg-require="Ví dụ: Số 88 Lê Văn Lương" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required">
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-md-3 control-label">Bản đồ</label>
             <div class="col-md-5">
-                <label class="control-label">Vị trí trên bản đồ <img class="google-map-icon" height="20" ng-click="initMap()" ng-src="/Assets/img/map.jpg" src="img/map.jpg"></label>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-md-3 control-label">Latitude</label>
-            <div class="col-md-5">
-                <input ng-model="form.Latitude" id="latitude" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="col-md-3 control-label">Longitude</label>
-            <div class="col-md-5">
-                <input ng-model="form.Longitude" id="longitude" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+                <label class="control-label">Vị trí trên bản đồ <img class="google-map-icon" height="20" ng-click="initMap()"  src='<c:url value="/resources/common/img/map.jpg"/>'></label>
             </div>
         </div>
 
@@ -137,14 +116,14 @@
         <div class="form-group row">
             <label class="col-md-3 control-label">Điện thoại</label>
             <div class="col-md-5">
-                <input required="" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" placeholder="Điện thoại liên hệ đặt sân" data-msg-require="Bạn phải nhập Điện thoại liên hệ đặt sân" ng-model="form.MobileNumbers" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required">
+                <input name="phoneNumber" required oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" placeholder="Điện thoại liên hệ đặt sân" data-msg-require="Bạn phải nhập Điện thoại liên hệ đặt sân"  class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required">
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-md-3 control-label">Địa chỉ email</label>
             <div class="col-md-5">
-                <input ng-model="form.EmailAddress" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+                <input name="pemail" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
                        
             </div>
         </div>
@@ -152,14 +131,14 @@
         <div class="form-group row">
             <label class="col-md-3 control-label">Facebook</label>
             <div class="col-md-5">
-                <input ng-model="form.Facebook" placeholder="Địa chỉ facebook" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+                <input name="facebook" placeholder="Địa chỉ facebook" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-md-3 control-label">Website</label>
             <div class="col-md-5">
-                <input ng-model="form.Website" placeholder="Địa chỉ website" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+                <input name="website" placeholder="Địa chỉ website" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
             </div>
         </div>
 
@@ -170,19 +149,30 @@
         <div class="form-group row">
             <label class="col-md-3 control-label"><strong>Hình ảnh sân</strong></label>
         </div>
+        
         <div class="form-group row">
             <label class="col-md-3 control-label">Ảnh đại diện</label>
             <div class="col-md-5">
-                <!-- ngIf: form.PicturePath -->
-                <input id="previewImagePath" type="file" file-model="imageLogo">
-                <input ng-model="form.PicturePath" value="" type="hidden" class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="inpLogoFilePath" placeholder="">
+                <input id="previewImagePath" type="file">
+                <input name="coverAvatar" value="" type="hidden" class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="inpLogoFilePath" placeholder="">
             </div>
         </div>
         <div class="form-group row">
             <label class="col-md-3 col-form-label">Slideshow</label>
             <div class="col-md-5">
-                <div id="fileuploader"><div class="ajax-upload-dragdrop" style="vertical-align: top; width: 400px;"><div class="ajax-file-upload" style="position: relative; overflow: hidden; cursor: default;">Upload<form method="POST" action="https://www.timdoinhanh.com/ajax/stadium/uploadprofile" '="" enctype="multipart/form-data" style="margin: 0px; padding: 0px;"><input type="file" id="ajax-upload-id-1525529284270" name="profileUpload[]" accept="*" multiple="" style="position: absolute; cursor: pointer; top: 0px; width: 100%; height: 100%; left: 0px; z-index: 100; opacity: 0;"></form></div><span><b>Drag &amp; Drop Files</b></span></div><div></div></div><div class="ajax-file-upload-container"></div>
-
+                <div id="fileuploader">
+	                <div class="ajax-upload-dragdrop" style="vertical-align: top; width: 400px;">
+		                <div class="ajax-file-upload" style="position: relative; overflow: hidden; cursor: default;">
+			                Upload
+			                <form method="POST" action="${contextPath}/ajax/stadium/uploadprofile" enctype="multipart/form-data" style="margin: 0px; padding: 0px;">
+			                	<input type="file" id="ajax-upload-id-1525529284270" name="profileUpload[]" accept="*" multiple="" style="position: absolute; cursor: pointer; top: 0px; width: 100%; height: 100%; left: 0px; z-index: 100; opacity: 0;">
+			                </form>
+		                </div>
+		                <span> <b>Drag &amp; Drop Files</b> </span>
+	                </div>
+                </div>
+                <div class="ajax-file-upload-container"></div>
+				
                 <div class="highslide-gallery gallery">
                 </div>
             </div>
@@ -193,163 +183,465 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-3 control-label">Giới thiệu</label>
-            <div class="col-md-9">
-                <textarea></textarea>
-            </div>
-        </div>
-
-        <div class="form-group row">
             <div class="clear-bordered"></div>
         </div>
 
-        <div class="form-group row">
-            <div class="col-md-12">
-<h4>
-    Giá thuê sân / 1 trận
-</h4>
 
-<!-- ngRepeat: stadiumNumberRow in stadiumNumberRows track by $index --><div class="snp-settings ng-scope" ng-repeat="stadiumNumberRow in stadiumNumberRows track by $index" ng-init="snIndex = $index" style="">
-    <div class="sn-settings-top row">
-        <!-- ngIf: selectedType.id!=1 -->
-        <!-- ngIf: selectedType.id==1 --><div class="col-md-12 ng-scope" ng-if="selectedType.id==1">
-            <div class="sn-settings-bar">
-                <div class="pull-left sn-settings-name">
-                    <!-- ngIf: selectedType.id==1 --><span ng-if="selectedType.id==1" style="float: left;margin-top: 3px" class="ng-binding ng-scope">
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        Loại sân: 5 người (4 sân) 
-                    </span><!-- end ngIf: selectedType.id==1 -->
-                    <div class="btn-group pull-right mobile-float-none" style="margin-left: 10px">
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle text-center" data-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-cog mr-0" aria-hidden="true"></i>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a ng-click="addStadiumNumberPrice($index)" class="pointer"><i class="fa fa-database" aria-hidden="true"></i> &nbsp;Thêm giá</a>
-                            </li>
-                            <li>
-                                <a ng-click="changeStadiumNumberQuantity(stadiumNumberRow)" class="pointer"><i class="fa fa-pencil" aria-hidden="true"></i> &nbsp;Thay đổi số lượng</a>
-                            </li>
-                            <li>
-                                <a ng-click="removeStadiumNumberRow(stadiumNumberRow, $index)" class="pointer"><i class="fa fa-remove" aria-hidden="true"></i> &nbsp;Xóa</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div><!-- end ngIf: selectedType.id==1 -->
-
-    </div>
-    <div class="stadium-number-prices">
-        <table class="table table-bordered text-left table-responsive stadium-number-price-table">
-            <thead>
-                <tr>
-                    <th>
-                        Khung giờ
-                    </th>
-                    <th>
-                        Ngày trong tuần
-                    </th>
-                    <th>
-                        Giá
-                    </th>
-                    <th>Xóa</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- ngRepeat: stadiumNumberPrice in stadiumNumberRow.stadiumNumberPrices track by $index --><tr ng-repeat="stadiumNumberPrice in stadiumNumberRow.stadiumNumberPrices track by $index" ng-init="priceIndex = $index" class="ng-scope">
-                    <td class="sn-price-time-td">
-                        <div class="form-inline">
-                            <input type="text" class="form-control input-sm textbox-timepicker ng-valid ng-empty ng-touched ng-dirty ng-valid-parse" ng-model="stadiumNumberPrice.startTime" style="">
-                            <input type="text" class="form-control input-sm textbox-timepicker ng-pristine ng-untouched ng-valid ng-empty" ng-model="stadiumNumberPrice.endTime">
-                            <a class="btn btn-default btn-sm mobile-only btn-delete-price" title="Xóa giá" ng-click="removeStadiumNumberPrice(snIndex, priceIndex)">
-                                <i class="fa fa-remove" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    </td>
-                    <td class="sn-price-day-picker">
-                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><div ng-if="stadiumNumberPrice.isEditMode || true" class="ng-scope">
-                            <div class="btn-group bootstrap-select show-tick ng-pristine ng-untouched ng-valid ng-empty"><button type="button" class="btn dropdown-toggle bs-placeholder btn-default" data-toggle="dropdown" role="button" title="--Chọn ngày--"><span class="filter-option pull-left">--Chọn ngày--</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button><div class="dropdown-menu open" role="combobox"><ul class="dropdown-menu inner" role="listbox" aria-expanded="false"><li data-original-index="0"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">T2-T6</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="1"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">T7CN</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="2"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">T7</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="3"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">CN</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="4"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">HOLIDAY</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li></ul></div><select multiple="" class="selectpicker ng-pristine ng-untouched ng-valid ng-empty" style="width:100%" data-ng-model="stadiumNumberPrice.selectedTimeGroups" title="--Chọn ngày--" data-ng-options="timeGroup.Text for timeGroup in stadiumNumberPrice.timeGroups track by timeGroup.Value" tabindex="-98"><option label="T2-T6" value="T2-T6">T2-T6</option><option label="T7CN" value="T7CN">T7CN</option><option label="T7" value="T7">T7</option><option label="CN" value="CN">CN</option><option label="HOLIDAY" value="HOLIDAY">HOLIDAY</option></select></div>
-                        </div><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
-                    </td>
-                    <td class="sn-price-price-td">
-                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
-                    </td>
-                    <td class="sn-price-delete-td">
-                        <a class="btn btn-default btn-sm" title="Xóa giá" ng-click="removeStadiumNumberPrice(snIndex, priceIndex)">
-                            <i class="fa fa-remove" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                </tr><!-- end ngRepeat: stadiumNumberPrice in stadiumNumberRow.stadiumNumberPrices track by $index --><tr ng-repeat="stadiumNumberPrice in stadiumNumberRow.stadiumNumberPrices track by $index" ng-init="priceIndex = $index" class="ng-scope" style="">
-                    <td class="sn-price-time-td">
-                        <div class="form-inline">
-                            <input type="text" class="form-control input-sm textbox-timepicker ng-pristine ng-untouched ng-valid ng-empty" ng-model="stadiumNumberPrice.startTime">
-                            <input type="text" class="form-control input-sm textbox-timepicker ng-pristine ng-untouched ng-valid ng-empty" ng-model="stadiumNumberPrice.endTime">
-                            <a class="btn btn-default btn-sm mobile-only btn-delete-price" title="Xóa giá" ng-click="removeStadiumNumberPrice(snIndex, priceIndex)">
-                                <i class="fa fa-remove" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    </td>
-                    <td class="sn-price-day-picker">
-                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><div ng-if="stadiumNumberPrice.isEditMode || true" class="ng-scope">
-                            <div class="btn-group bootstrap-select show-tick ng-pristine ng-untouched ng-valid ng-empty"><button type="button" class="btn dropdown-toggle bs-placeholder btn-default" data-toggle="dropdown" role="button" title="--Chọn ngày--"><span class="filter-option pull-left">--Chọn ngày--</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button><div class="dropdown-menu open" role="combobox"><ul class="dropdown-menu inner" role="listbox" aria-expanded="false"><li data-original-index="0"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">T2-T6</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="1"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">T7CN</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="2"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">T7</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="3"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">CN</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="4"><a tabindex="0" class="" style="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">HOLIDAY</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li></ul></div><select multiple="" class="selectpicker ng-pristine ng-untouched ng-valid ng-empty" style="width:100%" data-ng-model="stadiumNumberPrice.selectedTimeGroups" title="--Chọn ngày--" data-ng-options="timeGroup.Text for timeGroup in stadiumNumberPrice.timeGroups track by timeGroup.Value" tabindex="-98"><option label="T2-T6" value="T2-T6">T2-T6</option><option label="T7CN" value="T7CN">T7CN</option><option label="T7" value="T7">T7</option><option label="CN" value="CN">CN</option><option label="HOLIDAY" value="HOLIDAY">HOLIDAY</option></select></div>
-                        </div><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
-                    </td>
-                    <td class="sn-price-price-td">
-                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
-                    </td>
-                    <td class="sn-price-delete-td">
-                        <a class="btn btn-default btn-sm" title="Xóa giá" ng-click="removeStadiumNumberPrice(snIndex, priceIndex)">
-                            <i class="fa fa-remove" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                </tr><!-- end ngRepeat: stadiumNumberPrice in stadiumNumberRow.stadiumNumberPrices track by $index -->
-            </tbody>
-        </table>
-    </div>
-</div><!-- end ngRepeat: stadiumNumberRow in stadiumNumberRows track by $index -->
-
-
-<!-- ngIf: (selectedType.id==1 && additionalSN.availableSizes.length>0) || stadiumNumberRows.length==0 --><div class="form-inline ng-scope" ng-if="(selectedType.id==1 &amp;&amp; additionalSN.availableSizes.length&gt;0) || stadiumNumberRows.length==0">
-    <div class="form-group pull-right sn-addition-row" ng-show="allowToAddMoreStadiumNumber || true" style="margin-top:15px;">
-        <select ng-model="additionalSN.selectedSize" ng-show="selectedType.id==1" class="form-control input-sm ng-pristine ng-valid ng-not-empty ng-touched" ng-options="item.name for item in additionalSN.availableSizes track by item.id" style=""><option label="7 người" value="7" selected="selected">7 người</option><option label="9 người" value="9">9 người</option><option label="11 người" value="11">11 người</option></select>
-
-        <input onkeydown="return isNumberKey(event)" type="text" ng-model="additionalSN.quantity" min="0" max="100" class="form-control input-sm quantity ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" placeholder="Số lượng" style="width: 100px;">
-
-        <button ng-click="addStadiumNumberRow()" style="width:90px" class="btn btn-tertiary btn-sm addStadiumNumberRow" title="Thêm">
-            Thêm &gt;&gt;
-        </button>
-    </div>
-</div><!-- end ngIf: (selectedType.id==1 && additionalSN.availableSizes.length>0) || stadiumNumberRows.length==0 -->
-
-
-<style type="text/css">
-    .sn-price-day-picker > div {
-        width: 100% !important;
-    }
-
-    tfoot.sn-addition-row > tr > td {
-        border: none !important;
-    }
-
-    #stadium-management-price-table .textbox-timepicker {
-        width: 80px !important;
-    }
-
-    .xdsoft_datetimepicker .xdsoft_timepicker, .form-control.quantity {
-        width: 75px;
-    }
-
-        .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box > div > div {
-            font-size: 14px;
-        }
-
-        .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_prev {
-            background-position: -33px 0;
-        }
-</style>
-            </div>
-        </div>
+		<div class="form-group row">
+		
+		<div class="col-md-12" id="stadium-type-list">
+			<h4>
+			    Giá thuê sân / 1 trận
+			</h4>
+			
+			<!-- Thêm >> -->
+			
+		</div>
+		
+		
+		<!-- js add pitch type none begin-->
+		<div class="col-md-12">
+			<!-- Sân 5 -->
+			<div class="snp-settings ng-scope" id="stadium-type-item-5" style="display:none">
+			    <div class="sn-settings-top row">
+			        <div class="col-md-12 ng-scope" >
+			            <div class="sn-settings-bar">
+			                <div class="pull-left sn-settings-name">
+			                    <span style="float: left;margin-top: 3px" class="ng-binding ng-scope">
+			                        <i class="fa fa-check-square" aria-hidden="true"></i>
+			                        Loại sân: 5 người (<span id="soLuongSan-5" class="color-red"></span> sân)
+			                        
+			                        <input type="hidden" value="5" name="statidum_type_5" />
+			                        <input type="hidden" name="statidum_type_5_quanties" id="stadium-type-5-quantities" />
+			                        
+			                    </span>
+			                    <div class="btn-group pull-right mobile-float-none" style="margin-left: 10px">
+			                        <button type="button" class="btn btn-default btn-sm dropdown-toggle text-center" data-toggle="dropdown" aria-expanded="false">
+			                            <i class="fa fa-cog mr-0" aria-hidden="true"></i>
+			                        </button>
+			                        <ul class="dropdown-menu" role="menu">
+			                            <li>
+			                                <a onclick="addStadiumNumberPrice(5)" class="pointer">
+				                                <i class="fa fa-database" aria-hidden="true"></i> 
+				                                &nbsp;Thêm giá	
+			                                </a>
+			                            </li>
+			                            <li>
+			                                <a ng-click="changeStadiumNumberQuantity(stadiumNumberRow)" class="pointer">
+				                                <i class="fa fa-pencil" aria-hidden="true"></i> 
+				                                &nbsp;Thay đổi số lượng
+			                                </a>
+			                            </li>
+			                            <li>
+			                                <a onclick="removeStadiumNumberRow(5,this)" class="pointer">
+				                                <i class="fa fa-remove" aria-hidden="true"></i> 
+				                                &nbsp;Xóa
+			                                </a>
+			                            </li>
+			                        </ul>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+				
+				
+			    <div class="stadium-number-prices">
+			        <table class="table table-bordered text-left table-responsive stadium-number-price-table">
+			            <thead>
+			                <tr>
+			                    <th>
+			                        Khung giờ
+			                    </th>
+			                    <th>
+			                        Ngày trong tuần
+			                    </th>
+			                    <th>
+			                        Giá <span class="color-red"> [ Đơn vị: 000 ] </span>
+			                    </th>
+			                    <th>Xóa</th>
+			                </tr>
+			            </thead>
+			            
+			            <tbody id="san-5-them-gia-san-items">
+			               
+			               
+			               
+			            </tbody>
+			        </table>
+			        
+			        
+			        <table style="display:none">
+			            <tbody style="display:none" id="san-5-them-gia-san-item">
+			               <tr class="ng-scope">
+			                    <td class="sn-price-time-td">
+			                        <div class="form-inline">
+			                            <select name="cost_hour_start_5" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+					                    
+					                    <select name="cost_hour_end_5" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-day-picker">
+			                        <div class="ng-scope">
+										   <select name="fromDaytoDay_5" title="--Chọn ngày--" style="width:100%" class="form-control">
+										      <option value="2-8">T2-CN</option>
+										      <option value="2-6">T2-T6</option>
+										      <option value="7-8">T7-CN</option>
+										      <option value="7">T7</option>
+										      <option value="8">CN</option>
+										   </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-price-td">
+			                        <input name="price_5" type="text" class="form-control">
+			                    </td>
+			                    <td class="sn-price-delete-td">
+			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
+			                            <i class="fa fa-remove" aria-hidden="true"></i>
+			                        </a>
+			                    </td>
+			                </tr>
+			            </tbody>
+			            </table>
+			    </div>
+			</div>
+			<!-- Sân 5 -->
+			
+			
+			<!-- Sân 7 -->
+			
+			<div class="snp-settings ng-scope" id="stadium-type-item-7" style="display:none">
+			    <div class="sn-settings-top row">
+			        <div class="col-md-12 ng-scope" >
+			            <div class="sn-settings-bar">
+			                <div class="pull-left sn-settings-name">
+			                    <span style="float: left;margin-top: 3px" class="ng-binding ng-scope">
+			                        <i class="fa fa-check-square" aria-hidden="true"></i>
+			                        Loại sân: 7 người (<span id="soLuongSan-7" class='color-red'></span> sân) 
+			                        
+			                        <input type="hidden" value="7" name="statidum_type_7" />
+			                        <input type="hidden" name="statidum_type_7_quanties" id="stadium-type-7-quantities" />
+			                        
+			                    </span><!-- end ngIf: selectedType.id==1 -->
+			                    <div class="btn-group pull-right mobile-float-none" style="margin-left: 10px">
+			                        <button type="button" class="btn btn-default btn-sm dropdown-toggle text-center" data-toggle="dropdown" aria-expanded="false">
+			                            <i class="fa fa-cog mr-0" aria-hidden="true"></i>
+			                        </button>
+			                        <ul class="dropdown-menu" role="menu">
+			                            <li>
+			                                <a onclick="addStadiumNumberPrice(7)" class="pointer">
+				                                <i class="fa fa-database" aria-hidden="true"></i> 
+				                                &nbsp;Thêm giá	
+			                                </a>
+			                            </li>
+			                            <li>
+			                                <a ng-click="changeStadiumNumberQuantity(stadiumNumberRow)" class="pointer">
+				                                <i class="fa fa-pencil" aria-hidden="true"></i> 
+				                                &nbsp;Thay đổi số lượng
+			                                </a>
+			                            </li>
+			                            <li>
+			                                <a onclick="removeStadiumNumberRow(7, this)" class="pointer">
+				                                <i class="fa fa-remove" aria-hidden="true"></i> 
+				                                &nbsp;Xóa
+			                                </a>
+			                            </li>
+			                        </ul>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+				
+				
+			    <div class="stadium-number-prices">
+			        <table class="table table-bordered text-left table-responsive stadium-number-price-table">
+			            <thead>
+			                <tr>
+			                    <th>
+			                        Khung giờ
+			                    </th>
+			                    <th>
+			                        Ngày trong tuần
+			                    </th>
+			                    <th>
+			                        Giá <span class="color-red"> [ Đơn vị: 000 ] </span>
+			                    </th>
+			                    <th>Xóa</th>
+			                </tr>
+			            </thead>
+			            
+			            <tbody id="san-7-them-gia-san-items">
+			               <tr class="ng-scope">
+			                    <td class="sn-price-time-td">
+			                        <div class="form-inline">
+			                            <select name="cost_hour_start" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+					                    
+					                    <select name="cost_hour_end" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-day-picker">
+			                        <div class="ng-scope">
+										   <select title="--Chọn ngày--" style="width:100%" class="form-control">
+										      <option value="2-8">T2-CN</option>
+										      <option value="2-6">T2-T6</option>
+										      <option value="7-8">T7-CN</option>
+										      <option value="7">T7</option>
+										      <option value="8">CN</option>
+										   </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-price-td">
+			                        <input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
+			                    </td>
+			                    <td class="sn-price-delete-td">
+			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
+			                            <i class="fa fa-remove" aria-hidden="true"></i>
+			                        </a>
+			                    </td>
+			                </tr>
+			            </tbody>
+			            
+			        </table>
+			        
+			        <table style="display:none">
+			        	<tbody style="display:none" id="san-7-them-gia-san-item">
+			               <tr class="ng-scope" >
+			                    <td class="sn-price-time-td">
+			                        <div class="form-inline">
+			                            <select name="cost_hour_start" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+					                    
+					                    <select name="cost_hour_end" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-day-picker">
+			                        <div class="ng-scope">
+										   <select title="--Chọn ngày--" style="width:100%" class="form-control">
+										      <option value="2-8">T2-CN</option>
+										      <option value="2-6">T2-T6</option>
+										      <option value="7-8">T7-CN</option>
+										      <option value="7">T7</option>
+										      <option value="8">CN</option>
+										   </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-price-td">
+			                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
+			                    </td>
+			                    <td class="sn-price-delete-td">
+			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
+			                            <i class="fa fa-remove" aria-hidden="true"></i>
+			                        </a>
+			                    </td>
+			                </tr>
+			                
+			            </tbody>
+			        </table>
+			    </div>
+			</div>
+			
+			<!-- Sân 7 -->
+			
+			<!-- Sân 11 -->
+			
+			<div class="snp-settings ng-scope" id="stadium-type-item-11" style="display:none">
+			    <div class="sn-settings-top row">
+			        <div class="col-md-12 ng-scope" >
+			            <div class="sn-settings-bar">
+			                <div class="pull-left sn-settings-name">
+			                    <span style="float: left;margin-top: 3px" class="ng-binding ng-scope">
+			                        <i class="fa fa-check-square" aria-hidden="true"></i>
+			                        Loại sân: 11 người (<span id="soLuongSan-11" class='color-red'></span> sân) 
+			                        
+			                        <input type="hidden" value="11" name="statidum_type_11" />
+			                        <input type="hidden" name="statidum_type_11_quanties" id="stadium-type-11-quantities" />
+			                        
+			                    </span>
+			                    
+			                    <div class="btn-group pull-right mobile-float-none" style="margin-left: 10px">
+			                        <button type="button" class="btn btn-default btn-sm dropdown-toggle text-center" data-toggle="dropdown" aria-expanded="false">
+			                            <i class="fa fa-cog mr-0" aria-hidden="true"></i>
+			                        </button>
+			                        <ul class="dropdown-menu" role="menu">
+			                            <li>
+			                                <a onclick="addStadiumNumberPrice(11)" class="pointer">
+				                                <i class="fa fa-database" aria-hidden="true"></i> 
+				                                &nbsp;Thêm giá	
+			                                </a>
+			                            </li>
+			                            <li>
+			                                <a onclick="changeStadiumNumberQuantity(stadiumNumberRow)" class="pointer">
+				                                <i class="fa fa-pencil" aria-hidden="true"></i> 
+				                                &nbsp;Thay đổi số lượng
+			                                </a>
+			                            </li>
+			                            <li>
+			                                <a onclick="removeStadiumNumberRow(11, this)" class="pointer">
+				                                <i class="fa fa-remove" aria-hidden="true"></i> 
+				                                &nbsp;Xóa
+			                                </a>
+			                            </li>
+			                        </ul>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+				
+				
+			    <div class="stadium-number-prices">
+			        <table class="table table-bordered text-left table-responsive stadium-number-price-table">
+			            <thead>
+			                <tr>
+			                    <th>
+			                        Khung giờ
+			                    </th>
+			                    <th>
+			                        Ngày trong tuần
+			                    </th>
+			                    <th>
+			                        Giá <span class="color-red"> [ Đơn vị: 000 ] </span>
+			                    </th>
+			                    <th>Xóa</th>
+			                </tr>
+			            </thead>
+			            
+			            <tbody id="san-11-them-gia-san-items">
+			               <tr class="ng-scope">
+			                    <td class="sn-price-time-td">
+			                        <div class="form-inline">
+			                            <select name="cost_hour_start" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+					                    
+					                    <select name="cost_hour_end" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-day-picker">
+			                        <div class="ng-scope">
+										   <select title="--Chọn ngày--" style="width:100%" class="form-control">
+										      <option value="2-8">T2-CN</option>
+										      <option value="2-6">T2-T6</option>
+										      <option value="7-8">T7-CN</option>
+										      <option value="7">T7</option>
+										      <option value="8">CN</option>
+										   </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-price-td">
+			                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
+			                    </td>
+			                    <td class="sn-price-delete-td">
+			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
+			                            <i class="fa fa-remove" aria-hidden="true"></i>
+			                        </a>
+			                    </td>
+			                </tr>
+			            </tbody>
+			            
+			        </table>
+			        
+			        <table  style="display:none">
+			        	<tbody style="display:none" id="san-11-them-gia-san-item">
+			               <tr class="ng-scope" >
+			                    <td class="sn-price-time-td">
+			                        <div class="form-inline">
+			                            <select name="cost_hour_start" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+					                    
+					                    <select name="cost_hour_end" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
+					                        	<option  value="${map.value}">${map.key}</option>
+					                        </c:forEach>
+					                    </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-day-picker">
+			                        <div class="ng-scope">
+										   <select title="--Chọn ngày--" style="width:100%" class="form-control">
+										      <option value="2-8">T2-CN</option>
+										      <option value="2-6">T2-T6</option>
+										      <option value="7-8">T7-CN</option>
+										      <option value="7">T7</option>
+										      <option value="8">CN</option>
+										   </select>
+			                        </div>
+			                    </td>
+			                    <td class="sn-price-price-td">
+			                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
+			                    </td>
+			                    <td class="sn-price-delete-td">
+			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
+			                            <i class="fa fa-remove" aria-hidden="true"></i>
+			                        </a>
+			                    </td>
+			                </tr>
+			                
+			            </tbody>
+			        
+			        </table>
+			        
+			    </div>
+			</div>
+			<!-- Sân 11 -->
+			
+			
+			<div class="form-inline" >
+			    <div class="form-group pull-right sn-addition-row"  style="margin-top:15px;">
+			        <select class="form-control input-sm ng-pristine ng-valid ng-not-empty ng-touched" id="pitchType">
+			            <option>Loại sân</option>
+			            <option value="5">5 người</option>
+			            <option value="7">7 người</option>
+			            <option value="11">11 người</option>
+			        </select>
+			
+			        <input onkeydown="return isNumberKey(event)" type="text"  min="0" max="100" class="form-control input-sm quantity" placeholder="Số lượng" style="width:100px" />
+			
+					<!-- Thêm loại sân -->
+			        <button type="button" id="btn-addStadiumNumberRow" style="width:90px"
+			                class="btn btn-tertiary btn-sm " title="Thêm">
+			            Thêm >>
+			        </button>
+			    </div>
+			</div>
+		</div>
+		<!-- js add pitch type none end -->
+		
+		
+		</div>
 
         <div class="form-group row">
             <div class="clear-bordered"></div>
@@ -363,121 +655,102 @@
                 <!-- ngIf: showUpdateResults && showSuccessMessage -->
                 <!-- ngIf: showUpdateResults && showErrorMessage -->
 
-                <a class="btn btn-default" ng-href="/stadium/management" href="https://www.timdoinhanh.com/stadium/management">Quay lại</a>
+                <a class="btn btn-default"  href="${contextPath}/stadium/management">Quay lại</a>
                 &nbsp;
-                <!-- ngIf: isCreate --><button type="submit" id="btnCreateStadium" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..." class="btn btn-primary btn-primary-extra ng-scope" ng-if="isCreate" ng-click="frmStadiumInfo.$valid &amp;&amp; saveChange($event)">
+              <button type="submit" id="btnCreateStadium" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..." class="btn btn-primary btn-primary-extra ng-scope" >
                     <i class="fa fa-save"></i>
                     Tạo mới
-                </button><!-- end ngIf: isCreate -->
-
-                <!-- ngIf: !isCreate -->
-
-            </div> <!-- /.col -->
-
-        </div> <!-- /.form-group -->
+                </button>
+            </div> 
+        </div> 
     </div>
 
 </form>
 
-<div id="mapModal" class="modal modal-styled fade">
-    <div class="modal-dialog modal-lg">
-
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">Chọn vị trí bản đồ</h3>
-            </div>
-            <div class="modal-body">
-                <div class="col-sm-12">
-                    <div class="form-group col-md-12">
-                        <label class="col-md-2 control-label">Tỉnh/Thành</label>
-                        <div class="col-md-4">
-                            <select id="ddlMapSelectedProvince" ng-model="map.selectedProvince" ng-change="map.selectedCounty = map.selectedProvince.Children[0];" class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="width:100%;" ng-options="item as item.Name for item in provinces track by item.Id"><option value="?" selected="selected"></option><option label="Cần Thơ" value="1">Cần Thơ</option><option label="Đà Nẵng" value="2">Đà Nẵng</option><option label="Hà Nội" value="3">Hà Nội</option><option label="Hải Phòng" value="4">Hải Phòng</option><option label="Hồ Chí Minh" value="5">Hồ Chí Minh</option><option label="An Giang" value="6">An Giang</option><option label="Bà Rịa - Vũng Tàu" value="7">Bà Rịa - Vũng Tàu</option><option label="Bắc Giang" value="8">Bắc Giang</option><option label="Bắc Kạn" value="9">Bắc Kạn</option><option label="Bạc Liêu" value="10">Bạc Liêu</option><option label="Bắc Ninh" value="11">Bắc Ninh</option><option label="Bến Tre" value="12">Bến Tre</option><option label="Bình Định" value="13">Bình Định</option><option label="Bình Dương" value="14">Bình Dương</option><option label="Bình Phước" value="15">Bình Phước</option><option label="Bình Thuận" value="16">Bình Thuận</option><option label="Cà Mau" value="17">Cà Mau</option><option label="Cao Bằng" value="18">Cao Bằng</option><option label="Đắk Lắk" value="19">Đắk Lắk</option><option label="Đắk Nông" value="20">Đắk Nông</option><option label="Điện Biên" value="21">Điện Biên</option><option label="Đồng Nai" value="22">Đồng Nai</option><option label="Đồng Tháp" value="23">Đồng Tháp</option><option label="Gia Lai" value="24">Gia Lai</option><option label="Hà Giang" value="25">Hà Giang</option><option label="Hà Nam" value="26">Hà Nam</option><option label="Hà Tĩnh" value="27">Hà Tĩnh</option><option label="Hải Dương" value="28">Hải Dương</option><option label="Hậu Giang" value="29">Hậu Giang</option><option label="Hoà Bình" value="30">Hoà Bình</option><option label="Hưng Yên" value="31">Hưng Yên</option><option label="Khánh Hòa" value="32">Khánh Hòa</option><option label="Kiên Giang" value="33">Kiên Giang</option><option label="Kon Tum" value="34">Kon Tum</option><option label="Lai Châu" value="35">Lai Châu</option><option label="Lâm Đồng" value="36">Lâm Đồng</option><option label="Lạng Sơn" value="37">Lạng Sơn</option><option label="Lào Cai" value="38">Lào Cai</option><option label="Long An" value="39">Long An</option><option label="Nam Định" value="40">Nam Định</option><option label="Nghệ An" value="41">Nghệ An</option><option label="Ninh Bình" value="42">Ninh Bình</option><option label="Ninh Thuận" value="43">Ninh Thuận</option><option label="Phú Thọ" value="44">Phú Thọ</option><option label="Phú Yên" value="45">Phú Yên</option><option label="Quảng Bình" value="46">Quảng Bình</option><option label="Quảng Nam" value="47">Quảng Nam</option><option label="Quảng Ngãi" value="48">Quảng Ngãi</option><option label="Quảng Ninh" value="49">Quảng Ninh</option><option label="Quảng Trị" value="50">Quảng Trị</option><option label="Sóc Trăng" value="51">Sóc Trăng</option><option label="Sơn La" value="52">Sơn La</option><option label="Tây Ninh" value="53">Tây Ninh</option><option label="Thái Bình" value="54">Thái Bình</option><option label="Thái Nguyên" value="55">Thái Nguyên</option><option label="Thanh Hóa" value="56">Thanh Hóa</option><option label="Thừa Thiên Huế" value="57">Thừa Thiên Huế</option><option label="Tiền Giang" value="58">Tiền Giang</option><option label="Trà Vinh" value="59">Trà Vinh</option><option label="Tuyên Quang" value="60">Tuyên Quang</option><option label="Vĩnh Long" value="61">Vĩnh Long</option><option label="Vĩnh Phúc" value="62">Vĩnh Phúc</option><option label="Yên Bái" value="63">Yên Bái</option></select>
-
-                        </div>
-                        <label class="col-md-2 control-label">Quận/huyện</label>
-                        <div class="col-md-4">
-                            <select id="ddlMapSelectedCounty" ng-model="map.selectedCounty" class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="width:100%;" ng-options="item as item.Name for item in map.selectedProvince.Children track by item.Id"><option value="?" selected="selected"></option></select>
-
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-2 control-label">Địa chỉ</label>
-                        <div class="col-md-8">
-                            <input id="txtMapAddress" ng-model="map.Address" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" ng-click="searchMap()" class="form-control btn-tertiary"><i class="ui-icon-search"></i>Tìm kiếm</button>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <div id="google-map" style="height: 350px"></div>
-                    </div>
-                </div>
-            </div> <!-- /.modal-body -->
-            <div class="modal-footer">
-                <span style="margin-left:30px;" class="pull-left"><b>Lat:</b><span class="lat">21.026939</span></span>
-                <span style="margin-left:15px;" class="pull-left"><b>Long:</b><span class="long">105.833358</span></span>
-                <button type="button" ng-click="selectMap()" class="btn btn-primary">Chọn</button>
-                <button type="button" class="btn btn-default close" data-dismiss="modal">Thoát</button>
-            </div> <!-- /.modal-footer -->
-        </div> <!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-
-</div>
-
-<style>
-    table.text-center tr th, table.text-center tr td {
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    /*table.stadium-number > tbody > tr > td {
-        padding: 3px !important;
-    }*/
-    table.stadium-number {
-        margin-bottom: 0px !important;
-    }
-
-    .thumb {
-        height: 75px;
-        border: 1px solid #000;
-        margin: 10px 5px 0 0;
-        width: 104px;
-    }
-
-    .ajax-file-upload-container {
-        display: none !important;
-    }
-
-    .gallery a {
-        position: relative;
-    }
-
-    .icon-delete {
-        height: 17px;
-        position: absolute;
-        top: 36px;
-        left: 80px;
-        cursor: pointer;
-        z-index: 9999;
-        display: none;
-    }
-
-    .gallery a:hover .icon-delete {
-        display: block;
-    }
-</style>
-                            </div> <!-- /.tab-pane -->
-                            
-                            <div class="tab-pane fade" id="stadiumCalendar">
-                                
-                            </div> <!-- /.tab-pane -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>                         
+<div class="tab-pane fade" id="stadiumCalendar">                             
+</div> 
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+	
+	function removeStadiumNumberPrice(current) {
+		current.parentElement.parentElement.remove();
+	}
+	
+	
+	function removeStadiumNumberRow(loaiSan, current) {
+		switch(loaiSan) {
+			case 5:
+				// current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
+				break;
+			case 7:
+				// current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
+				break;
+			case 11:
+				// current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
+				break;
+		}	
+	}
+	
+	// Them gia cho moi loai san
+	function addStadiumNumberPrice(loaiSan) {
+		switch(loaiSan) {
+			case 5:
+				var giaSan5 = $("#san-5-them-gia-san-item").html();
+				$('#san-5-them-gia-san-items').append(giaSan5);
+				break;
+			case 7:
+				var giaSan7 = $("#san-7-them-gia-san-item").html();
+				$('#san-7-them-gia-san-items').append(giaSan7);
+				break;
+			case 11:
+				var giaSan11 = $("#san-11-them-gia-san-item").html();
+				$('#san-11-them-gia-san-items').append(giaSan11);
+				break;
+		}
+		
+	}
+
+	// Them loai san
+	$(document).ready(function(){
+		$('#btn-addStadiumNumberRow').click(function(){
+			var loaiSan = $("#pitchType").val();
+			var soLuongSan = $(".quantity").val();
+			
+			switch(loaiSan) {
+				case '5':
+					$("#soLuongSan-5").text(soLuongSan);
+					$("#stadium-type-5-quantities").attr('value', soLuongSan);
+					
+					var soLuongSan5 = $('#stadium-type-item-5').html();
+					$('#stadium-type-list').append(soLuongSan5);
+					break;
+				case '7':
+					$("#soLuongSan-7").text(soLuongSan);
+					$("#stadium-type-7-quantities").attr('value', soLuongSan);
+					
+					var soLuongSan7 = $('#stadium-type-item-7').html();
+					$('#stadium-type-list').append(soLuongSan7);
+					break;
+				case '11':
+					$("#soLuongSan-11").text(soLuongSan);
+					$("#stadium-type-11-quantities").attr('value', soLuongSan);
+					
+					var soLuongSan11 = $('#stadium-type-item-11').html();
+					$('#stadium-type-list').append(soLuongSan11);
+					break;	
+			}
+		});
+		
+	});
+	
+	
+</script>

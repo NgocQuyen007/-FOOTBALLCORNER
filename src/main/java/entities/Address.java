@@ -32,6 +32,9 @@ public class Address implements Serializable {
 	@Column(name="website")
 	private String website;
 	
+	@Column(name="pemail")
+	private String pemail;
+	
 	@Column(name="created_at")
 	private Timestamp createdAt;
 	
@@ -90,6 +93,14 @@ public class Address implements Serializable {
 		return pitch;
 	}
 
+	public String getPemail() {
+		return pemail;
+	}
+
+	public void setPemail(String pemail) {
+		this.pemail = pemail;
+	}
+
 	public void setPitch(Pitch pitch) {
 		this.pitch = pitch;
 	}
@@ -117,5 +128,12 @@ public class Address implements Serializable {
 	public void setWebsite(String website) {
 		this.website = website;
 	}
+
+	@Override
+	public String toString() {
+		return "Address [id=" + id + ", detail=" + detail + ", phoneNumber=" + phoneNumber + ", facebook=" + facebook
+				+ ", website=" + website + ", pemail=" + pemail + ", createdAt=" + createdAt +  "]";
+	}
+	
 	
 }

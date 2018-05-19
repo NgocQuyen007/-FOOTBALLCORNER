@@ -2,12 +2,10 @@
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
 
-<link href="css/summernote.css" rel="stylesheet">
-
 <!-- ngView: --><div ng-view="" class="ng-scope">
 <div class="breadcrum ng-scope">
     <div class="container">
-        <div class="breadcrum-line"><a href="https://www.timdoinhanh.com/">Trang chủ</a><a href="https://www.timdoinhanh.com/stadium/management">Danh sách sân</a></div>
+        <div class="breadcrum-line"><a href="${contextPath}/">Trang chủ</a><a href="${contextPath}/stadium/management">Danh sách sân</a></div>
     </div>
 </div>
 <div class="content-wrap ng-scope">
@@ -16,14 +14,14 @@
             <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
                 <ul id="myTab" class="nav nav-tabs" role="tablist">
                     <li ng-controller="StadiumBookingNotificationCtrl" class="ng-scope">
-                        <a href="https://www.timdoinhanh.com/stadium/management#/booking" data-toggle="tab" aria-expanded="true">
+                        <a href="${contextPath}/stadium/management#/booking" data-toggle="tab" aria-expanded="true">
                             <i class="fa fa-list" aria-hidden="true"></i>
                             Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">2</b>
                         </a>
                     </li>
 
                     <li class="active">
-                        <a href="https://www.timdoinhanh.com/stadium/management#/stadium" data-toggle="tab" aria-expanded="false">
+                        <a href="${contextPath}/stadium/management#/stadium" data-toggle="tab" aria-expanded="false">
                             <i class="fa fa-list" aria-hidden="true"></i>
                             Danh sách sân
                         </a>
@@ -46,22 +44,19 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="https://www.timdoinhanh.com/stadium/management#/addNew/1">Bóng đá</a>
+                                            <a href="${contextPath}/stadium/management/addNew">Bóng đá</a>
                                         </li>
                                         <li>
-                                            <a href="https://www.timdoinhanh.com/stadium/management#/addNew/2">Tennis</a>
+                                            <a>Tennis</a>
                                         </li>
                                         <li>
-                                            <a href="https://www.timdoinhanh.com/stadium/management#/addNew/3">Bóng chuyền</a>
+                                            <a>Bóng chuyền</a>
                                         </li>
                                         <li>
-                                            <a href="https://www.timdoinhanh.com/stadium/management#/addNew/4">Bóng bàn</a>
+                                            <a>Bóng bàn</a>
                                         </li>
                                         <li>
-                                            <a href="https://www.timdoinhanh.com/stadium/management#/addNew/5">Cầu Lông</a>
-                                        </li>
-                                        <li>
-                                            <a href="https://www.timdoinhanh.com/stadium/management#/addNew/6">Bơi lội</a>
+                                            <a>Cầu Lông</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -89,7 +84,7 @@
                                             <!-- ngIf: stadium.TypeId==6 -->
                                         </td>
                                         <td>
-                                            <a ng-href="#/stadium-info/1273" href="https://www.timdoinhanh.com/stadium/management#/stadium-info/1273"><strong class="ng-binding">Nam Hoa Vang</strong></a>
+                                            <a ng-href="#/stadium-info/1273" href="${contextPath}/stadium/management#/stadium-info/1273"><strong class="ng-binding">Nam Hoa Vang</strong></a>
                                             <div class="ng-binding">
                                                 <i class="fa fa-map-o"></i> 704 Hoa Vang (Quận Liên Chiểu Đà Nẵng)
                                             </div>
@@ -97,10 +92,10 @@
                                                 <i class="fa fa-phone-square"></i> <a href="tel:01727272727" class="ng-binding"> 01727272727</a>
                                             </div><!-- end ngIf: stadium.MobileNumbers!='' && stadium.MobileNumbers!=null -->
                                             <!-- ngIf: stadium.Facebook!='' && stadium.Facebook!=null --><div ng-if="stadium.Facebook!=&#39;&#39; &amp;&amp; stadium.Facebook!=null" class="ng-scope">
-                                                <i class="fa fa-facebook-square" aria-hidden="true"></i> <a href="https://www.timdoinhanh.com/stadium/nothing" target="_blank" class="ng-binding"> nothing</a>
+                                                <i class="fa fa-facebook-square" aria-hidden="true"></i> <a href="${contextPath}/stadium/nothing" target="_blank" class="ng-binding"> nothing</a>
                                             </div><!-- end ngIf: stadium.Facebook!='' && stadium.Facebook!=null -->
                                             <!-- ngIf: stadium.Website!='' && stadium.Website!=null --><div ng-if="stadium.Website!=&#39;&#39; &amp;&amp; stadium.Website!=null" class="ng-scope">
-                                                <i class="fa fa-home" aria-hidden="true"></i> <a href="https://www.timdoinhanh.com/stadium/nothing" target="_blank" class="ng-binding"> nothing</a>
+                                                <i class="fa fa-home" aria-hidden="true"></i> <a href="${contextPath}/stadium/nothing" target="_blank" class="ng-binding"> nothing</a>
                                             </div><!-- end ngIf: stadium.Website!='' && stadium.Website!=null -->
                                             <!-- ngIf: stadium.EmailAddress!='' && stadium.EmailAddress!=null --><div ng-if="stadium.EmailAddress!=&#39;&#39; &amp;&amp; stadium.EmailAddress!=null" class="ng-scope">
                                                 <i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:uhuhuhhu@gmail.com" target="_top" class="ng-binding"> uhuhuhhu@gmail.com</a>
@@ -113,12 +108,12 @@
 
                                         <td align="right" style="text-align:right">
                                             <div class="form-group">
-                                                <a href="https://www.timdoinhanh.com/stadium/management#/bookingManager/1273" class="btn btn-info btn-sm" style="width:130px">
+                                                <a href="${contextPath}/stadium/management#/bookingManager/1273" class="btn btn-info btn-sm" style="width:130px">
                                                     <i class="fa fa-calendar" aria-hidden="true"></i> Đặt sân
                                                 </a>
                                             </div>
                                             <div class="form-group">
-                                                <a class="btn btn-default btn-sm" ng-href="#/stadium-info/1273" title="Chỉnh sửa" style="width:130px" href="https://www.timdoinhanh.com/stadium/management#/stadium-info/1273">
+                                                <a class="btn btn-default btn-sm" ng-href="#/stadium-info/1273" title="Chỉnh sửa" style="width:130px" href="${contextPath}/stadium/management#/stadium-info/1273">
                                                     <i class="glyphicon glyphicon-pencil"></i> Sửa thông tin
                                                 </a>
                                             </div>
@@ -145,7 +140,7 @@
                                             <!-- ngIf: stadium.TypeId==6 -->
                                         </td>
                                         <td>
-                                            <a ng-href="#/stadium-info/1271" href="https://www.timdoinhanh.com/stadium/management#/stadium-info/1271"><strong class="ng-binding">13 T4 DUT</strong></a>
+                                            <a ng-href="#/stadium-info/1271" href="${contextPath}/stadium/management#/stadium-info/1271"><strong class="ng-binding">13 T4 DUT</strong></a>
                                             <div class="ng-binding">
                                                 <i class="fa fa-map-o"></i> 74 Nam Cao Da Nag (Quận Liên Chiểu Đà Nẵng)
                                             </div>
@@ -163,12 +158,12 @@
 
                                         <td align="right" style="text-align:right">
                                             <div class="form-group">
-                                                <a href="https://www.timdoinhanh.com/stadium/management#/bookingManager/1271" class="btn btn-info btn-sm" style="width:130px">
+                                                <a href="${contextPath}/stadium/management#/bookingManager/1271" class="btn btn-info btn-sm" style="width:130px">
                                                     <i class="fa fa-calendar" aria-hidden="true"></i> Đặt sân
                                                 </a>
                                             </div>
                                             <div class="form-group">
-                                                <a class="btn btn-default btn-sm" ng-href="#/stadium-info/1271" title="Chỉnh sửa" style="width:130px" href="https://www.timdoinhanh.com/stadium/management#/stadium-info/1271">
+                                                <a class="btn btn-default btn-sm" ng-href="#/stadium-info/1271" title="Chỉnh sửa" style="width:130px" href="${contextPath}/stadium/management#/stadium-info/1271">
                                                     <i class="glyphicon glyphicon-pencil"></i> Sửa thông tin
                                                 </a>
                                             </div>

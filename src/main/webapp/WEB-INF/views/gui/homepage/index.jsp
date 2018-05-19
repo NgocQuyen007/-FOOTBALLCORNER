@@ -36,7 +36,7 @@
                             Giảm thiểu tối đa tình trạng <strong>trống sân, cháy đối</strong>!
                         </li>
                         <li class="view-more">
-                            <a class="btn btn-primary" title="Toàn bộ tính năng của TìmĐốiNhanh.com" href="https://www.timdoinhanh.com/tien-ich.html">
+                            <a class="btn btn-primary" title="Toàn bộ tính năng của TìmĐốiNhanh.com" href="${contextPath}/tien-ich.html">
                                 <em class="glyphicon glyphicon-hand-right"></em>
                                 XEM CHI TIẾT
                             </a>
@@ -45,33 +45,33 @@
                 </div>
                 <div class="fp-quick-buttons">
                     <div class="fp-btn-group">
-                        <a href="https://www.timdoinhanh.com/tim-doi-da-bong-tai-ha-noi" title="Tìm đối đá bóng tại Hà Nội" class="btn btn-info" id="fp-btn-match-hanoi">
-                            <span class="count" id="matchHNCount">262</span> Đối tại Hà Nội
+                        <a href="${contextPath}/tim-doi-da-bong-tai-ha-noi" title="Tìm đối đá bóng tại Hà Nội" class="btn btn-info" id="fp-btn-match-hanoi">
+                            <span class="count" id="matchHNCount">76</span> Đối thủ tại Hòa Vang
                         </a>
-                        <a href="https://www.timdoinhanh.com/tim-doi-da-bong-tai-ho-chi-minh" title="Tìm đối đá bóng tại Hồ Chí Minh" class="btn btn-info" id="fp-btn-match-hcm">
-                            <span class="count" id="matchHCMCount">9</span> Đối tại Hồ Chí Minh
+                        <a href="${contextPath}/tim-doi-da-bong-tai-ho-chi-minh" title="Tìm đối đá bóng tại Hồ Chí Minh" class="btn btn-info" id="fp-btn-match-hcm">
+                            <span class="count" id="matchHCMCount">19</span> Đối tại Liên Chiểu
                         </a>
-                        <!--<a href="/tim-doi-da-bong-tai-da-nang" title="Tìm đối đá bóng tại Đà Nẵng" class="btn btn-info btn-sm" id="fp-btn-match-danang">
+                        <a href="${contextPath}/tim-doi-da-bong-tai-da-nang" title="Tìm đối đá bóng tại Đà Nẵng" class="btn btn-info btn-sm" id="fp-btn-match-danang">
                             <span class="count" id="fp-btn-match-danang-count"></span> Đối tại Đà Nẵng
-                        </a>-->
-                        <a href="https://www.timdoinhanh.com/doi-bong" title="Danh sách đội bóng tại Hà Nội, Hồ Chí Minh, Đà Nẵng..." class="btn btn-info" id="fp-btn-match-team">
-                            <span class="count" id="teamAllCount">5,877</span> Đội bóng
+                        </a>
+                        <a href="${contextPath}/doi-bong" title="Danh sách đội bóng tại Hà Nội, Hồ Chí Minh, Đà Nẵng..." class="btn btn-info" id="fp-btn-match-team">
+                            <span class="count" id="teamAllCount">38</span> Đội bóng
 
                         </a>
                     </div>
                     <div class="fp-btn-group">
-                        <a href="https://www.timdoinhanh.com/san-bong-tai-ha-noi" title="Sân bóng tại Hà Nội" class="btn btn-info" id="fp-btn-stadium-hanoi">
-                            <span class="count" id="stadiumHNCount">165</span>
-                            Sân bóng tại Hà Nội
+                        <a href="${contextPath}/san-bong-tai-lien-chieu" title="Sân bóng tại Liên Chiểu" class="btn btn-info" id="fp-btn-stadium-hanoi">
+                            <span class="count" id="stadiumHNCount">18</span>
+                            Sân bóng tại Liên Chiểu
                         </a>
-                        <a href="https://www.timdoinhanh.com/san-bong-tai-ho-chi-minh" title="Sân bóng tại Hồ Chí Minh" class="btn btn-info" id="fp-btn-stadium-hcm">
-                            <span class="count" id="stadiumHCMCount">141</span>
-                            Sân bóng tại Hồ Chí Minh
+                        <a href="${contextPath}/san-bong-tai-hai-chau" title="Sân bóng tại Hải Châu" class="btn btn-info" id="fp-btn-stadium-hcm">
+                            <span class="count" id="stadiumHCMCount">62</span>
+                            Sân bóng tại Hải Châu
                         </a>
-                        <!--<a href="/san-bong-tai-da-nang" title="Sân bóng tại Đà Nẵng" class="btn btn-info btn-sm" id="fp-btn-stadium-danang">
-                            <span class="count" id="stadiumDNCount"></span>
-                            Sân bóng tại Đà Nẵng
-                        </a>-->
+                        <a href="${contextPath}/san-bong-tai-hoa-vang" title="Sân bóng tại Hòa Vang" class="btn btn-info btn-sm" id="fp-btn-stadium-danang">
+                            <span class="count" id="stadiumDNCount">12</span>
+                            Sân bóng tại Hòa Vang
+                        </a>
                     </div>
                 </div>
             </div>
@@ -122,8 +122,8 @@
                             </div>
                             <div class="form-control-note text-justify">
                                 Bằng cách nhấn vào nút "Đăng ký", Bạn đồng ý với
-                                <a href="https://www.timdoinhanh.com/dieu-khoan-su-dung.html" target="_blank">điều khoản sử dụng</a> và
-                                <a href="https://www.timdoinhanh.com/chinh-sach-bao-mat.html" target="_blank">chính sách bảo mật</a> của chúng tôi.
+                                <a href="${contextPath}/dieu-khoan-su-dung.html" target="_blank">điều khoản sử dụng</a> và
+                                <a href="${contextPath}/chinh-sach-bao-mat.html" target="_blank">chính sách bảo mật</a> của chúng tôi.
                             </div>
                         </div>
                     </form>

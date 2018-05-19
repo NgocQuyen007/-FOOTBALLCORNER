@@ -13,7 +13,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 
 import entities.Event;
-import entities.Team;
 import iplms.IEvent;
 
 @Repository
@@ -127,6 +125,23 @@ public class EventDao implements IEvent {
 			throw new HibernateException(e);
 		}
 		
+	}
+	
+	@Override
+	public int updateStatusToBe2(int eventId) {
+		final Connection conn = getConnection();
+		// don't close the Connection ! managed via connection
+		final String updateQuery = " UPDATE events "
+							+ " SET status = 2"
+							+ " WHERE id = ?";
+		try {
+			try (PreparedStatement pst = conn.prepareStatement(updateQuery)) {
+				pst.setInt(1, eventId);
+				return pst.executeUpdate();
+			}
+		} catch (final SQLException e) {
+			throw new HibernateException(e);
+		}
 	}
 	
 	private Connection getConnection() {

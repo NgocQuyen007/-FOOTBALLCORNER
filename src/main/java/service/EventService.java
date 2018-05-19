@@ -52,6 +52,12 @@ public class EventService implements IEvent {
 		return eventDao.countAllRows(keyword, created_at);
 	}
 
+	@Override
+	@Transactional
+	public int updateStatusToBe2(int eventId) {
+		return eventDao.updateStatusToBe2(eventId);
+	}
+
 	
 
 }
