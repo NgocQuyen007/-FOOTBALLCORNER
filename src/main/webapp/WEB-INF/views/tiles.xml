@@ -60,6 +60,11 @@
 	
 	<!-- ================ MANAGEMENT ================ -->
 	
+	<definition name="match.inviting" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/match/match-inviting.jsp"></put-attribute>
+	</definition>
+	
+	
 	<!-- ================ QUẢN LÝ ĐỘI BÓNG ================ -->
 	<definition name="team.newteam" extends="tiles-definition">
 		<put-attribute name="content" value="/WEB-INF/views/management/team/team-newteam.jsp"></put-attribute>

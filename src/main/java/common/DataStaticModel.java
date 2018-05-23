@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 public class DataStaticModel {
 	
-	public static final int STATE_ROWCOUNT = 2;
+	public static final int STATE_ROWCOUNT = 5;
 	
 	public static final String SUCCESS_LOGIN_STATUS_CONST = "success";
 	

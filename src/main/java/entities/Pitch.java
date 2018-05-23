@@ -2,7 +2,6 @@ package entities;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -33,10 +32,10 @@ public class Pitch implements Serializable {
 	private String description;
 	
 	@Column(name="hour_start")
-	private Date hourStart;
+	private Integer hourStart;
 	
 	@Column(name="hour_end")
-	private Date hourEnd;
+	private Integer hourEnd;
 	
 	@Column(name="average_rating")
 	private Float averageRating;
@@ -45,10 +44,10 @@ public class Pitch implements Serializable {
 	private Date timeAutoReject;
 	
 	@Column(name="created_at")
-	private Timestamp createdAt;
+	private String createdAt;
 	
 	@Column(name="updated_at")
-	private Timestamp updatedAt;
+	private String updatedAt;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pitch_id", referencedColumnName = "id")
@@ -61,6 +60,26 @@ public class Pitch implements Serializable {
 	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
 	User user;
+	
+	public Pitch() {}
+	
+	public Pitch(Integer id, String name, Integer status, String coverAvatar, String description, Integer hourStart,
+			Integer hourEnd, Float averageRating, Date timeAutoReject, String createdAt, String updatedAt) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.status = status;
+		this.coverAvatar = coverAvatar;
+		this.description = description;
+		this.hourStart = hourStart;
+		this.hourEnd = hourEnd;
+		this.averageRating = averageRating;
+		this.timeAutoReject = timeAutoReject;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
+
 
 	public Integer getId() {
 		return id;
@@ -102,19 +121,19 @@ public class Pitch implements Serializable {
 		this.description = description;
 	}
 	
-	public Date getHourStart() {
+	public Integer getHourStart() {
 		return hourStart;
 	}
 
-	public void setHourStart(Date hourStart) {
+	public void setHourStart(Integer hourStart) {
 		this.hourStart = hourStart;
 	}
 
-	public Date getHourEnd() {
+	public Integer getHourEnd() {
 		return hourEnd;
 	}
 
-	public void setHourEnd(Date hourEnd) {
+	public void setHourEnd(Integer hourEnd) {
 		this.hourEnd = hourEnd;
 	}
 
@@ -134,19 +153,19 @@ public class Pitch implements Serializable {
 		this.timeAutoReject = timeAutoReject;
 	}
 
-	public Timestamp getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Timestamp createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdatedAt() {
+	public String getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(Timestamp updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
@@ -177,8 +196,12 @@ public class Pitch implements Serializable {
 	@Override
 	public String toString() {
 		return "Pitch [id=" + id + ", name=" + name + ", status=" + status + ", coverAvatar=" + coverAvatar
-				+ ", description=" + description + ", createdAt=" + createdAt + ", addresses=" + addresses + "]";
+				+ ", description=" + description + ", hourStart=" + hourStart + ", hourEnd=" + hourEnd
+				+ ", averageRating=" + averageRating + ", timeAutoReject=" + timeAutoReject + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + "]";
 	}
+
+	
 
 	
 }

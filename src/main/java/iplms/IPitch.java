@@ -4,6 +4,7 @@ import java.util.List;
 
 import dto.PitchInfoDto;
 import entities.Pitch;
+import entities.PitchDetail;
 
 public interface IPitch {
 	
@@ -54,4 +55,16 @@ public interface IPitch {
 	public int countAllRows();
 
 	List<PitchInfoDto> getListPitchInfo(String pricesKey, String numberofplayersKey, String keyword);
+	
+	/**
+	 * insert pitch
+	 * @param pitch item
+	 * @return
+	 */
+	public int insertPitch(Pitch pitch);
+	
+	public List<Pitch> getListPitchesByUserId(int userId);
+	
+	public int delById(int stadiumId);
+	
 }

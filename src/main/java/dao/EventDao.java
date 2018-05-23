@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 
+import dto.EventInfoDto;
 import entities.Event;
 import iplms.IEvent;
 
@@ -142,6 +144,34 @@ public class EventDao implements IEvent {
 		} catch (final SQLException e) {
 			throw new HibernateException(e);
 		}
+	}
+	
+	@Override
+	public List<EventInfoDto> thongKeSoLuongDoiTaiMoiQuan() {
+		List<EventInfoDto> dtos = new ArrayList<>();
+		// -- Thống kê số đối tại mỗi quận. Lấy 3 thằng đầu tiên
+		String queryString = " SELECT COUNT(*) SoDoi, devdn_destricts.name " +
+							 " FROM events " +
+							 " JOIN devdn_destricts " +
+							 " ON devdn_destricts.zipcode = events.dzipcode " +
+							 " GROUP BY (dzipcode) " +
+							 " ORDER BY SoDoi DESC " +
+							 " LIMIT 0,3 ";
+		Connection conn = getConnection();
+		PreparedStatement pst = null;
+		try {
+			pst = conn.prepareStatement(queryString);
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				EventInfoDto dto = new EventInfoDto();
+				dto.setNumberOfCompetiters(rs.getInt("SoDoi"));
+				dto.setDistrictName(rs.getString("devdn_destricts.name"));
+				dtos.add(dto);
+			}
+		} catch(Exception ex) {
+			
+		}
+		return dtos;
 	}
 	
 	private Connection getConnection() {

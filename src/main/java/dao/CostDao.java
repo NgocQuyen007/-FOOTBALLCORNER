@@ -1,11 +1,15 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.internal.SessionImpl;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
@@ -57,6 +61,34 @@ public class CostDao implements ICost{
 		
 		return dtos;
 	}
+
+	@Override
+	public int insertCost(Cost cost) {
+		Connection conn = getConnection();
+		String queryString =  " INSERT INTO costs(hour_start, hour_end, wday_start, wday_end, price, pdtail_id)"
+							+ " VALUES(?,?,?,?,?,?)";
+		PreparedStatement pst = null;
+		try {
+			 pst = conn.prepareStatement(queryString);
+			 pst.setInt(1, cost.getHourStart());
+			 pst.setInt(2, cost.getHourEnd());
+			 pst.setInt(3, cost.getWdayStart());
+			 pst.setInt(4, cost.getWdayEnd());
+			 pst.setInt(5, cost.getPrice());
+			 pst.setInt(6, cost.getPitchDetail().getId());
+			 
+			 return pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+	
+	private Connection getConnection() {
+		return ((SessionImpl) sessionFactory.getCurrentSession()).connection();
+	}
+	
 	
 	
 

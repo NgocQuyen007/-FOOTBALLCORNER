@@ -73,3 +73,19 @@
   -ms-transform: translate(0, 0);
   transform: translate(0, 0);
 }
+
+.sucess-action{
+	color: #ffffff;
+    background: orange;
+    padding-top: 10px;
+    padding-left: 13px;
+    line-height: 40px;
+}
+
+.fail-action{
+	color: red;
+    background: white;
+    padding-top: 10px;
+    padding-left: 13px;
+    line-height: 40px;
+}

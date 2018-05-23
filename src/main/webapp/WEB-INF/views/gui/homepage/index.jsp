@@ -1,3 +1,5 @@
+<%@page import="java.util.regex.Pattern"%>
+<%@page import="java.text.Normalizer"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 <%@ include file="/WEB-INF/tags/taglibs.jsp" %>
 
@@ -19,6 +21,7 @@
                         Tại đây, bạn dễ dàng tìm được các đối chơi cùng trình độ cũng như tìm sân chơi chất lượng cao với khung thời gian, giá cả hợp lý nhất.
                     </p>
                     <ul id="feature-list">
+                    
                         <li class="free-text">
                             <em class="glyphicon glyphicon-ok-sign"></em>
                             Hoàn toàn <strong>miễn phí</strong>!
@@ -36,7 +39,7 @@
                             Giảm thiểu tối đa tình trạng <strong>trống sân, cháy đối</strong>!
                         </li>
                         <li class="view-more">
-                            <a class="btn btn-primary" title="Toàn bộ tính năng của TìmĐốiNhanh.com" href="${contextPath}/tien-ich.html">
+                            <a class="btn btn-primary" title="Toàn bộ tính năng của TìmĐốiNhanh.com" href="${contextPath}">
                                 <em class="glyphicon glyphicon-hand-right"></em>
                                 XEM CHI TIẾT
                             </a>
@@ -45,33 +48,37 @@
                 </div>
                 <div class="fp-quick-buttons">
                     <div class="fp-btn-group">
-                        <a href="${contextPath}/tim-doi-da-bong-tai-ha-noi" title="Tìm đối đá bóng tại Hà Nội" class="btn btn-info" id="fp-btn-match-hanoi">
-                            <span class="count" id="matchHNCount">76</span> Đối thủ tại Hòa Vang
+                    	<a href="${contextPath}/tim-doi-da-bong-tai-da-nang" title="Tìm đối đá bóng tại Đà Nẵng" class="btn btn-info btn-sm" id="fp-btn-match-danang">
+                            <span class="count" id="fp-btn-match-danang-count">22</span> Đối tại Đà Nẵng
                         </a>
-                        <a href="${contextPath}/tim-doi-da-bong-tai-ho-chi-minh" title="Tìm đối đá bóng tại Hồ Chí Minh" class="btn btn-info" id="fp-btn-match-hcm">
-                            <span class="count" id="matchHCMCount">19</span> Đối tại Liên Chiểu
-                        </a>
-                        <a href="${contextPath}/tim-doi-da-bong-tai-da-nang" title="Tìm đối đá bóng tại Đà Nẵng" class="btn btn-info btn-sm" id="fp-btn-match-danang">
-                            <span class="count" id="fp-btn-match-danang-count"></span> Đối tại Đà Nẵng
-                        </a>
-                        <a href="${contextPath}/doi-bong" title="Danh sách đội bóng tại Hà Nội, Hồ Chí Minh, Đà Nẵng..." class="btn btn-info" id="fp-btn-match-team">
-                            <span class="count" id="teamAllCount">38</span> Đội bóng
+                        
+                    	<c:forEach var="soDoi" items="${soDoiTaiMoiQuan}">
+                    		<a href="${contextPath}/tim-doi-da-bong-tai-da-nang" title="Tìm đối đá bóng tại Đà Nẵng" class="btn btn-info" id="fp-btn-match-hanoi">
+	                            <span class="count" id="matchDnCount">${soDoi.getNumberOfCompetiters()}</span> Đối thủ tại ${soDoi.getDistrictName()}
+	                        </a>	
+                    	</c:forEach>
+                        
+                        <a href="${contextPath}/doi-bong-tai-da-nang" title="Danh sách đội bóng tại Đà Nẵng..." class="btn btn-info" id="fp-btn-match-team">
+                            <span class="count" id="teamAllCount">18</span> Đội bóng
 
                         </a>
                     </div>
                     <div class="fp-btn-group">
-                        <a href="${contextPath}/san-bong-tai-lien-chieu" title="Sân bóng tại Liên Chiểu" class="btn btn-info" id="fp-btn-stadium-hanoi">
-                            <span class="count" id="stadiumHNCount">18</span>
-                            Sân bóng tại Liên Chiểu
+                    
+                    <c:forEach var="soQuan" items="${districtdtos}">
+                    		<c:set var="name" value="${soQuan.name.substring(dqty.name.indexOf(' '))}"></c:set>
+		                    	<%
+		                    		String name = (String)pageContext.getAttribute("name");
+		                    		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
+		                    		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		                    		pageContext.setAttribute("dnameurl", pattern.matcher(temp).replaceAll("").toLowerCase().replaceAll(" ", "-").replaceAll("đ", "d"));
+		                    	%>
+                           
+                        <a href="${contextPath}/san-bong-tai-${dnameurl}-${soQuan.zipcode}" title="Sân bóng tại ${name}" class="btn btn-info" id="fp-btn-stadium-hanoi">
+                            <span class="count" id="stadiumDNCount">${soQuan.getQuantity()}</span>
+                            Sân bóng tại ${soQuan.getName()}
                         </a>
-                        <a href="${contextPath}/san-bong-tai-hai-chau" title="Sân bóng tại Hải Châu" class="btn btn-info" id="fp-btn-stadium-hcm">
-                            <span class="count" id="stadiumHCMCount">62</span>
-                            Sân bóng tại Hải Châu
-                        </a>
-                        <a href="${contextPath}/san-bong-tai-hoa-vang" title="Sân bóng tại Hòa Vang" class="btn btn-info btn-sm" id="fp-btn-stadium-danang">
-                            <span class="count" id="stadiumDNCount">12</span>
-                            Sân bóng tại Hòa Vang
-                        </a>
+                    </c:forEach>    
                     </div>
                 </div>
             </div>

@@ -1,11 +1,19 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.internal.SessionImpl;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
@@ -15,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import dto.DistrictQuantityDto;
 import dto.PitchTypeQuantityDto;
+import entities.Address;
 import entities.PitchDetail;
 import iplms.IPitchDetail;
 
@@ -57,6 +66,36 @@ public class PitchDetailDao implements IPitchDetail{
 		List<PitchDetail> pitchDetails = query.getResultList();
 		return pitchDetails;
 	}
+
+	@Override
+	public Map<Integer, Integer> insertPitchDetail(PitchDetail pitchDetail) {
+		// insertion order
+		Map<Integer, Integer> map = new LinkedHashMap<>();
+		int id = 0;
+		Connection conn = getConnection();
+		String queryString = " INSERT INTO pitches_detail(pitch_type_id, pitch_id) "
+						   + " VALUES(?,?)";
+		PreparedStatement pst;
+		try {
+			pst = conn.prepareStatement(queryString, PreparedStatement.RETURN_GENERATED_KEYS);
+			pst.setInt(1, pitchDetail.getPitchType().getId());
+			pst.setInt(2, pitchDetail.getPitch().getId());
+			pst.executeUpdate();
+			ResultSet rs = pst.getGeneratedKeys();
+			while(rs.next()) {
+				id = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		map.put(id, pitchDetail.getPitchType().getId());
+		return map;
+	}
+	
+		
+	private Connection getConnection() {
+		return ((SessionImpl) sessionFactory.getCurrentSession()).connection();
+	} 
 	
 	
 	

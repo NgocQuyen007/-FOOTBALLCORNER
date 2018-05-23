@@ -1,6 +1,7 @@
 package service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,6 +31,12 @@ public class PitchDetailService implements IPitchDetail{
 	@Transactional
 	public List<PitchDetail> getPitchDetails() {
 		return pitchDetailDao.getPitchDetails();
+	}
+
+	@Override
+	@Transactional
+	public Map<Integer, Integer> insertPitchDetail(PitchDetail pitchDetail) {
+		return pitchDetailDao.insertPitchDetail(pitchDetail);
 	}
 	
 }

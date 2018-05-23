@@ -16,4 +16,6 @@ public interface ICost {
 	 * @return the mini pitches quantity of each specific cost
 	 */
 	public List<CostQuantityDto> getPitchesQuantityofCosts();
+	
+	public int insertCost(Cost cost);
 }

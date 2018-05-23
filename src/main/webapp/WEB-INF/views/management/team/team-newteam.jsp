@@ -13,24 +13,24 @@
                     <div class="col-md-3">
                         <div class="sidebar sidebar-tien-ich">
                             <ul class="list-left-links">
-                                <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Trận đấu của tôi</a></li>
-                                <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
+                                <li><a href="${contextPath}/match/inviting" class="red">Trận đấu của tôi</a></li>
+                                <li><a >Đặt sân</a></li>
                                 <li>
-                                    <a href="https://www.timdoinhanh.com/team/view/9293">Quản lý đội bóng</a>
+                                    <a href="${contextPath}/team/management?tab=thanhvien">Quản lý đội bóng</a>
                                     <!-- ngIf: myTeams.length>0 --><ul class="sub-links ng-scope" ng-if="myTeams.length&gt;0">
                                     <!-- ngRepeat: team in myTeams --><li ng-repeat="team in myTeams" class="ng-scope">
-                                    <a href="https://www.timdoinhanh.com/team/management?id=9293" class="ng-binding">
+                                    <a  class="ng-binding">
                                         FC 2013_T4
                                     </a>
                                 </li><!-- end ngRepeat: team in myTeams --><li ng-repeat="team in myTeams" class="ng-scope">
-                                <a href="https://www.timdoinhanh.com/team/management?id=8918" class="ng-binding">
+                                <a href= class="ng-binding">
                                     FC13T4
                                 </a>
                             </li><!-- end ngRepeat: team in myTeams -->
                         </ul><!-- end ngIf: myTeams.length>0 -->
                     </li>
-                    <li><a href="https://www.timdoinhanh.com/stadium/management">Quản lý sân</a></li>
-                    <li><a href="https://www.timdoinhanh.com/user/profile">Tài khoản</a></li>
+                    <li><a href="${contextPath}/stadium/management">Quản lý sân</a></li>
+                    <li><a href="${contextPath}/user/profile">Tài khoản</a></li>
                 </ul>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     <br>
                     Bạn nên cập nhật số điện thoại vào tài khoản để đối tác có thể liên hệ trực tiếp.
                     <br>
-                    Cập nhật số điện thoại <a href="https://www.timdoinhanh.com/user/profile" target="_blank">tại đây</a>
+                    Cập nhật số điện thoại <a href="${contextPath}/user/profile" target="_blank">tại đây</a>
                 </div>
                 <div class="page-team-setting layout-main-content ng-scope">
                     <div class="heading-block">
@@ -54,7 +54,7 @@
                         <div class="form-group alert alert-warning">
                             <label class="control-label col-sm-3"><strong>Địa chỉ truy cập:</strong></label>
                             <div class="col-sm-9">
-                                <a target="_blank" href="https://www.timdoinhanh.com/">https://www.timdoinhanh.com/</a><input type="text" ng-model="team.logicalName" class="input-transparent ng-pristine ng-untouched ng-valid ng-empty">
+                                <a target="_blank" >https://www.datkeonhanh.com/</a><input type="text" ng-model="team.logicalName" class="input-transparent ng-pristine ng-untouched ng-valid ng-empty">
                                 <button type="button" ng-click="checkTeamLogicalName($event)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..." class="btn btn-primary inlineBlock btn-sm">Kiểm tra</button>
                                 <p ng-show="checkLogicalName==1" style="font-style:italic; color:blue" class="ng-hide">
                                     <i class="fa fa-check"></i> Địa chỉ khả dụng

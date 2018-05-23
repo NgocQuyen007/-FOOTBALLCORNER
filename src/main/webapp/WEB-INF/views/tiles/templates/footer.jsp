@@ -6,7 +6,7 @@
 <footer class="footer">
     <div class="container">
         <div class="col-xs-12 col-sm-2 col-md-3 col-1-footer">
-            <a href="https://www.timdoinhanh.com/#" class="footer-logo"><img class="img-responsive" src='<c:url value="/resources/common/img/logo-gray.png"/>' /></a>
+            <a href="${contextPath}/#" class="footer-logo"><img class="img-responsive" src='<c:url value="/resources/common/img/logo-dat-keo-nhanh-ft.png"/>' /></a>
             <div class="login-social-footer">
                 <a class="" href="javascript:void(0)">
                     <i class="fa fa-facebook-square"></i>
@@ -19,21 +19,21 @@
         <div class="col-xs-12 col-sm-3 col-md-3 intro">
             <ul>
                 <li>
-                    <h5>TìmĐốiNhanh.COM</h5>
+                    <h5>ĐặtKèoNhanh.COM</h5>
                 </li>
 
                 <li>
                     <a href="mailto:timdoinhanh.com@gmail.com">
                         <span>
                             <i class="fa fa-envelope-o"></i>
-                            timdoinhanh.com@gmail.com
+                            datkeonhanh.com@gmail.com
                         </span>
                     </a>
                 </li>
                 <li>
                 </li>
                 <li>
-                    <a href="https://www.facebook.com/timdoinhanh" target="_blank">
+                    <a href="https://www.facebook.com/datkeonhanh" target="_blank">
                         <span>
                             <i class="fa fa-facebook-f"></i>
                             Facebook
@@ -41,7 +41,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.facebook.com/timdoinhanh" target="_blank">
+                    <a href="https://www.facebook.com/datkeonhanh" target="_blank">
                         <span>
                             <i class="fa fa-youtube-play"></i>
                             Youtube
@@ -56,7 +56,7 @@
                     <h5>Thông tin</h5>
                 </li>
                 <li>
-                    <a href="https://www.timdoinhanh.com/gioi-thieu.html">
+                    <a href="${contextPath}/gioi-thieu.html">
                         <span>
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             Giới thiệu
@@ -64,7 +64,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.timdoinhanh.com/tien-ich.html">
+                    <a href="${contextPath}/tien-ich.html">
                         <span>
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             Tiện ích
@@ -72,7 +72,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.timdoinhanh.com/dieu-khoan-su-dung.html">
+                    <a href="${contextPath}/dieu-khoan-su-dung.html">
                         <span>
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             Điều khoản sử dụng
@@ -80,7 +80,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.timdoinhanh.com/chinh-sach-bao-mat.html">
+                    <a href="${contextPath}/chinh-sach-bao-mat.html">
                         <span>
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             Chính sách bảo mật
@@ -97,10 +97,10 @@
                     </h5>
                 </li>
                 <li>
-                    <a href="https://www.timdoinhanh.com/">
+                    <a href="${contextPath}">
                         <img src='<c:url value="/resources/common/img/app-store.png"/>' class="app-store">
                     </a>
-                    <a href="https://www.timdoinhanh.com/">
+                    <a href="${contextPath}">
                         <img src='<c:url value="/resources/common/img/ch-play.png"/>' class="ch-play">
                     </a>
                 </li>
@@ -121,7 +121,7 @@
 
 
 <!-- after footer -->
-<a href="https://www.timdoinhanh.com/#top" class="back-to-top" style="display: none;"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
+<a href="${contextPath}/#top" class="back-to-top" style="display: none;"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
 <div id="divAjaxLoadingRequest" style="display:none">
 </div>
 <a id="layout_modal_button" class="hidden" data-toggle="modal" role="button" href="javascript:void(0);" data-target="#"></a>
@@ -343,7 +343,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <a href="javascript:void(0);" onclick="$('#loginModal').show(); $('#modalNotAuthorize').hide(); " class="btn btn-success">Đăng nhập</a>
+                                <a href="javascript:void(0);" onclick="$('#modalNotAuthorize').addClass('hidden'); $('#loginModal').show();  " class="btn btn-success">Đăng nhập</a>
                                 <a href="${contextPath}/#" onclick="location.href =''" class="btn btn-danger">Đăng kí</a>
                             </div>
                         </div>
@@ -387,6 +387,15 @@
 		  '15:00', '15:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30']
 		});
 	});
+	
+	function isNumberKey(evt)
+    {
+       var charCode = (evt.which) ? evt.which : event.keyCode
+       if (charCode != 45  && charCode > 31 && (charCode < 48 || charCode > 57))
+          return false;
+
+       return true;
+    }
 	
 </script>
 </body>

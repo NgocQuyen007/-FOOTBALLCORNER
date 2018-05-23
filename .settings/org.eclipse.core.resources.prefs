@@ -1,7 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/main/webapp/WEB-INF/views/gui/comp-finding/compf-index.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/gui/comp-finding/compf-teams.jsp=UTF-8
-encoding//src/main/webapp/WEB-INF/views/gui/comp-finding/compf-waiting.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/gui/homepage/index.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-detail.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-district-ajax.jsp=UTF-8
@@ -9,6 +8,7 @@ encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-district.jsp=UT
 encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-index-ajax.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/gui/pitch-booking/pitchb-index.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/management/account/account-profile.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/management/match/match-inviting.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/management/stadium/stadium-booking.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/management/stadium/stadium-list.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/management/stadium/stadium-new.jsp=UTF-8

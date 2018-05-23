@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import dao.EventDao;
+import dto.EventInfoDto;
 import entities.Event;
 import iplms.IEvent;
 
@@ -56,6 +57,12 @@ public class EventService implements IEvent {
 	@Transactional
 	public int updateStatusToBe2(int eventId) {
 		return eventDao.updateStatusToBe2(eventId);
+	}
+
+	@Override
+	@Transactional
+	public List<EventInfoDto> thongKeSoLuongDoiTaiMoiQuan() {
+		return eventDao.thongKeSoLuongDoiTaiMoiQuan();
 	}
 
 	

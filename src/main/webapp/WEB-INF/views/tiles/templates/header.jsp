@@ -151,25 +151,25 @@
 		                </a>
 		            </li>
 		            <li>
-		                <a href="/user/profile">
+		                <a href="${contextPath}/user/profile">
 		                    <i class="fa fa-user"></i>
 		                    Thông tin tài khoản
 		                </a>
 		            </li>
 		            <li>
-		                <a href="/match/inviting">
+		                <a href="${contextPath}/match/inviting">
 		                    <i class="fa fa-futbol-o"></i>
 		                    Trận đấu của tôi
 		                </a>
 		            </li>
 		            <li>
-		                <a href="{{ firstTeamUrl() }}">
+		                <a href="${contextPath}/team/management/newteam">
 		                    <i class="fa fa-group"></i>
 		                    Đội bóng của tôi
 		                </a>
 		            </li>
 		            <li>
-		                <a href="/stadium/bookinghistory">
+		                <a >
 		                    <i class="fa fa-history"></i>
 		                    Lịch sử đặt sân
 		                </a>
@@ -202,7 +202,7 @@
         <!-- Responsive web for Login -->
             <span id="btn-left-sidebar" class="only-mobile-btn"><i class="fa fa-bars" aria-hidden="true"></i></span>
             <a class="logo-top" href="${contextPath}" title="Tìm Đối Nhanh">
-                <img src='<c:url value="/resources/common/img/logo-tim-doi-nhanh.png"/>' alt="Tìm Đối Nhanh">
+                <img src='<c:url value="/resources/common/img/logo-dat-keo-nhanh.png"/>' alt="Đặt kèo nhanh">
             </a>
             <span id="btn-right-sidebar" class="only-mobile-btn btn-right-user ng-scope" >
             <i class="fa fa-user" aria-hidden="true"></i>
@@ -372,25 +372,25 @@
 		                       <ul class="navbar-nav-dropdown" role="menu">
 		
 		                           <li>
-		                               <a href="/user/profile">
+		                               <a href="${contextPath}/user/profile">
 		                                   <i class="fa fa-user"></i>
 		                                   Thông tin tài khoản
 		                               </a>
 		                           </li>
 		                           <li>
-		                               <a href="/match/inviting">
+		                               <a href="${contextPath}/match/inviting">
 		                                   <i class="fa fa-futbol-o"></i>
 		                                   Trận đấu của tôi
 		                               </a>
 		                           </li>
 		                           <li>
-		                               <a href="/stadium/bookinghistory">
+		                               <a >
 		                                   <i class="fa fa-history"></i>
 		                                   Lịch sử đặt sân
 		                               </a>
 		                           </li>
 		                           <li>
-		                               <a href="{{ firstTeamUrl() }}">
+		                               <a href="${contextPath}/team/management/newteam">
 		                                   <i class="fa fa-futbol-o"></i>
 		                                   Đội bóng của tôi
 		                               </a>

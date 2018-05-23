@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import common.DataStaticModel;
 import dto.DistrictQuantityDto;
+import dto.EventInfoDto;
 import entities.District;
 import entities.Handicap;
 import entities.Level;
 import entities.Notification;
 import entities.User;
 import service.DistrictService;
+import service.EventService;
 import service.HandicapService;
 import service.LevelService;
 import service.NotificationService;
@@ -39,6 +41,9 @@ public class HomepageController {
 	
 	@Autowired
 	NotificationService notificationService;
+	
+	@Autowired
+	EventService eventService;
 	
 	@ModelAttribute
 	public void common(ModelMap modelMap, HttpSession httpSession) {
@@ -65,8 +70,11 @@ public class HomepageController {
 	@GetMapping
 	public String index(ModelMap modelMap, HttpSession httpSession) {
 		if (httpSession.getAttribute("sessionUserInfo") != null) {
-			return "redirect:/team/management/newteam";
+			return "redirect:/tim-doi-da-bong-tai-da-nang";
 		}
+		List<EventInfoDto> soDoiTaiMoiQuan = eventService.thongKeSoLuongDoiTaiMoiQuan();
+		System.out.println(soDoiTaiMoiQuan.size() + " ihuhhih ");
+		modelMap.addAttribute("soDoiTaiMoiQuan", soDoiTaiMoiQuan);
 		return "homepage.index";
 	}
 	

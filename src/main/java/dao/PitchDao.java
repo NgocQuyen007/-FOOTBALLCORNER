@@ -1,5 +1,8 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +13,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
+import org.hibernate.internal.SessionImpl;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
@@ -62,7 +66,8 @@ public class PitchDao implements IPitch{
 	public List<PitchInfoDto> getListPitchInfo() {
 		Session session = sessionFactory.getCurrentSession();
 		
-		String queryString = Q_GET_LIST_PITCH_DETAIL_INFO_X;
+		String queryString = Q_GET_LIST_PITCH_DETAIL_INFO_X
+				             + " ORDER BY p.id DESC ";
 		final NativeQuery query = session.createNativeQuery(queryString);
 		
 		query.addScalar(PitchInfoDto.PROP_PITCH_ID, StandardBasicTypes.INTEGER);
@@ -443,6 +448,42 @@ Session session = sessionFactory.getCurrentSession();
 			return dtos;
 		}
 		return Collections.emptyList();
+	}
+
+	@Override
+	public int insertPitch(Pitch pitch) {
+		Session session = sessionFactory.getCurrentSession();
+		int userId = (int) session.save(pitch);
+		return userId > 0 ? userId : 0;
+	}
+
+	@Override
+	public List<Pitch> getListPitchesByUserId(int userId) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		String queryString = "FROM pitches WHERE owner_id = :uid";
+		Query query = session.createQuery(queryString);
+		query.setParameter("uid", userId);
+		
+		return query.getResultList();
+	}
+
+	@Override
+	public int delById(int stadiumId) {
+		Connection conn = getConnection();
+		String query = "delete from pitches where id = ?";
+		PreparedStatement pst = null;
+		try {
+			 pst = conn.prepareStatement(query);
+			 pst.setInt(1, stadiumId);
+			 return pst.executeUpdate();
+		} catch (SQLException e) {
+		}
+		return 0;
+	}
+	
+	private Connection getConnection() {
+		return ((SessionImpl) sessionFactory.getCurrentSession()).connection();
 	}
 
 	

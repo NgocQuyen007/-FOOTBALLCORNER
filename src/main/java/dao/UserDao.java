@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 
+import common.LibraryString;
 import entities.User;
 import iplms.IUser;
 
@@ -31,8 +32,10 @@ public class UserDao implements IUser {
 					+ " WHERE email = :email AND password = :password";
 		Query sqlQ = session.createQuery(sql);
 		sqlQ.setParameter("email", user.getEmail());
-		sqlQ.setParameter("password", user.getPassword());
-
+		sqlQ.setParameter("password", LibraryString.md5(user.getPassword()));
+		
+		System.out.println(LibraryString.md5(user.getPassword()));
+		
 		try {
 			user = (User) sqlQ.getSingleResult();
 			if (!StringUtils.isEmpty(user)) {

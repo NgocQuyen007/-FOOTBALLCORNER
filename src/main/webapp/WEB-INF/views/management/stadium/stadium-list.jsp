@@ -1,8 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
+<c:if test="${param['msg'] eq 'adds'}">
+	<p class="sucess-action">Thêm thành công</p>
+</c:if>
+<c:if test="${param['msg'] eq 'dels'}">
+	<p class="sucess-action">Xóa thành công</p>
+</c:if>
+<c:if test="${param['msg'] eq 'delf'}">
+	<p class="fail-action">Xóa thất bại. Chỉ quản trị viên mới có quyền được xóa sân bóng. </p>
+</c:if>
 
-<!-- ngView: --><div ng-view="" class="ng-scope">
+
+<!-- ngView: --><div class="ng-scope">
 <div class="breadcrum ng-scope">
     <div class="container">
         <div class="breadcrum-line"><a href="${contextPath}/">Trang chủ</a><a href="${contextPath}/stadium/management">Danh sách sân</a></div>
@@ -13,15 +23,15 @@
         <div class="item-card">
             <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
                 <ul id="myTab" class="nav nav-tabs" role="tablist">
-                    <li ng-controller="StadiumBookingNotificationCtrl" class="ng-scope">
-                        <a href="${contextPath}/stadium/management#/booking" data-toggle="tab" aria-expanded="true">
+                    <li class="ng-scope">
+                        <a href="${contextPath}/stadium/management/booking" data-toggle="tab" aria-expanded="true">
                             <i class="fa fa-list" aria-hidden="true"></i>
                             Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">2</b>
                         </a>
                     </li>
 
                     <li class="active">
-                        <a href="${contextPath}/stadium/management#/stadium" data-toggle="tab" aria-expanded="false">
+                        <a href="${contextPath}/stadium/management/stadium" data-toggle="tab" aria-expanded="false">
                             <i class="fa fa-list" aria-hidden="true"></i>
                             Danh sách sân
                         </a>
@@ -30,11 +40,10 @@
                 <div id="myTab1Content" class="tab-content">
                     <div class="tab-pane fade" id="booking">
 
-                    </div> <!-- /.tab-pane -->
+                    </div>
 
                     <div class="tab-pane fade active in" id="#/stadium">
-                        <div id="listStadium" style="min-height:250px; position:relative">
-                            <!-- ngIf: overlayLoading -->
+                        <div>
                             <div class="pull-right" style="margin-bottom:30px;">
                                 <div class="dropdown">
                                     <button class="btn btn-primary btn-primary-extra dropdown-toggle" type="button" data-toggle="dropdown">
@@ -61,7 +70,8 @@
                                     </ul>
                                 </div>
                             </div>
-                            <!-- ngIf: stadiums.length>=1 --><table class="table table-striped table-responsive table-stadium-list ng-scope" ng-if="stadiums.length&gt;=1" style="">
+                            
+                            <table class="table table-striped table-responsive table-stadium-list ng-scope" >
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -71,35 +81,46 @@
                                         <th align="right" style="text-align:right">Tác vụ</th>
                                     </tr>
                                 </thead>
-
+								
                                 <tbody>
-                                    <!-- ngRepeat: stadium in stadiums --><tr ng-repeat="stadium in stadiums" class="ng-scope">
-                                        <td class="ng-binding">1</td>
+                                <c:if test="${stadiums.size() > 0 }">
+                                
+                                <fmt:parseNumber var="index" type="number" value="0" />
+                                <c:forEach var="stadium" items="${stadiums}">
+                                	<span style="display:none">${index = index + 1}</span>
+                                	<c:set var="address" value="${stadium.getAddresses().iterator().next()}"></c:set>
+                                    <tr  class="ng-scope">
+                                        <td class="ng-binding">${index}</td>
                                         <td>
-                                            <!-- ngIf: stadium.TypeId==1 --><span ng-if="stadium.TypeId==1" class="ng-scope">Bóng đá</span><!-- end ngIf: stadium.TypeId==1 -->
-                                            <!-- ngIf: stadium.TypeId==2 -->
-                                            <!-- ngIf: stadium.TypeId==3 -->
-                                            <!-- ngIf: stadium.TypeId==4 -->
-                                            <!-- ngIf: stadium.TypeId==5 -->
-                                            <!-- ngIf: stadium.TypeId==6 -->
+                                            <span class="ng-scope">Bóng đá</span>
                                         </td>
                                         <td>
-                                            <a ng-href="#/stadium-info/1273" href="${contextPath}/stadium/management#/stadium-info/1273"><strong class="ng-binding">Nam Hoa Vang</strong></a>
+                                            <a href="${contextPath}/stadium/management#/stadium-info/1273">
+                                            	<strong class="ng-binding">${stadium.getName()}</strong>
+                                            </a>
                                             <div class="ng-binding">
-                                                <i class="fa fa-map-o"></i> 704 Hoa Vang (Quận Liên Chiểu Đà Nẵng)
+                                                <i class="fa fa-map-o"></i> ${address.getDetail()} (${address.getDistrict().getName()} Đà Nẵng)
                                             </div>
-                                            <!-- ngIf: stadium.MobileNumbers!='' && stadium.MobileNumbers!=null --><div ng-if="stadium.MobileNumbers!=&#39;&#39; &amp;&amp; stadium.MobileNumbers!=null" class="ng-scope">
-                                                <i class="fa fa-phone-square"></i> <a href="tel:01727272727" class="ng-binding"> 01727272727</a>
-                                            </div><!-- end ngIf: stadium.MobileNumbers!='' && stadium.MobileNumbers!=null -->
-                                            <!-- ngIf: stadium.Facebook!='' && stadium.Facebook!=null --><div ng-if="stadium.Facebook!=&#39;&#39; &amp;&amp; stadium.Facebook!=null" class="ng-scope">
-                                                <i class="fa fa-facebook-square" aria-hidden="true"></i> <a href="${contextPath}/stadium/nothing" target="_blank" class="ng-binding"> nothing</a>
-                                            </div><!-- end ngIf: stadium.Facebook!='' && stadium.Facebook!=null -->
-                                            <!-- ngIf: stadium.Website!='' && stadium.Website!=null --><div ng-if="stadium.Website!=&#39;&#39; &amp;&amp; stadium.Website!=null" class="ng-scope">
-                                                <i class="fa fa-home" aria-hidden="true"></i> <a href="${contextPath}/stadium/nothing" target="_blank" class="ng-binding"> nothing</a>
-                                            </div><!-- end ngIf: stadium.Website!='' && stadium.Website!=null -->
-                                            <!-- ngIf: stadium.EmailAddress!='' && stadium.EmailAddress!=null --><div ng-if="stadium.EmailAddress!=&#39;&#39; &amp;&amp; stadium.EmailAddress!=null" class="ng-scope">
-                                                <i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:uhuhuhhu@gmail.com" target="_top" class="ng-binding"> uhuhuhhu@gmail.com</a>
-                                            </div><!-- end ngIf: stadium.EmailAddress!='' && stadium.EmailAddress!=null -->
+                                            
+                                            <div class="ng-scope">
+                                                <i class="fa fa-phone-square"></i> 
+                                                <a href="tel:01727272727" class="ng-binding"> ${address.getPhoneNumber()}</a>
+                                            </div>
+                                            
+                                            <div  class="ng-scope">
+                                                <i class="fa fa-facebook-square" aria-hidden="true"></i> 
+                                                <a target="_blank" class="ng-binding"> ${address.getFacebook()}</a>
+                                            </div>
+                                            
+                                            <div class="ng-scope">
+                                                <i class="fa fa-home" aria-hidden="true"></i> 
+                                                <a target="_blank" class="ng-binding"> ${address.getWebsite()} </a>
+                                            </div>
+                                            
+                                            <div  class="ng-scope">
+                                                <i class="fa fa-envelope-o" aria-hidden="true"></i> 
+                                                <a href="mailto:uhuhuhhu@gmail.com" target="_top" class="ng-binding"> ${address.getPemail()}</a>
+                                            </div>
 
                                         </td>
                                         <td>
@@ -108,12 +129,12 @@
 
                                         <td align="right" style="text-align:right">
                                             <div class="form-group">
-                                                <a href="${contextPath}/stadium/management#/bookingManager/1273" class="btn btn-info btn-sm" style="width:130px">
+                                                <a href="${contextPath}/stadium/management/bookingManager/${stadium.getId()}" class="btn btn-info btn-sm" style="width:130px">
                                                     <i class="fa fa-calendar" aria-hidden="true"></i> Đặt sân
                                                 </a>
                                             </div>
                                             <div class="form-group">
-                                                <a class="btn btn-default btn-sm" ng-href="#/stadium-info/1273" title="Chỉnh sửa" style="width:130px" href="${contextPath}/stadium/management#/stadium-info/1273">
+                                                <a href="${contextPath}/stadium/management/stadium-info/${stadium.getId()}" class="btn btn-default btn-sm" title="Chỉnh sửa" style="width:130px" >
                                                     <i class="glyphicon glyphicon-pencil"></i> Sửa thông tin
                                                 </a>
                                             </div>
@@ -123,63 +144,15 @@
                                                 </a><!-- end ngIf: stadium.Status == 1 -->
                                                 <!-- ngIf: stadium.Status == 2 -->
 
-                                                <a class="btn btn-danger btn-sm" confirmation-needed="Bạn có chắc chắn muốn xóa Nam Hoa Vang?" ng-click="changeStatus(stadium.Id,3,$event)" title="Xóa">
+                                                <a href="${contextPath}/stadium/management/del/${stadium.getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa sân ${stadium.getName()} không ?')" title="Xóa">
                                                     <i class="glyphicon glyphicon-remove-circle"></i> Xóa
                                                 </a>
                                             </div>
                                         </td>
-
-                                    </tr><!-- end ngRepeat: stadium in stadiums --><tr ng-repeat="stadium in stadiums" class="ng-scope">
-                                        <td class="ng-binding">2</td>
-                                        <td>
-                                            <!-- ngIf: stadium.TypeId==1 --><span ng-if="stadium.TypeId==1" class="ng-scope">Bóng đá</span><!-- end ngIf: stadium.TypeId==1 -->
-                                            <!-- ngIf: stadium.TypeId==2 -->
-                                            <!-- ngIf: stadium.TypeId==3 -->
-                                            <!-- ngIf: stadium.TypeId==4 -->
-                                            <!-- ngIf: stadium.TypeId==5 -->
-                                            <!-- ngIf: stadium.TypeId==6 -->
-                                        </td>
-                                        <td>
-                                            <a ng-href="#/stadium-info/1271" href="${contextPath}/stadium/management#/stadium-info/1271"><strong class="ng-binding">13 T4 DUT</strong></a>
-                                            <div class="ng-binding">
-                                                <i class="fa fa-map-o"></i> 74 Nam Cao Da Nag (Quận Liên Chiểu Đà Nẵng)
-                                            </div>
-                                            <!-- ngIf: stadium.MobileNumbers!='' && stadium.MobileNumbers!=null --><div ng-if="stadium.MobileNumbers!=&#39;&#39; &amp;&amp; stadium.MobileNumbers!=null" class="ng-scope">
-                                                <i class="fa fa-phone-square"></i> <a href="tel:0164 767 2019" class="ng-binding"> 0164 767 2019</a>
-                                            </div><!-- end ngIf: stadium.MobileNumbers!='' && stadium.MobileNumbers!=null -->
-                                            <!-- ngIf: stadium.Facebook!='' && stadium.Facebook!=null -->
-                                            <!-- ngIf: stadium.Website!='' && stadium.Website!=null -->
-                                            <!-- ngIf: stadium.EmailAddress!='' && stadium.EmailAddress!=null -->
-
-                                        </td>
-                                        <td>
-                                            <img height="120" ng-src="">
-                                        </td>
-
-                                        <td align="right" style="text-align:right">
-                                            <div class="form-group">
-                                                <a href="${contextPath}/stadium/management#/bookingManager/1271" class="btn btn-info btn-sm" style="width:130px">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i> Đặt sân
-                                                </a>
-                                            </div>
-                                            <div class="form-group">
-                                                <a class="btn btn-default btn-sm" ng-href="#/stadium-info/1271" title="Chỉnh sửa" style="width:130px" href="${contextPath}/stadium/management#/stadium-info/1271">
-                                                    <i class="glyphicon glyphicon-pencil"></i> Sửa thông tin
-                                                </a>
-                                            </div>
-                                            <div class="form-group">
-                                                <!-- ngIf: stadium.Status == 1 --><a class="btn btn-danger btn-sm ng-scope" confirmation-needed="Bạn có chắc chắn muốn ngưng hoạt động 13 T4 DUT?" ng-if="stadium.Status == 1" ng-click="changeStatus(stadium.Id,2,$event)" title="Ngưng hoạt động">
-                                                    <i class="glyphicon glyphicon-ban-circle"></i> Dừng
-                                                </a><!-- end ngIf: stadium.Status == 1 -->
-                                                <!-- ngIf: stadium.Status == 2 -->
-
-                                                <a class="btn btn-danger btn-sm" confirmation-needed="Bạn có chắc chắn muốn xóa 13 T4 DUT?" ng-click="changeStatus(stadium.Id,3,$event)" title="Xóa">
-                                                    <i class="glyphicon glyphicon-remove-circle"></i> Xóa
-                                                </a>
-                                            </div>
-                                        </td>
-
-                                    </tr><!-- end ngRepeat: stadium in stadiums -->
+                                    </tr>
+                                  </c:forEach>  
+                                 </c:if>
+                                    
                                 </tbody>
                             </table><!-- end ngIf: stadiums.length>=1 -->
                             <!-- ngIf: stadiums.length==0 -->

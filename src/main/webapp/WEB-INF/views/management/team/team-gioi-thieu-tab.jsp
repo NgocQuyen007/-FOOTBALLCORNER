@@ -22,7 +22,7 @@
                     <h1>fc2013_t4<span class="gender"><i class="fa fa-mars" aria-hidden="true"></i></span></h1>
                     <p class="captain-item" owner-id="1428">
                         <span class="mobile-hidden">
-                            <a href="https://www.timdoinhanh.com/user/profile/1428">Quyen Phan</a> (đội trưởng)
+                            <a href="${contextPath}/user/profile">Quyen Phan</a> (đội trưởng)
                             <span class="captain-item-status offline"></span>
                         </span>
                         <span class="chat-nhanh chat-nhanh-offline" ng-click="onQuickChat(1428);" title="Click để chat nhanh với đối."><i class="fa fa-comments" aria-hidden="true"></i> Nói chuyện</span>
@@ -30,12 +30,12 @@
                 </div>
                 <div class="wrap-ul-doi">
                     <ul class="list-link-doi">
-                        <li><a href="https://www.timdoinhanh.com/fc2013_t4">Tìm đối</a></li>
-                        <li><a href="https://www.timdoinhanh.com/fc2013_t4?tab=thanhvien">Thành viên</a></li>
-                        <li class="active"><a href="https://www.timdoinhanh.com/fc2013_t4?tab=gioithieu">Giới thiệu</a></li>
-                        <li><a href="https://www.timdoinhanh.com/fc2013_t4?tab=teamfund">Quỹ bóng</a></li>
+                        <li class="active"><a href="${contextPath}/team/management?tab=timdoi">Tìm đối</a></li>
+                        <li><a href="${contextPath}/team/management?tab=thanhvien">Thành viên</a></li>
+                        <li><a href="${contextPath}/team/management?tab=gioithieu">Giới thiệu</a></li>
+                        <li><a >Quỹ bóng</a></li>
                         <li>
-                            <a href="https://www.timdoinhanh.com/team/management?id=9293">
+                            <a >
                                 <i class="fa fa-gear"></i> Cập nhật thông tin
                             </a>
                         </li>

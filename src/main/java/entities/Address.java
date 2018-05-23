@@ -1,7 +1,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,18 +35,35 @@ public class Address implements Serializable {
 	private String pemail;
 	
 	@Column(name="created_at")
-	private Timestamp createdAt;
+	private String createdAt;
 	
 	@Column(name="updated_at")
-	private Timestamp updatedAt;
+	private String updatedAt;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "pitch_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "pitch_id", referencedColumnName = "id", nullable = true)
 	Pitch pitch;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "dzipcode", referencedColumnName = "zipcode", nullable = false)
+	@JoinColumn(name = "dzipcode", referencedColumnName = "zipcode", nullable = true)
 	District district;
+	
+	public Address() {}
+	
+	public Address(Integer id, String detail, String phoneNumber, String facebook, String website, String pemail,
+			String createdAt, String updatedAt, Pitch pitch, District district) {
+		super();
+		this.id = id;
+		this.detail = detail;
+		this.phoneNumber = phoneNumber;
+		this.facebook = facebook;
+		this.website = website;
+		this.pemail = pemail;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.pitch = pitch;
+		this.district = district;
+	}
 
 	public Integer getId() {
 		return id;
@@ -73,19 +89,19 @@ public class Address implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Timestamp getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Timestamp createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdatedAt() {
+	public String getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(Timestamp updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
@@ -132,8 +148,11 @@ public class Address implements Serializable {
 	@Override
 	public String toString() {
 		return "Address [id=" + id + ", detail=" + detail + ", phoneNumber=" + phoneNumber + ", facebook=" + facebook
-				+ ", website=" + website + ", pemail=" + pemail + ", createdAt=" + createdAt +  "]";
+				+ ", website=" + website + ", pemail=" + pemail + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + ", pitch=" + pitch.getId() + ", district=" + district.getZipcode() + "]";
 	}
+
+	
 	
 	
 }

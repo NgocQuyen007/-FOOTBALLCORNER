@@ -2,17 +2,14 @@
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
 
-<script src="js/summernote.min.js"></script>
-<link href="css/summernote.css" rel="stylesheet">
-
-<!-- ngView: --><div ng-view="" class="ng-scope" style="">
+<!-- ngView: --><div  class="ng-scope" style="">
 <div class="breadcrum ng-scope">
     <div class="container">
         <div class="breadcrum-line">
-            <a href="https://www.timdoinhanh.com/">Trang chủ</a>
-            <a href="https://www.timdoinhanh.com/stadium/management">Danh sách sân</a>
-            <a ng-show="stadiumId &gt; 0" href="https://www.timdoinhanh.com/stadium/management#/stadium-info/1273" class="ng-binding">Nam Hoa Vang</a>
-            <a ng-show="stadiumId &gt; 0" href="https://www.timdoinhanh.com/stadium/management#/bookingManager/1273" class="">Đặt sân</a>
+            <a href="${contextPath}/">Trang chủ</a>
+            <a href="${contextPath}/stadium/management">Danh sách sân</a>
+            <a ng-show="stadiumId &gt; 0" href="${contextPath}/stadium/management/stadium-info/1273" class="ng-binding">Nam Hoa Vang</a>
+            <a ng-show="stadiumId &gt; 0" href="${contextPath}/stadium/management/bookingManager/1273" class="">Đặt sân</a>
         </div>
     </div>
 </div>
@@ -22,20 +19,20 @@
             <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
                 <ul id="myTab" class="nav nav-tabs" role="tablist">
                     <li ng-controller="StadiumBookingNotificationCtrl" class="ng-scope">
-                        <a href="https://www.timdoinhanh.com/stadium/management#/booking" data-toggle="tab" aria-expanded="true">
+                        <a href="${contextPath}/stadium/management/booking" data-toggle="tab" aria-expanded="true">
                             <i class="fa fa-list" aria-hidden="true"></i>
                             Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">2</b>
                         </a>
                     </li>
                     <li>
-                        <a href="https://www.timdoinhanh.com/stadium/management#/stadium-info/1273" data-toggle="tab" aria-expanded="true">
+                        <a href="${contextPath}/stadium/management#/stadium-info/1273" data-toggle="tab" aria-expanded="true">
                             <i class="glyphicon glyphicon-info-sign"></i>
                             Thông tin cơ bản
                         </a>
                     </li>
 
                     <li class="active">
-                        <a href="https://www.timdoinhanh.com/stadium/management#/bookingManager/1273" data-toggle="tab" aria-expanded="false">
+                        <a href="${contextPath}/stadium/management#/bookingManager/1273" data-toggle="tab" aria-expanded="false">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                             Đặt sân
                         </a>
@@ -68,7 +65,7 @@
                                         <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
                                             <!-- ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible --><i class="fa fa-minus-square ng-scope" aria-hidden="true" ng-if="bookingDate.isVisible"></i><!-- end ngIf: bookingDate.isVisible -->
-                                            Thứ Bảy ngày 05/05/2018
+                                            Thứ Hai ngày 21/05/2018
                                         </a>
                                     </h4>
                                     <div class="scroll-bar-x">
@@ -690,7 +687,7 @@
                                         <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
                                             <!-- ngIf: !bookingDate.isVisible --><i class="fa fa-plus-square ng-scope" aria-hidden="true" ng-if="!bookingDate.isVisible"></i><!-- end ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible -->
-                                            Chủ Nhật ngày 06/05/2018
+                                            Thứ Ba ngày 22/05/2018
                                         </a>
                                     </h4>
                                     <div class="scroll-bar-x">
@@ -1475,7 +1472,7 @@
                                         <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
                                             <!-- ngIf: !bookingDate.isVisible --><i class="fa fa-plus-square ng-scope" aria-hidden="true" ng-if="!bookingDate.isVisible"></i><!-- end ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible -->
-                                            Thứ Hai ngày 07/05/2018
+                                            Thứ Tư ngày 23/05/2018
                                         </a>
                                     </h4>
                                     <div class="scroll-bar-x">
@@ -2097,7 +2094,7 @@
                                         <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
                                             <!-- ngIf: !bookingDate.isVisible --><i class="fa fa-plus-square ng-scope" aria-hidden="true" ng-if="!bookingDate.isVisible"></i><!-- end ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible -->
-                                            Thứ Ba ngày 08/05/2018
+                                            Thứ Năm ngày 24/05/2018
                                         </a>
                                     </h4>
                                     <div class="scroll-bar-x">
@@ -2719,7 +2716,7 @@
                                         <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
                                             <!-- ngIf: !bookingDate.isVisible --><i class="fa fa-plus-square ng-scope" aria-hidden="true" ng-if="!bookingDate.isVisible"></i><!-- end ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible -->
-                                            Thứ Tư ngày 09/05/2018
+                                            Thứ Sáu ngày 25/05/2018
                                         </a>
                                     </h4>
                                     <div class="scroll-bar-x">
@@ -3341,7 +3338,7 @@
                                         <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
                                             <!-- ngIf: !bookingDate.isVisible --><i class="fa fa-plus-square ng-scope" aria-hidden="true" ng-if="!bookingDate.isVisible"></i><!-- end ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible -->
-                                            Thứ Năm ngày 10/05/2018
+                                            Thứ Bảy ngày 26/05/2018
                                         </a>
                                     </h4>
                                     <div class="scroll-bar-x">
@@ -3963,7 +3960,7 @@
                                         <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
                                             <!-- ngIf: !bookingDate.isVisible --><i class="fa fa-plus-square ng-scope" aria-hidden="true" ng-if="!bookingDate.isVisible"></i><!-- end ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible -->
-                                            Thứ Sáu ngày 11/05/2018
+                                            Chủ nhật ngày 27/05/2018
                                         </a>
                                     </h4>
                                     <div class="scroll-bar-x">

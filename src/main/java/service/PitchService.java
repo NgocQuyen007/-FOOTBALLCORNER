@@ -103,6 +103,32 @@ public class PitchService implements IPitch {
 		}
 		return Collections.emptyList();
 	}
+
+	@Override
+	@Transactional
+	public int insertPitch(Pitch pitch) {
+		return pitchDao.insertPitch(pitch);
+	}
 	
+	/**
+	 * Danh sách các sân bóng của chủ sân
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public List<Pitch> getListPitchesByUserId(int userId) {
+		List<Pitch> dtos = pitchDao.getListPitchesByUserId(userId);
+		if (dtos.size() > 0) {
+			return dtos;
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	@Transactional
+	public int delById(int stadiumId) {
+		return pitchDao.delById(stadiumId);
+	}
 	
 }

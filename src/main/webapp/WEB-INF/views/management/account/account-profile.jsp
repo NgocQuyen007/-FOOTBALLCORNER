@@ -28,14 +28,14 @@
                 <div class="col-md-3">
                     <div class="sidebar sidebar-tien-ich">
 				<ul class="list-left-links">
-				    <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Trận đấu của tôi</a></li>
-				    <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
+				    <li><a class="red">Trận đấu của tôi</a></li>
+				    <li><a>Đặt sân</a></li>
 				    <li>
-				        <a href="https://www.timdoinhanh.com/team/management">Quản lý đội bóng</a>
+				        <a >Quản lý đội bóng</a>
 				        <!-- ngIf: myTeams.length>0 -->
 				    </li>
-				    <li><a href="https://www.timdoinhanh.com/stadium/management">Quản lý sân</a></li>
-				    <li><a href="https://www.timdoinhanh.com/user/profile">Tài khoản</a></li>
+				    <li><a >Quản lý sân</a></li>
+				    <li><a href="${contextPath}/user/profile">Tài khoản</a></li>
 				</ul>
                     </div>
                 </div>
@@ -56,9 +56,9 @@
                                 </div>
                                 <div class="col-md-9 right-item-san profile-view" style="display: block;">
 	                                <div class="form-group col-md-11">
-									    <p><strong>Họ và Tên:</strong> one test</p>
-									    <p><strong>Email:</strong> Chưa có</p>
-									    <p><strong>Điện thoại:</strong>  1a1241123</p>
+									    <p><strong>Họ và Tên:</strong> Phan Ngọc Quyền</p>
+									    <p><strong>Email:</strong> phanngocquyen250995@gmail.com</p>
+									    <p><strong>Điện thoại:</strong>  098 581 3271</p>
 									</div>
 									<div class="form-group col-md-11">
 									    <a href="javascript:void(0)" onclick="$('#profile').hide();$('profile-main').show();" id="btnProfileEdit" class="btn mb20 btn-small btn-primary">Chỉnh sửa</a>
@@ -133,14 +133,14 @@
         <div class="col-md-3">
             <div class="sidebar sidebar-tien-ich">
 <ul class="list-left-links">
-    <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Trận đấu của tôi</a></li>
-    <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
+    <li><a  class="red">Trận đấu của tôi</a></li>
+    <li><a >Đặt sân</a></li>
     <li>
-        <a href="https://www.timdoinhanh.com/team/management">Quản lý đội bóng</a>
-        <!-- ngIf: myTeams.length>0 -->
+        <a >Quản lý đội bóng</a>
+        
     </li>
-    <li><a href="https://www.timdoinhanh.com/stadium/management">Quản lý sân</a></li>
-    <li><a href="https://www.timdoinhanh.com/user/profile">Tài khoản</a></li>
+    <li><a >Quản lý sân</a></li>
+    <li><a href="${contextPath}/user/profile">Tài khoản</a></li>
 </ul>
             </div>
         </div>

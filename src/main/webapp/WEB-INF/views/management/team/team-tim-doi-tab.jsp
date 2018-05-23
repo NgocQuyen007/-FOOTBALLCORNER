@@ -22,7 +22,7 @@
                     <h1>fc2013_t4<span class="gender"><i class="fa fa-mars" aria-hidden="true"></i></span></h1>
                     <p class="captain-item" owner-id="1428">
                         <span class="mobile-hidden">
-                            <a href="https://www.timdoinhanh.com/user/profile/1428">Quyen Phan</a> (đội trưởng)
+                            <a href="${contextPath}/user/profile">Quyen Phan</a> (đội trưởng)
                             <span class="captain-item-status offline"></span>
                         </span>
                         <span class="chat-nhanh chat-nhanh-offline" ng-click="onQuickChat(1428);" title="Click để chat nhanh với đối."><i class="fa fa-comments" aria-hidden="true"></i> Nói chuyện</span>
@@ -30,12 +30,12 @@
                 </div>
                 <div class="wrap-ul-doi">
                     <ul class="list-link-doi">
-                        <li class="active"><a href="https://www.timdoinhanh.com/fc2013_t4">Tìm đối</a></li>
-                        <li><a href="https://www.timdoinhanh.com/fc2013_t4?tab=thanhvien">Thành viên</a></li>
-                        <li><a href="https://www.timdoinhanh.com/fc2013_t4?tab=gioithieu">Giới thiệu</a></li>
-                        <li><a href="https://www.timdoinhanh.com/fc2013_t4?tab=teamfund">Quỹ bóng</a></li>
+                        <li class="active"><a href="${contextPath}/team/management?tab=timdoi">Tìm đối</a></li>
+                        <li><a href="${contextPath}/team/management?tab=thanhvien">Thành viên</a></li>
+                        <li><a href="${contextPath}/team/management?tab=gioithieu">Giới thiệu</a></li>
+                        <li><a >Quỹ bóng</a></li>
                         <li>
-                            <a href="https://www.timdoinhanh.com/team/management?id=9293">
+                            <a >
                                 <i class="fa fa-gear"></i> Cập nhật thông tin
                             </a>
                         </li>
@@ -53,7 +53,7 @@
                                     <div class="col-md-12">
                                         <div class="right-item-san right-item-doi">
                                             <div class="header-item-doi">
-                                                <h2><a href="https://www.timdoinhanh.com/fc2013_t4#">fc2013_t4</a></h2>
+                                                <h2><a >fc2013_t4</a></h2>
                                                 <fieldset class="rating">
                                                     <input type="radio" id="star5" name="rating" value="5"><label class="full" for="star5" title="Awesome - 5 stars"></label>
                                                     <input type="radio" id="star4half" name="rating" value="4 and a half"><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
@@ -95,11 +95,11 @@
                                 <ul class="ul-list-doi-new">
                                     <li>
                                         <div class="doi-lis-img">
-                                            <a href="https://www.timdoinhanh.com/take-down-fc.html"><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="Take down FC" align="thumbnail"></a>
+                                            <a><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="Take down FC" align="thumbnail"></a>
                                         </div>
                                         <div class="doi-lis-content">
                                             <h3>
-                                                <a href="https://www.timdoinhanh.com/take-down-fc.html" title="Take down FC">Take down FC</a>
+                                                <a  title="Take down FC">Take down FC</a>
                                             </h3>
                                             <p>
                                                 <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
@@ -109,11 +109,11 @@
                                     </li>
                                     <li>
                                         <div class="doi-lis-img">
-                                            <a href="https://www.timdoinhanh.com/vcr.html"><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="VCR" align="thumbnail"></a>
+                                            <a ><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="VCR" align="thumbnail"></a>
                                         </div>
                                         <div class="doi-lis-content">
                                             <h3>
-                                                <a href="https://www.timdoinhanh.com/vcr.html" title="VCR">VCR</a>
+                                                <a title="VCR">VCR</a>
                                             </h3>
                                             <p>
                                                 <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
@@ -123,11 +123,11 @@
                                     </li>
                                     <li>
                                         <div class="doi-lis-img">
-                                            <a href="https://www.timdoinhanh.com/fc-bsh-262011-262012.html"><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="FC BSH" align="thumbnail"></a>
+                                            <a ><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="FC BSH" align="thumbnail"></a>
                                         </div>
                                         <div class="doi-lis-content">
                                             <h3>
-                                                <a href="https://www.timdoinhanh.com/fc-bsh-262011-262012.html" title="FC BSH">FC BSH</a>
+                                                <a  title="FC BSH">FC BSH</a>
                                             </h3>
                                             <p>
                                                 <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
@@ -137,11 +137,11 @@
                                     </li>
                                     <li>
                                         <div class="doi-lis-img">
-                                            <a href="https://www.timdoinhanh.com/fc-bsh-262011.html"><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="FC BSH" align="thumbnail"></a>
+                                            <a ><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="FC BSH" align="thumbnail"></a>
                                         </div>
                                         <div class="doi-lis-content">
                                             <h3>
-                                                <a href="https://www.timdoinhanh.com/fc-bsh-262011.html" title="FC BSH">FC BSH</a>
+                                                <a  title="FC BSH">FC BSH</a>
                                             </h3>
                                             <p>
                                                 <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
@@ -153,11 +153,11 @@
                                         </li>
                                         <li>
                                             <div class="doi-lis-img">
-                                                <a href="https://www.timdoinhanh.com/fc-bsh.html"><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="FC BSH" align="thumbnail"></a>
+                                                <a ><img class="img-responsive" src='<c:url value="/resources/common/img/sport.png" />' alt="FC BSH" align="thumbnail"></a>
                                             </div>
                                             <div class="doi-lis-content">
                                                 <h3>
-                                                    <a href="https://www.timdoinhanh.com/fc-bsh.html" title="FC BSH">FC BSH</a>
+                                                    <a  title="FC BSH">FC BSH</a>
                                                 </h3>
                                                 <p>
                                                     <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
@@ -166,7 +166,7 @@
                                             </div>
                                         </li>
                                     </ul>
-                                    <a href="https://www.timdoinhanh.com/doi-bong?level=1&amp;provinceId=2" class="doi-xem-them"><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Xem thêm</a>
+                                    <a  class="doi-xem-them"><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Xem thêm</a>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>

@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
-
+<c:if test="${param['msg'] eq 'addf'}">
+	<p style='color:#ffffff;background:orange; padding-top:10px;padding-bottom:10px'>Thêm thất bại</p>
+</c:if>
 
 <div>
 <div class="breadcrum ng-scope">
@@ -51,7 +53,7 @@
         <div class="form-group row">
             <label class="col-md-3 col-form-label">Tên sân</label>
             <div class="col-md-9">
-                <input type="text" name="name" style="font-weight: bold;" placeholder="Nhập tên sân" required="" oninvalid="sport.account.validateControl(this);" oninput="sport.account.validateControl(this);" data-msg-require="Bạn phải nhập tên sân" class="form-control ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched">
+                <input type="text" name="name" style="font-weight: bold;" placeholder="Nhập tên sân" required data-msg-require="Bạn phải nhập tên sân" class="form-control ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched">
             </div>
         </div>
 
@@ -264,9 +266,7 @@
 			            </thead>
 			            
 			            <tbody id="san-5-them-gia-san-items">
-			               
-			               
-			               
+									               
 			            </tbody>
 			        </table>
 			        
@@ -295,13 +295,13 @@
 										      <option value="2-8">T2-CN</option>
 										      <option value="2-6">T2-T6</option>
 										      <option value="7-8">T7-CN</option>
-										      <option value="7">T7</option>
-										      <option value="8">CN</option>
+										      <option value="7-7">T7</option>
+										      <option value="8-8">CN</option>
 										   </select>
 			                        </div>
 			                    </td>
-			                    <td class="sn-price-price-td">
-			                        <input name="price_5" type="text" class="form-control">
+			                    <td>
+			                        <input onkeydown="return isNumberKey(event)" type="text" name="price_5" pattern="[0-9]{2,5}" title="Vui lòng nhập định dạng số" class="form-control ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched"/>
 			                    </td>
 			                    <td class="sn-price-delete-td">
 			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
@@ -380,44 +380,8 @@
 			            </thead>
 			            
 			            <tbody id="san-7-them-gia-san-items">
-			               <tr class="ng-scope">
-			                    <td class="sn-price-time-td">
-			                        <div class="form-inline">
-			                            <select name="cost_hour_start" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
-					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
-					                        	<option  value="${map.value}">${map.key}</option>
-					                        </c:forEach>
-					                    </select>
-					                    
-					                    <select name="cost_hour_end" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
-					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
-					                        	<option  value="${map.value}">${map.key}</option>
-					                        </c:forEach>
-					                    </select>
-			                        </div>
-			                    </td>
-			                    <td class="sn-price-day-picker">
-			                        <div class="ng-scope">
-										   <select title="--Chọn ngày--" style="width:100%" class="form-control">
-										      <option value="2-8">T2-CN</option>
-										      <option value="2-6">T2-T6</option>
-										      <option value="7-8">T7-CN</option>
-										      <option value="7">T7</option>
-										      <option value="8">CN</option>
-										   </select>
-			                        </div>
-			                    </td>
-			                    <td class="sn-price-price-td">
-			                        <input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
-			                    </td>
-			                    <td class="sn-price-delete-td">
-			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
-			                            <i class="fa fa-remove" aria-hidden="true"></i>
-			                        </a>
-			                    </td>
-			                </tr>
+			               
 			            </tbody>
-			            
 			        </table>
 			        
 			        <table style="display:none">
@@ -425,13 +389,13 @@
 			               <tr class="ng-scope" >
 			                    <td class="sn-price-time-td">
 			                        <div class="form-inline">
-			                            <select name="cost_hour_start" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+			                            <select name="cost_hour_start_7" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
 					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
 					                        	<option  value="${map.value}">${map.key}</option>
 					                        </c:forEach>
 					                    </select>
 					                    
-					                    <select name="cost_hour_end" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                    <select name="cost_hour_end_7" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
 					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
 					                        	<option  value="${map.value}">${map.key}</option>
 					                        </c:forEach>
@@ -440,17 +404,17 @@
 			                    </td>
 			                    <td class="sn-price-day-picker">
 			                        <div class="ng-scope">
-										   <select title="--Chọn ngày--" style="width:100%" class="form-control">
+										   <select name="fromDaytoDay_7"title="--Chọn ngày--" style="width:100%" class="form-control">
 										      <option value="2-8">T2-CN</option>
 										      <option value="2-6">T2-T6</option>
 										      <option value="7-8">T7-CN</option>
-										      <option value="7">T7</option>
-										      <option value="8">CN</option>
+										      <option value="7-7">T7</option>
+										      <option value="8-8">CN</option>
 										   </select>
 			                        </div>
 			                    </td>
 			                    <td class="sn-price-price-td">
-			                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
+			                        <input onkeydown="return isNumberKey(event)" type="text" name="price_7" pattern="[0-9]{2,5}" title="Vui lòng nhập định dạng số" class="form-control ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched"/>
 			                    </td>
 			                    <td class="sn-price-delete-td">
 			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
@@ -531,44 +495,8 @@
 			            </thead>
 			            
 			            <tbody id="san-11-them-gia-san-items">
-			               <tr class="ng-scope">
-			                    <td class="sn-price-time-td">
-			                        <div class="form-inline">
-			                            <select name="cost_hour_start" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
-					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
-					                        	<option  value="${map.value}">${map.key}</option>
-					                        </c:forEach>
-					                    </select>
-					                    
-					                    <select name="cost_hour_end" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
-					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
-					                        	<option  value="${map.value}">${map.key}</option>
-					                        </c:forEach>
-					                    </select>
-			                        </div>
-			                    </td>
-			                    <td class="sn-price-day-picker">
-			                        <div class="ng-scope">
-										   <select title="--Chọn ngày--" style="width:100%" class="form-control">
-										      <option value="2-8">T2-CN</option>
-										      <option value="2-6">T2-T6</option>
-										      <option value="7-8">T7-CN</option>
-										      <option value="7">T7</option>
-										      <option value="8">CN</option>
-										   </select>
-			                        </div>
-			                    </td>
-			                    <td class="sn-price-price-td">
-			                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
-			                    </td>
-			                    <td class="sn-price-delete-td">
-			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">
-			                            <i class="fa fa-remove" aria-hidden="true"></i>
-			                        </a>
-			                    </td>
-			                </tr>
+			               
 			            </tbody>
-			            
 			        </table>
 			        
 			        <table  style="display:none">
@@ -576,13 +504,13 @@
 			               <tr class="ng-scope" >
 			                    <td class="sn-price-time-td">
 			                        <div class="form-inline">
-			                            <select name="cost_hour_start" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+			                            <select name="cost_hour_start_11" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
 					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
 					                        	<option  value="${map.value}">${map.key}</option>
 					                        </c:forEach>
 					                    </select>
 					                    
-					                    <select name="cost_hour_end" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
+					                    <select name="cost_hour_end_11" class="form-control input-sm ng-valid ng-empty ng-touched ng-dirty ng-valid-parse"> 
 					                        <c:forEach var="map" items="${PITCH_BEGIN_END_HOUR_MAP}">
 					                        	<option  value="${map.value}">${map.key}</option>
 					                        </c:forEach>
@@ -591,17 +519,17 @@
 			                    </td>
 			                    <td class="sn-price-day-picker">
 			                        <div class="ng-scope">
-										   <select title="--Chọn ngày--" style="width:100%" class="form-control">
+										   <select name="fromDaytoDay_11" title="--Chọn ngày--" style="width:100%" class="form-control">
 										      <option value="2-8">T2-CN</option>
 										      <option value="2-6">T2-T6</option>
 										      <option value="7-8">T7-CN</option>
-										      <option value="7">T7</option>
-										      <option value="8">CN</option>
+										      <option value="7-7">T7</option>
+										      <option value="8-8">CN</option>
 										   </select>
 			                        </div>
 			                    </td>
 			                    <td class="sn-price-price-td">
-			                        <!-- ngIf: stadiumNumberPrice.isEditMode || true --><input onkeydown="return isNumberKey(event)" type="text" ng-if="stadiumNumberPrice.isEditMode || true" ng-model="stadiumNumberPrice.price" min="0" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-scope ng-not-empty ng-valid-min" ui-number-mask="0"><!-- end ngIf: stadiumNumberPrice.isEditMode || true -->
+			                        <input onkeydown="return isNumberKey(event)" type="text" name="price_11" pattern="[0-9]{2,5}" title="Vui lòng nhập định dạng số" class="form-control ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched"/>
 			                    </td>
 			                    <td class="sn-price-delete-td">
 			                        <a class="btn btn-default btn-sm" title="Xóa giá" onclick="removeStadiumNumberPrice(this)">

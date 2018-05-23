@@ -40,6 +40,16 @@ public class PitchDetail implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pdtail_id", referencedColumnName = "id")
 	Set<Cost> costs;
+	
+	public PitchDetail() {
+	}
+	
+	public PitchDetail(int id, PitchType pitchType, Pitch pitch) {
+		super();
+		this.id = id;
+		this.pitchType = pitchType;
+		this.pitch = pitch;
+	}
 
 	public int getId() {
 		return id;

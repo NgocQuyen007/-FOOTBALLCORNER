@@ -32,4 +32,10 @@ public class CostService implements ICost {
 		return costDao.getPitchesQuantityofCosts();
 	}
 
+	@Override
+	@Transactional
+	public int insertCost(Cost cost) {
+		return costDao.insertCost(cost);
+	}
+
 }

@@ -98,10 +98,10 @@ public class UserManagementController {
 	}
 
 	@GetMapping("logout")
-	public String logout(@SessionAttribute("sessionUserInfo") User sessionUserInfo, ModelMap modelMap,
+	public String logout(ModelMap modelMap,
 			HttpSession httpSession, HttpServletResponse response) {
 		// we ensure sessionUserInfo existed
-		if (sessionUserInfo != null) {
+		if (httpSession.getAttribute("sessionUserInfo") != null) {
 			
 			Cookie cookie = new Cookie("emailck", null); // Not necessary, but saves bandwidth.
 			cookie.setPath("/datkeonhanh");

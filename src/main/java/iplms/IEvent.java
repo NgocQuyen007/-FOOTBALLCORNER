@@ -2,6 +2,7 @@ package iplms;
 
 import java.util.List;
 
+import dto.EventInfoDto;
 import entities.Event;
 
 public interface IEvent {
@@ -43,5 +44,7 @@ public interface IEvent {
 	 * @return
 	 */
 	public int updateStatusToBe2(int eventId) ;
+	
+	public List<EventInfoDto> thongKeSoLuongDoiTaiMoiQuan();
 	
 }
