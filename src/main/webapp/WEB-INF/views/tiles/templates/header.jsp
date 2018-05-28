@@ -18,7 +18,7 @@
     <meta name="theme-color" content="#ffffff">
     
     <!--Booking verify-->
-    <title>Tìm đối đá bóng</title>
+    <title>Đặt kèo nhanh</title>
     
     <!-- Google Font -->
     <link href='<c:url value="/resources/common/css/css.css" />' rel="stylesheet" type="text/css">

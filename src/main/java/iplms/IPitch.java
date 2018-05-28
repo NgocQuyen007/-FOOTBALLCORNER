@@ -67,4 +67,8 @@ public interface IPitch {
 	
 	public int delById(int stadiumId);
 	
+	public int updateStatus(int stadiumId, int status);
+	
+	public int updatePitch(Pitch pitch);
+	
 }

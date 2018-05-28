@@ -130,5 +130,17 @@ public class PitchService implements IPitch {
 	public int delById(int stadiumId) {
 		return pitchDao.delById(stadiumId);
 	}
+
+	@Override
+	@Transactional
+	public int updateStatus(int stadiumId, int status) {
+		return pitchDao.updateStatus(stadiumId, status);
+	}
+	
+	@Override
+	@Transactional
+	public int updatePitch(Pitch pitch) {
+		return pitchDao.updatePitch(pitch);
+	}
 	
 }

@@ -1,6 +1,9 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -16,9 +19,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import com.google.common.collect.Sets;
 
 import common.DataStaticModel;
+import common.LibraryString;
 import dto.DistrictQuantityDto;
+import dto.PitchInfoDto;
 import entities.Address;
 import entities.Cost;
 import entities.District;
@@ -66,7 +75,6 @@ public class StadiumManagementController {
 	@Autowired
 	CostService costService;
 	
-	
 	@ModelAttribute
 	public void common(ModelMap modelMap, HttpSession httpSession) {
 		List<DistrictQuantityDto> districtdtos = districtService.getPitchesQuantityofDistricts();
@@ -98,7 +106,6 @@ public class StadiumManagementController {
 		}
 		User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
 		List<Pitch> stadiums = pitchService.getListPitchesByUserId(sessionUserInfo.getId());
-		
 		if (stadiums.size() > 0 ) {
 			modelMap.addAttribute("stadiums", stadiums);
 			return "stadium.list";
@@ -122,7 +129,7 @@ public class StadiumManagementController {
 	}
 	
 	@GetMapping("addNew")
-	public String addNew(HttpSession httpSession) {
+	public String addNew(HttpSession httpSession, HttpServletRequest request) {
 		if (httpSession.getAttribute("sessionUserInfo") == null) {
 			return "redirect:/";
 		}
@@ -131,10 +138,22 @@ public class StadiumManagementController {
 	
 	@PostMapping("addNew")
 	public String addNew(HttpSession httpSession, @ModelAttribute("pitch") Pitch pitch, @ModelAttribute("address") Address address, @RequestParam Integer dzipcode,
-			HttpServletRequest request) {
+			@RequestParam("cover_avatar") CommonsMultipartFile commonsMultipartFile, HttpServletRequest request) {
 		if (httpSession.getAttribute("sessionUserInfo") == null) {
 			return "redirect:/";
 		}
+		
+		String uploadFileDirPath = request.getServletContext().getRealPath(DataStaticModel.UPLOAD_FILE_DIRECTORY);
+		File uploadFileDir = new File(uploadFileDirPath);
+		if(!uploadFileDir.exists()) {
+			uploadFileDir.mkdir();
+		}
+		
+		String originalFileName = commonsMultipartFile.getOriginalFilename();
+		if(!"".equals(originalFileName)) {
+			pitch.setCoverAvatar(LibraryString.renameFile(originalFileName));
+		}
+		
 		User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
 		
 		int san5 = Integer.parseInt(request.getParameter("statidum_type_5"));
@@ -218,7 +237,15 @@ public class StadiumManagementController {
 			}
 		}
 		
+		System.err.println("Te te: " + uploadFileDir + File.separator + originalFileName);
+		
 		if (newestPId > 0) {
+			if(!pitch.getCoverAvatar().equals("")){
+				try {
+					// Upload file
+					commonsMultipartFile.transferTo(new File(uploadFileDir + File.separator + pitch.getCoverAvatar()));
+				} catch (IllegalStateException | IOException e) {}
+			}
 			return "redirect:/stadium/management?msg=adds";
 		}
 		
@@ -227,18 +254,50 @@ public class StadiumManagementController {
 	
 	
 	@GetMapping("stadium-info/{id}")
-	public String updateInfo() {
+	public String updateInfo(@PathVariable int id, ModelMap modelMap) {
+		List<PitchInfoDto> pitchInfodtos = pitchService.getListPitchInfo();
+		List<PitchInfoDto> pitches = getPitches(pitchInfodtos);
+
+		// Thông tin sân bóng theo pid
+		PitchInfoDto stadium = getPitchByPId(pitches, id);
+		
+		modelMap.addAttribute("stadium", stadium);
 		return "stadium.update.info";
 	}
 	
+	@PostMapping("update-info")
+	public String updateInfo(@ModelAttribute("pitch") Pitch pitch, @ModelAttribute("address") Address address) {
+		System.err.println("Pitch Id: " + pitch.getId());
+		pitch.setAddresses(Sets.newHashSet(address));
+		if (pitchService.updatePitch(pitch) > 0 ) {
+			return "redirect:/stadium/management?msg=updates";
+		}
+		return "redirect:/stadium/management?msg=updatef";
+	}
+	
 	@GetMapping("del/{id}")
-	public String delete(@PathVariable("id") int stadiumId) {
-		System.out.println("Id: " + stadiumId);
+	public String delete(@PathVariable("id") int stadiumId, HttpServletRequest request) {
+		String coverAvatar = pitchService.getPitchByID(stadiumId).getCoverAvatar();
 		if(pitchService.delById(stadiumId) > 0) {
+			if (!"".equals(coverAvatar)) {
+				File file = new File(request.getServletContext().getRealPath(DataStaticModel.UPLOAD_FILE_DIRECTORY) + File.separator + coverAvatar);
+				if(file.exists()) {
+					file.delete();
+				}
+			}
 			return "redirect:/stadium/management?msg=dels";
 		}
 		return "redirect:/stadium/management?msg=delf";
 	}
+	@GetMapping("updateStatus")
+	@ResponseBody
+	public String updateStadiumStatus(@RequestParam int stadiumId, @RequestParam int status) {
+		if (pitchService.updateStatus(stadiumId, status) > 0 ) {
+			return "true";
+		}
+		return "false";
+	}
+	
 	
 	public void insertCostControl(int pdtailId, int soBangGiaItem, String[] cost_hour_start_item, String[] cost_hour_end_item, String[] fromDaytoDay_item, String[] price_item) {
 		for(int i = 0 ; i < (soBangGiaItem-2) ; i++) {
@@ -254,8 +313,7 @@ public class StadiumManagementController {
 	}
 	
 	public void initialPitch(Pitch pitch, User sessionUserInfo) {
-		pitch.setStatus(0);
-		pitch.setCoverAvatar("");
+		pitch.setStatus(1);
 		pitch.setHourStart(5);
 		pitch.setHourEnd(22);
 		pitch.setAverageRating(4f);
@@ -295,5 +353,28 @@ public class StadiumManagementController {
 	
 	public int parseInt(String input) {
 		return Integer.parseInt(input);
+	}
+	
+	public PitchInfoDto getPitchByPId(List<PitchInfoDto> pitches, int pid) {
+		for (PitchInfoDto pitch : pitches) {
+			if (pid == pitch.getId()) {
+				return pitch;
+			}
+		}
+		return null;
+	}
+
+	public List<PitchInfoDto> getPitches(List<PitchInfoDto> pitchInfodtos) {
+		List<PitchInfoDto> pitches = new ArrayList<>();
+		List<Integer> pids = new ArrayList<>();
+		// List id-s of pitches
+
+		for (PitchInfoDto pidto : pitchInfodtos) {
+			if (!pids.contains(pidto.getId())) {
+				pids.add(pidto.getId());
+				pitches.add(pidto);
+			}
+		}
+		return pitches.size() > 0 ? pitches : Collections.emptyList();
 	}
 }

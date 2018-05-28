@@ -18,6 +18,8 @@ public class DataStaticModel {
 	
 	public static final String EMPTY_SPACE = "";
 	
+	public static final String UPLOAD_FILE_DIRECTORY = "resources/files";
+	
 	
 	@SuppressWarnings("serial")
 	public static final TreeMap<String, String> PITCH_BOOKING_TIME_MAP = new TreeMap<String, String>()

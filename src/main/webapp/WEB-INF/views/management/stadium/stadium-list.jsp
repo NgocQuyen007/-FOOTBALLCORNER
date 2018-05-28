@@ -4,6 +4,9 @@
 <c:if test="${param['msg'] eq 'adds'}">
 	<p class="sucess-action">Thêm thành công</p>
 </c:if>
+<c:if test="${param['msg'] eq 'updates'}">
+	<p class="sucess-action">Sửa thành công</p>
+</c:if>
 <c:if test="${param['msg'] eq 'dels'}">
 	<p class="sucess-action">Xóa thành công</p>
 </c:if>
@@ -15,7 +18,9 @@
 <!-- ngView: --><div class="ng-scope">
 <div class="breadcrum ng-scope">
     <div class="container">
-        <div class="breadcrum-line"><a href="${contextPath}/">Trang chủ</a><a href="${contextPath}/stadium/management">Danh sách sân</a></div>
+        <div class="breadcrum-line">
+        	<a href="${contextPath}/">Trang chủ</a><a href="${contextPath}/stadium/management">Danh sách sân</a>
+        </div>
     </div>
 </div>
 <div class="content-wrap ng-scope">
@@ -124,7 +129,13 @@
 
                                         </td>
                                         <td>
-                                            <img height="120" ng-src="https://res.givator.com/pictures/11017/500/2018_04/original/be-the-good.jpg" src='<c:url value="https://res.givator.com/pictures/11017/500/2018_04/original/be-the-good.jpg" />'>
+                                        	<c:if test="${not empty stadium.getCoverAvatar()}">
+                                        		<img height="120" src='<c:url value="/resources/files/${stadium.getCoverAvatar()}"/>' />
+                                        	</c:if>
+                                        	<c:if test="${empty stadium.getCoverAvatar()}">
+                                        		<img height="120" src='<c:url value="/resources/common/img/stadium-default.png" />'>
+                                        	</c:if>
+                                            
                                         </td>
 
                                         <td align="right" style="text-align:right">
@@ -138,12 +149,27 @@
                                                     <i class="glyphicon glyphicon-pencil"></i> Sửa thông tin
                                                 </a>
                                             </div>
-                                            <div class="form-group">
-                                                <!-- ngIf: stadium.Status == 1 --><a class="btn btn-danger btn-sm ng-scope" confirmation-needed="Bạn có chắc chắn muốn ngưng hoạt động Nam Hoa Vang?" ng-if="stadium.Status == 1" ng-click="changeStatus(stadium.Id,2,$event)" title="Ngưng hoạt động">
-                                                    <i class="glyphicon glyphicon-ban-circle"></i> Dừng
-                                                </a><!-- end ngIf: stadium.Status == 1 -->
-                                                <!-- ngIf: stadium.Status == 2 -->
-
+                                            <div class="form-group" id="status">
+                                            	<c:if test="${stadium.getStatus() == 1}">
+	                                                <a  id="status-disable-ft" onclick="changeStadiumStatus(${stadium.getId()}, 0, this)"
+	                                                	class="btn btn-danger btn-sm ng-scope" title="Ngưng hoạt động" >
+	                                                    <i class="glyphicon glyphicon-ban-circle"></i> Dừng 
+	                                                </a>
+                                                </c:if>
+                                                <c:if test="${stadium.getStatus() == 0}">
+	                                                <a id="status-active-ft" onclick="changeStadiumStatus(${stadium.getId()}, 1, this)"
+	                                                	class="btn btn-danger btn-sm ng-scope" title="Hoạt động" >
+	                                                    <i class="glyphicon glyphicon-ok-circle"></i> Hoạt động
+	                                                </a>
+                                                </c:if>
+                                                
+                                                <div id="status-active" style="display:none">
+	                                                <a id="status-active-ft" onclick="changeStadiumStatus(${stadium.getId()}, 1, this)"
+		                                                	class="btn btn-danger btn-sm ng-scope" title="Hoạt động" >
+		                                                    <i class="glyphicon glyphicon-ok-circle"></i> Hoạt động
+		                                            </a>
+	                                            </div>
+                                                
                                                 <a href="${contextPath}/stadium/management/del/${stadium.getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa sân ${stadium.getName()} không ?')" title="Xóa">
                                                     <i class="glyphicon glyphicon-remove-circle"></i> Xóa
                                                 </a>
@@ -164,5 +190,32 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+	function changeStadiumStatus(stadiumId, status, current) {
+		var contextPath = $("#contextPath").val();
+		
+		$.ajax({
+			url : contextPath+"/stadium/management/updateStatus",
+			type: "GET", 
+			data: {
+				stadiumId: stadiumId,
+				status: status
+			},
+				
+			success: function(response) {
+				if (response == 'true') {
+					window.location.reload();
+				} 
+			},
+			
+			error: function(ex) {
+				console.log(ex);
+			}
+			
+		})
+	}
+</script>
 
 </div>
+
+

@@ -18,6 +18,11 @@
 	<mvc:resources location="/resources/" mapping="/resources/**" />
 	<mvc:annotation-driven enable-matrix-variables="true" />
 	
+	<!-- Upload file Multipart -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="1000000"/>
+	</bean>
+	
      <!-- View Resolver using Tiles XML -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
@@ -32,9 +37,4 @@
 	</bean>
 	<!-- View Resolver using Tiles XML-->
 	
-	<!-- Upload file Multipart -->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="100000"/>
-	</bean>
-
 </beans>

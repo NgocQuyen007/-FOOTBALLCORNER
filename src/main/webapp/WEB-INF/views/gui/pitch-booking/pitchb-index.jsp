@@ -148,7 +148,7 @@
 														<img class="img-responsive" src='<c:url value="/resources/common/img/sanbong.jpg" />' title="">
 													</c:when>
 													<c:otherwise>
-														<img class="img-responsive" src="https://res.givator.com/pictures/11017/600/2018_04/medium/sanbongdamhong.jpg" title="">
+														<img height="220 !important" class="img-responsive" src='<c:url value="/resources/files/${pitch.getAvatar()}"/>' title="">
 													</c:otherwise>
 												</c:choose>
 											</a>

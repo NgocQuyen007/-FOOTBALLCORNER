@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import dto.PitchInfoDto;
+import entities.Address;
 import entities.Pitch;
 import iplms.IPitch;
 
@@ -452,6 +453,7 @@ Session session = sessionFactory.getCurrentSession();
 
 	@Override
 	public int insertPitch(Pitch pitch) {
+		System.err.println("cover: " + pitch.getCoverAvatar());
 		Session session = sessionFactory.getCurrentSession();
 		int userId = (int) session.save(pitch);
 		return userId > 0 ? userId : 0;
@@ -471,7 +473,7 @@ Session session = sessionFactory.getCurrentSession();
 	@Override
 	public int delById(int stadiumId) {
 		Connection conn = getConnection();
-		String query = "delete from pitches where id = ?";
+		String query = "delete from pitches where id = ? LIMIT 1";
 		PreparedStatement pst = null;
 		try {
 			 pst = conn.prepareStatement(query);
@@ -482,9 +484,58 @@ Session session = sessionFactory.getCurrentSession();
 		return 0;
 	}
 	
+	@Override
+	public int updateStatus(int stadiumId, int status) {
+		Connection conn = getConnection();
+		String query = "UPDATE pitches\n"
+					 + "SET status = ?\n"
+					 + "WHERE id = ?";
+		PreparedStatement pst = null;
+		try {
+			 pst = conn.prepareStatement(query);
+			 pst.setInt(1, status);
+			 pst.setInt(2, stadiumId);
+			 return pst.executeUpdate();
+		} catch (SQLException e) {
+		}
+		return 0;
+	}
+
+	@Override
+	public int updatePitch(Pitch pitch) {
+		Connection conn = getConnection();
+		Address adrress = pitch.getAddresses().iterator().next();
+		String query = " UPDATE pitches p\n" + 
+				       " JOIN addresses a ON p.id = a.pitch_id\n" +
+				       " SET p.name         = ?, \n" +
+				       "     p.description  = ?, \n" +
+				       "     a.detail       = ?, \n" +
+				       "     a.phone_number = ?, \n" +
+				       "     a.facebook     = ?, \n" +
+				       "     a.website      = ?, \n" +
+				       "     a.pemail       = ?  \n" +
+				       " WHERE p.id         = ?";
+	PreparedStatement pst = null;
+	try {
+		 pst = conn.prepareStatement(query);
+		 pst.setString(1, pitch.getName());
+		 pst.setString(2, pitch.getDescription());
+		 pst.setString(3, adrress.getDetail());
+		 pst.setString(4, adrress.getPhoneNumber());
+		 pst.setString(5, adrress.getFacebook());
+		 pst.setString(6, adrress.getWebsite());
+		 pst.setString(7, adrress.getPemail());
+		 pst.setInt(8, pitch.getId());
+		 return pst.executeUpdate();
+	} catch (SQLException e) {
+	}
+	return 0;
+	}
+	
 	private Connection getConnection() {
 		return ((SessionImpl) sessionFactory.getCurrentSession()).connection();
 	}
+
 
 	
 
