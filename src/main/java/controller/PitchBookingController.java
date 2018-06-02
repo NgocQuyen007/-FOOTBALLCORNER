@@ -426,7 +426,7 @@ public class PitchBookingController {
 		stadiumDetailStatus.setUser(user);
 		
 		int matchTime = DataStaticModel.PITCH_BEGIN_END_HOUR_MAP.get(matchDayAndTime.trim().substring(0, 5));
-		String matchDay = matchDayAndTime.trim().substring(matchDayAndTime.lastIndexOf(" "));
+		String matchDay = matchDayAndTime.trim().substring(matchDayAndTime.lastIndexOf(" ")+1);
 		
 		stadiumDetailStatus.setMatchDay(matchDay);
 		stadiumDetailStatus.setMatchTime(matchTime);

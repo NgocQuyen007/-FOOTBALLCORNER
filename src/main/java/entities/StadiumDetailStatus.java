@@ -49,6 +49,8 @@ public class StadiumDetailStatus implements Serializable{
 	
 	private String note;
 	
+	private Integer position;
+	
 	public StadiumDetailStatus() {}
 
 	public StadiumDetailStatus(Cost cost, String matchDay, Integer matchTime) {
@@ -76,7 +78,7 @@ public class StadiumDetailStatus implements Serializable{
 	public String toString() {
 		return "StadiumDetailStatus [id=" + id + ", cost=" + cost.getId() + ", matchDay=" + matchDay + ", matchTime="
 				+ matchTime + ", user=" + user.getId() + ", status=" + status + ", createdAt=" + createdAt + ", customerName="
-				+ customerName + ", phoneNumber=" + phoneNumber + ", note=" + note + "]";
+				+ customerName + ", phoneNumber=" + phoneNumber + ", note=" + note + ", positon=" + position + "]";
 	}
 
 	public String getMatchDateTime() {
@@ -165,6 +167,14 @@ public class StadiumDetailStatus implements Serializable{
 
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public Integer getPosition() {
+		return position;
+	}
+
+	public void setPosition(Integer position) {
+		this.position = position;
 	}
 
 }

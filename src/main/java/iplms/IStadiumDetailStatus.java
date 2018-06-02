@@ -2,6 +2,7 @@ package iplms;
 
 import java.util.List;
 
+import dto.BookingManagerDto;
 import entities.StadiumDetailStatus;
 
 public interface IStadiumDetailStatus {
@@ -17,4 +18,9 @@ public interface IStadiumDetailStatus {
 	
 	/** Thông báo đến khách hàng là chủ sân đã accept hay reject*/
 	public List<StadiumDetailStatus> getNotifications(int id);
+	
+	/** Bảng thống kê tình trạng các sân bóng theo giờ: NGÀY ??? */
+	public List<BookingManagerDto> getStadiumBookingManagers(int stadiumId);
+	
+	public List<StadiumDetailStatus> getListStadiumDetailStatusByMatchDayAndPitchId(String matchDay, int stadiumId);
 }

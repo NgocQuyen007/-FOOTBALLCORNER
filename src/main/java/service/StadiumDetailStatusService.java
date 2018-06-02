@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import dao.StadiumDetailStatusDao;
+import dto.BookingManagerDto;
 import entities.StadiumDetailStatus;
 import iplms.IStadiumDetailStatus;
 
@@ -51,6 +52,18 @@ public class StadiumDetailStatusService implements IStadiumDetailStatus {
 	@Transactional
 	public List<StadiumDetailStatus> getNotifications(int id) {
 		return stadiumDetailStatusDao.getNotifications(id);
+	}
+
+	@Override
+	@Transactional
+	public List<BookingManagerDto> getStadiumBookingManagers(int stadiumId) {
+		return stadiumDetailStatusDao.getStadiumBookingManagers(stadiumId);
+	}
+
+	@Override
+	@Transactional
+	public List<StadiumDetailStatus> getListStadiumDetailStatusByMatchDayAndPitchId(String matchDay, int stadiumId) {
+		return stadiumDetailStatusDao.getListStadiumDetailStatusByMatchDayAndPitchId(matchDay, stadiumId);
 	}
 
 }

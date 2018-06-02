@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +28,7 @@ import com.google.common.collect.Sets;
 
 import common.DataStaticModel;
 import common.LibraryString;
+import dto.BookingManagerDto;
 import dto.DistrictQuantityDto;
 import dto.PitchInfoDto;
 import entities.Address;
@@ -305,12 +308,66 @@ public class StadiumManagementController {
 	}
 	
 	@GetMapping("bookingManager/{id}")
-	public String booking(@PathVariable("id") int stadiumId, HttpSession httpSession) {
+	public String booking(@PathVariable("id") int stadiumId, HttpSession httpSession, ModelMap modelMap) {
 		/** Trang đặt sân => tab thứ 3*/
 		if (httpSession.getAttribute("sessionUserInfo") == null ){
 			return "redirect:/";
 		}
+		List<BookingManagerDto> bookingManagerDtos = stadiumDetailStatusService.getStadiumBookingManagers(stadiumId);
+		Map<Integer, Integer> loaiSanVsSoLuongMap = new HashMap<>();
+		for (BookingManagerDto dto: bookingManagerDtos) {
+			loaiSanVsSoLuongMap.put(dto.getPitchType(), dto.getQuantity());
+			System.err.println(dto.toString());
+		}
+		
+		/*
+		for (Entry<Integer, Integer> map: loaiSanVsSoLuongMap.entrySet()) {
+			System.out.println("map: " + map.getKey() + ", " + map.getValue());
+			for (int i = 1 ; i <= map.getValue() ; i++) {
+				System.out.println("Sân " + map.getKey() + " So  " + i);
+			}
+		}
+		*/
+		
+		// Get pid, hourStart, hourEnd
+		modelMap.addAttribute("bookingManagerDto", bookingManagerDtos.get(0));
+		modelMap.addAttribute("loaiSanVsSoLuongMap", loaiSanVsSoLuongMap);
+		
+		
+		// GET CÁC stadium_detail_status với status = 1 và bởi pitchId
+		List<StadiumDetailStatus> stadiumDetailStatusList = stadiumDetailStatusService.getListStadiumDetailStatusByMatchDayAndPitchId("14/06/2018",stadiumId);
+		modelMap.addAttribute("stadiumDetailStatusList", stadiumDetailStatusList);
+		// Có hết trong này nè : Hihi
+		
+		// System.out.println("SZZZ: " + stadiumDetailStatusList.get(0).toString());
+		
+		for (int hourStep = bookingManagerDtos.get(0).getHourStart() ; hourStep < bookingManagerDtos.get(0).getHourEnd() ; hourStep++ ) {
+			for (Entry<Integer, Integer> map: loaiSanVsSoLuongMap.entrySet()) {
+				for (int i = 1 ; i <= map.getValue() ; i++) {
+					System.out.println("minipitch-" + hourStep + "-" + map.getKey() + "-" +i);
+					StadiumDetailStatus ooop = isBooking(stadiumDetailStatusList, hourStep, map.getKey(), i);
+					if (ooop != null) {
+						System.out.println(ooop.getPhoneNumber() +", " + ooop.getCustomerName() + ", " + ooop.getNote());
+					} else {
+						System.out.println("Còn trống");
+					}
+				}
+			}
+		}
+		
+		
 		return "stadium.booking";
+	}
+	
+	public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStatusList, int hourStep, int pitchType, int position ) {
+		for (StadiumDetailStatus detailStatus: stadiumDetailStatusList) {
+			if (hourStep == detailStatus.getMatchTime() 
+					&& pitchType == detailStatus.getCost().getPitchDetail().getPitchType().getId()
+					&& position == detailStatus.getPosition()) {
+				return detailStatus;
+			}
+		}
+		return null;
 	}
 	
 	@GetMapping("booking")

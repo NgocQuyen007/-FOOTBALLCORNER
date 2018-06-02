@@ -1,3 +1,8 @@
+<%@page import="java.util.Map.Entry"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="entities.StadiumDetailStatus"%>
+<%@page import="common.DataStaticModel"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
@@ -8,11 +13,25 @@
         <div class="breadcrum-line">
             <a href="${contextPath}/">Trang chủ</a>
             <a href="${contextPath}/stadium/management">Danh sách sân</a>
-            <a href="${contextPath}/stadium/management/stadium-info/1273">Nam Hoa Vang</a>
+            <a href="${contextPath}/stadium/management/stadium-info/1273">Cồn tộc</a>
             <a href="${contextPath}/stadium/management/bookingManager/1273" class="">Đặt sân</a>
         </div>
     </div>
 </div>
+
+<%!
+public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStatusList, int hourStep, int pitchType, int position ) {
+	for (StadiumDetailStatus detailStatus: stadiumDetailStatusList) {
+		if (hourStep == detailStatus.getMatchTime() 
+				&& pitchType == detailStatus.getCost().getPitchDetail().getPitchType().getId()
+				&& position == detailStatus.getPosition()) {
+			return detailStatus;
+		}
+	}
+	return null;
+}
+%>
+
 <div class="content-wrap ng-scope">
     <div class="container">
         <div class="item-card">
@@ -25,14 +44,14 @@
                         </a>
                     </li>
                     <li>
-                        <a href="${contextPath}/stadium/management/stadium-info/${stadium.getId()}" aria-expanded="false" >
+                        <a href="${contextPath}/stadium/management/stadium-info/${bookingManagerDto.getPitchId()}" aria-expanded="false" >
                             <i class="glyphicon glyphicon-info-sign"></i>
                             &nbsp;&nbsp;Thông tin cơ bản
                         </a>
                     </li>
 
                     <li  class="active">
-                        <a href="${contextPath}/stadium/management/bookingManager/${stadium.getId()}" aria-expanded="true">
+                        <a href="${contextPath}/stadium/management/bookingManager/${bookingManagerDto.getPitchId()}" aria-expanded="true">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                             &nbsp;&nbsp;Đặt sân
                         </a>
@@ -43,15 +62,18 @@
                         <div class="row">
                             <div class="col-md-12 form-group">
                                 <form class="form-inline ng-pristine ng-valid">
+                                    <div class="form-group">
+                                        <button ng-click="loadTodayBookingDates($event)" class="btn btn-info mobile-w-100p m-mtop-10">Hôm nay</button>
+                                    </div>
                                     <div class="input-group date frm-date-time">
-                                        <input type="text" class="form-control jqueryDatePickerEnabled2">
+                                        <input type="text" class="form-control jqueryDatePickerEnabled2" placeholder="04/06/2018">
                                         <label class="input-group-addon btn" for="bookingDatePicker">
                                             <span class="glyphicon glyphicon-calendar">
                                             </span>
                                         </label>
                                     </div>
                                     <div class="form-group">
-                                        <button ng-click="loadTodayBookingDates($event)" class="btn btn-info mobile-w-100p m-mtop-10">Hôm nay</button>
+                                        <button ng-click="loadTodayBookingDates($event)" class="btn btn-info mobile-w-100p m-mtop-10">Thông tin sân bóng</button>
                                     </div>
                                 </form>
                             </div>
@@ -68,538 +90,145 @@
                                         <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
                                             <!-- ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible --><i class="fa fa-minus-square ng-scope" aria-hidden="true" ng-if="bookingDate.isVisible"></i><!-- end ngIf: bookingDate.isVisible -->
-                                            Thứ Hai ngày 21/05/2018
+                                            Thứ Hai ngày 04/06/2018
                                         </a>
                                     </h4>
+                                    <br>
+                                    
                                     <div class="scroll-bar-x">
                                         <table class="table table-bordered table-responsive stadium-booking-table">
                                             <thead>
                                                 <tr>
                                                     <th style="width:125px">Khung giờ</th>
-                                                    <th width="235px" class="ng-binding ng-scope">Sân 5 số 1</th>
-                                                    <th width="235px" class="ng-binding ng-scope">Sân 5 số 2</th>
-                                                    <th width="235px" class="ng-binding ng-scope">Sân 5 số 3</th>
-                                                    <th width="235px" class="ng-binding ng-scope">Sân 5 số 4</th>
-                                                    <th width="235px" class="ng-binding ng-scope">Sân 7 số 1</th>
+                                                    <c:forEach var="map" items="${loaiSanVsSoLuongMap}">
+                                                    	<c:forEach begin="1" end="${map.getValue()}" var="i" step="1">
+                                                    		<th width="235px" class="ng-binding ng-scope">Sân ${map.getKey()} số ${i}</th>
+                                                    	</c:forEach>
+                                                    </c:forEach>
                                                 </tr>
                                             </thead>
+                                            
                                             <tbody >
-                                                <tr>
+                                            <c:forEach var="hourStep" begin="${bookingManagerDto.getHourStart()}" end="${bookingManagerDto.getHourEnd()-1}" step="1">
+                                            	<tr>
                                                     <td class="time-frame-td">
-                                                    	<span class="time-frame-text ng-binding">16:00 - 17:30</span>
-                                                    </td>
-                                                    <td>
-                                                        <div class="stadium-number-name mobile-only">
-                                                        	<strong class="ng-binding">Sân 5 số 1</strong>
-                                                        </div>
-                                                        
-                                                        <div class="booking-info-available ng-scope" onclick="$('.stadium-booking-form').removeClass('ng-hide')">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div>
-                                                        
-                                                        <form action="javascript:void(0);" class="stadium-booking-form ng-hide">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
-                                                                placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
-                                                                placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
-                                                                placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button onclick="$('.stadium-booking-form').addClass('ng-hide')" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
+                                                    	<span class="time-frame-text ng-binding">
+                                                    		<%=DataStaticModel.HOUR_LESS_THAN_10.get(Integer.parseInt(pageContext.getAttribute("hourStep").toString()))%>
+                                                    		&nbsp;-&nbsp;
+                                                    		<%=DataStaticModel.HOUR_LESS_THAN_10.get(Integer.parseInt(pageContext.getAttribute("hourStep").toString())+1)%>
+                                                    	</span>
                                                     </td>
                                                     
-                                                    <td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 2</strong></div>
-                                                        
-                                                        <div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 3</strong></div>
-                                                        
-                                                        <div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                    <td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 4</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                    <td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 7 số 1</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
+                                                   <c:forEach var="map" items="${loaiSanVsSoLuongMap}">
+                                                   		<c:forEach begin="1" end="${map.getValue()}" var="i" step="1">
+		                                                    <td class='minipitch-${hourStep}-${map.getKey()}-${i}'>
+		                                                        <div class="stadium-number-name mobile-only">
+		                                                        	<strong class="ng-binding">Sân ${map.getKey()} số ${i}</strong>
+		                                                        </div>
+		                                                        
+		                                                        <c:if test="${not empty stadiumDetailStatusList}">
+		                                                        <% 
+		                                                        	List<StadiumDetailStatus> stadiumDetailStatusList = (List<StadiumDetailStatus>)request.getAttribute("stadiumDetailStatusList"); 
+		                                                        	int hourStep = Integer.parseInt(pageContext.getAttribute("hourStep").toString());
+		                                                        	Entry<Integer, Integer> map = (Entry<Integer, Integer>)pageContext.getAttribute("map");
+		                                                        	int pitchType = map.getKey();
+		                                                        	int position = Integer.parseInt(pageContext.getAttribute("i").toString());
+		                                                        	StadiumDetailStatus detailStatus = isBooking(stadiumDetailStatusList, hourStep, pitchType, position);
+		                                                        	pageContext.setAttribute("detailStatus", detailStatus);
+		                                                        %>
+		                                                        	<c:choose>
+		                                                        		<c:when test="${detailStatus != null }">
+			                                                        		<div class="booking-info-available-${hourStep}-${map.getKey()}-${i} ng-scope" onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide'); $(this).addClass('ng-hide')">
+					                                                            <a class="pointer text-underline color-red"><i>Đã được đặt</i></a>
+					                                                        </div>
+			                                                        		
+			                                                        		<form action="javascript:void(0);" class="stadium-booking-form-${hourStep}-${map.getKey()}-${i} ng-hide">
+					                                                            <div class="form-group">
+					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                placeholder="Tên Người đặt / Đội bóng" value="${detailStatus.getCustomerName()}">
+					                                                            </div>
+					                                                            <div class="form-group">
+					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                placeholder="Điện thoại liên hệ" value="${detailStatus.getPhoneNumber()}">
+					                                                            </div>
+					                                                            <div class="form-group">
+					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                placeholder="Ghi chú" value="${detailStatus.getNote()}">
+					                                                            </div>
+					                                                            
+					                                                            
+					                                                            <div class="form-group text-right">
+					                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
+					                                                                    Lưu
+					                                                                </button>
+					                                                                <button onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').addClass('ng-hide'); $('.booking-info-available-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide')" class="btn btn-default btn-sm">Huỷ</button>
+					                                                            </div>
+					                                                        </form>
+		                                                        		</c:when>
+		                                                        		<c:otherwise>
+			                                                       			<div class="booking-info-available-${hourStep}-${map.getKey()}-${i} ng-scope" onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide'); $(this).addClass('ng-hide')">
+					                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
+					                                                        </div>
+					                                                        <form action="javascript:void(0);" class="stadium-booking-form-${hourStep}-${map.getKey()}-${i} ng-hide">
+					                                                            <div class="form-group">
+					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                placeholder="Tên Người đặt / Đội bóng" >
+					                                                            </div>
+					                                                            <div class="form-group">
+					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                placeholder="Điện thoại liên hệ" >
+					                                                            </div>
+					                                                            <div class="form-group">
+					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                placeholder="Ghi chú" >
+					                                                            </div>
+					                                                            <div class="form-group text-right">
+					                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
+					                                                                    Lưu
+					                                                                </button>
+					                                                                <button onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').addClass('ng-hide'); $('.booking-info-available-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide')" class="btn btn-default btn-sm">Huỷ</button>
+					                                                            </div>
+					                                                        </form>
+		                                                        		</c:otherwise>
+		                                                        	</c:choose>
+		                                                        </c:if>
+		                                                        
+		                                                        <c:if test="${empty stadiumDetailStatusList}">
+		                                                        	<div class="booking-info-available-${hourStep}-${map.getKey()}-${i} ng-scope" onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide'); $(this).addClass('ng-hide')">
+			                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
+			                                                        </div>
+			                                                        <form action="javascript:void(0);" class="stadium-booking-form-${hourStep}-${map.getKey()}-${i} ng-hide">
+			                                                            <div class="form-group">
+			                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+			                                                                placeholder="Tên Người đặt / Đội bóng" >
+			                                                            </div>
+			                                                            <div class="form-group">
+			                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+			                                                                placeholder="Điện thoại liên hệ" >
+			                                                            </div>
+			                                                            <div class="form-group">
+			                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+			                                                                placeholder="Ghi chú" >
+			                                                            </div>
+			                                                            <div class="form-group text-right">
+			                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
+			                                                                    Lưu
+			                                                                </button>
+			                                                                <button onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').addClass('ng-hide'); $('.booking-info-available-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide')" class="btn btn-default btn-sm">Huỷ</button>
+			                                                            </div>
+			                                                        </form>	
+		                                                        </c:if>
+		                                                        
+		                                                    </td>
+                                                    	</c:forEach>
+                                                    </c:forEach>
+                                                    
                                                 </tr>
-                                                <tr ng-repeat="timeFrame in bookingDate.timeFrames track by $index" ng-init="timeFrameIndex = $index" class="ng-scope">
-                                                    <td class="time-frame-td"><span class="time-frame-text ng-binding">17:30 - 19:00</span></td>
-                                                    <!-- ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 1</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                    <td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 2</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-													<td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 3</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                    <td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 4</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                    <td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 7 số 1</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                <tr ng-repeat="timeFrame in bookingDate.timeFrames track by $index" ng-init="timeFrameIndex = $index" class="ng-scope">
-                                                    <td class="time-frame-td"><span class="time-frame-text ng-binding">19:00 - 20:30</span></td>
-                                                    <td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 1</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div>
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 2</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 3</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 4</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 7 số 1</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index -->
-                                                </tr>
-                                                <tr ng-repeat="timeFrame in bookingDate.timeFrames track by $index" ng-init="timeFrameIndex = $index" class="ng-scope">
-                                                    <td class="time-frame-td"><span class="time-frame-text ng-binding">20:30 - 22:00</span></td>
-                                                    <!-- ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 1</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 2</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 3</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td><!-- end ngRepeat: bookingRecord in timeFrame.bookingRecords track by $index --><td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 5 số 4</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                    <td ng-repeat="bookingRecord in timeFrame.bookingRecords track by $index" ng-init="bookingRecordIndex = $index" class="ng-scope">
-                                                        <div class="stadium-number-name mobile-only"><strong class="ng-binding">Sân 7 số 1</strong></div>
-                                                        <!-- ngIf: bookingRecord.bookingId>0 && !bookingRecord.isEditing -->
-                                                        <!-- ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing --><div class="booking-info-available ng-scope" ng-if="bookingRecord.bookingId==0 &amp;&amp; !bookingRecord.isEditing" ng-click="bookingRecord.isEditing=true;">
-                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
-                                                        </div><!-- end ngIf: bookingRecord.bookingId==0 && !bookingRecord.isEditing -->
-                                                        <form class="stadium-booking-form ng-pristine ng-valid ng-hide" ng-show="bookingRecord.isEditing">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Tên Người đặt / Đội bóng" ng-model="bookingRecord.userName">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Điện thoại liên hệ" ng-model="bookingRecord.userMobile">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" placeholder="Ghi chú" ng-model="bookingRecord.description">
-                                                            </div>
-                                                            
-                                                            <div class="form-group text-right">
-                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
-                                                                    Lưu
-                                                                </button>
-                                                                <button ng-click="bookingRecord.isEditing=false;" class="btn btn-default btn-sm">Huỷ</button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                </tr>
+                                            
+                                            </c:forEach>
+                                                
                                                 <tr class="additional-row">
-                                                    <td colspan="6">
+                                                    <td colspan="3">
                                                         <form class="form-inline ng-pristine ng-valid">
                                                             <input type="text" class="form-control input-sm textbox-timepicker ng-pristine ng-untouched ng-valid ng-empty" style="width:80px" placeholder="Bắt đầu" ng-model="bookingDate.startTimeOfDayNew">
                                                             <input type="text" class="form-control input-sm textbox-timepicker ng-pristine ng-untouched ng-valid ng-empty" style="width:80px" placeholder="Kết thúc" ng-model="bookingDate.endTimeOfDayNew">
