@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import dto.DistrictQuantityDto;
 import dto.PitchTypeQuantityDto;
-import entities.Address;
 import entities.PitchDetail;
 import iplms.IPitchDetail;
 
@@ -65,6 +63,16 @@ public class PitchDetailDao implements IPitchDetail{
 		@SuppressWarnings("unchecked")
 		List<PitchDetail> pitchDetails = query.getResultList();
 		return pitchDetails;
+	}
+	
+	@Override
+	public PitchDetail getPitchDetail(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		String sql = " FROM pitches_detail WHERE id = :pitchDetailId";
+		Query query = session.createQuery(sql);
+		query.setParameter("pitchDetailId", id);
+		PitchDetail pitchDetail = (PitchDetail) query.getSingleResult();
+		return pitchDetail;
 	}
 
 	@Override

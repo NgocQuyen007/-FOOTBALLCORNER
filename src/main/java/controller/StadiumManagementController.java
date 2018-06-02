@@ -37,6 +37,7 @@ import entities.Notification;
 import entities.Pitch;
 import entities.PitchDetail;
 import entities.PitchType;
+import entities.StadiumDetailStatus;
 import entities.User;
 import service.AddressService;
 import service.CostService;
@@ -46,6 +47,7 @@ import service.LevelService;
 import service.NotificationService;
 import service.PitchDetailService;
 import service.PitchService;
+import service.StadiumDetailStatusService;
 
 @Controller
 @RequestMapping("stadium/management")
@@ -75,6 +77,9 @@ public class StadiumManagementController {
 	@Autowired
 	CostService costService;
 	
+	@Autowired
+	StadiumDetailStatusService stadiumDetailStatusService;
+	
 	@ModelAttribute
 	public void common(ModelMap modelMap, HttpSession httpSession) {
 		List<DistrictQuantityDto> districtdtos = districtService.getPitchesQuantityofDistricts();
@@ -94,8 +99,15 @@ public class StadiumManagementController {
 		/** Thông báo bắt đối trận đấu*/
 		if (httpSession.getAttribute("sessionUserInfo") != null) {
 			User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
+			
+			// Thông báo bắt đối, tìm đối thủ
 			List<Notification> findingRecipientNotifications = notificationService.getNotificationsByUserId(sessionUserInfo.getId());
 			modelMap.addAttribute("findingRecipientNotifications", findingRecipientNotifications);
+			
+			// Thông báo đặt sân, từ chối, chấp nhận => status in (1,2)
+			List<StadiumDetailStatus> stadiumDetailStatusNoti = stadiumDetailStatusService.getNotifications(sessionUserInfo.getId());
+			modelMap.addAttribute("stadiumDetailStatusNoti", stadiumDetailStatusNoti);
+			
 		}
 	}
 	
@@ -120,12 +132,6 @@ public class StadiumManagementController {
 		/** TH chưa có sân nào cả*/
 		return "redirect:/stadium/management/addNew";
 		
-	}
-	
-	@GetMapping("bookingManager/{id}")
-	public String booking() {
-		// Quản lý đặt sân
-		return "stadium.booking";
 	}
 	
 	@GetMapping("addNew")
@@ -197,6 +203,8 @@ public class StadiumManagementController {
 		 * 
 		 * => insert pitches_detail => id
 		 * => insert costs
+		 * 
+		 * 
 		 * => insert mini pitches
 		 */
 		
@@ -236,8 +244,6 @@ public class StadiumManagementController {
 					break;
 			}
 		}
-		
-		System.err.println("Te te: " + uploadFileDir + File.separator + originalFileName);
 		
 		if (newestPId > 0) {
 			if(!pitch.getCoverAvatar().equals("")){
@@ -298,6 +304,42 @@ public class StadiumManagementController {
 		return "false";
 	}
 	
+	@GetMapping("bookingManager/{id}")
+	public String booking(@PathVariable("id") int stadiumId, HttpSession httpSession) {
+		/** Trang đặt sân => tab thứ 3*/
+		if (httpSession.getAttribute("sessionUserInfo") == null ){
+			return "redirect:/";
+		}
+		return "stadium.booking";
+	}
+	
+	@GetMapping("booking")
+	public String bookingRequest(HttpSession httpSession, ModelMap modelMap) {
+		/** Xử lý yêu cầu đặt sân => tab thứ 1*/
+		if (httpSession.getAttribute("sessionUserInfo") == null ){
+			return "redirect:/";
+		}
+		User sessionUserInfo = (User)httpSession.getAttribute("sessionUserInfo");
+		List<StadiumDetailStatus> stadiumDetailStatusList = stadiumDetailStatusService.getListStadiumDetailStatusByUserIdAndStatus(sessionUserInfo.getId());
+		for (StadiumDetailStatus status: stadiumDetailStatusList) {
+			System.err.println(status.getCost().getPitchDetail().getPitch().getName() + " - " + status.getCost().getPitchDetail().getPitchType().getId()
+					+ ", " + status.getCustomerName() + "-" + status.getPhoneNumber()
+					+ ", " + status.getMatchDateTime()
+					+ ", " + status.getNote() + ", " + status.getId() + ", " + status.getCreatedAt()
+					);
+		}
+		modelMap.addAttribute("stadiumDetailStatusList", stadiumDetailStatusList);
+		return "stadium.booking.request";
+	}
+	
+	@GetMapping("booking/reject/{id}")
+	@ResponseBody
+	public String reject(@PathVariable int id) {
+		if (stadiumDetailStatusService.rejectBoookingRequest(id) > 0){
+			return "success";
+		}
+		return "";
+	}
 	
 	public void insertCostControl(int pdtailId, int soBangGiaItem, String[] cost_hour_start_item, String[] cost_hour_end_item, String[] fromDaytoDay_item, String[] price_item) {
 		for(int i = 0 ; i < (soBangGiaItem-2) ; i++) {

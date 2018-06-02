@@ -441,7 +441,7 @@
 				
 				        <div class="modal-footer">
 				            <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
-				            <button class="btn btn-primary btn-primary-extra ng-scope" type="submit">
+				            <button class="btn btn-primary btn-primary-extra" type="submit">
 				                <i class="fa fa-send"></i> Gửi
 				            </button>
 				        </div> 

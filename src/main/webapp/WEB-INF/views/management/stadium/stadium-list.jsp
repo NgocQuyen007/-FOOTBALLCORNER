@@ -2,16 +2,16 @@
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
 <c:if test="${param['msg'] eq 'adds'}">
-	<p class="sucess-action">Thêm thành công</p>
+	<p class="alert alert-success">Thêm thành công</p>
 </c:if>
 <c:if test="${param['msg'] eq 'updates'}">
-	<p class="sucess-action">Sửa thành công</p>
+	<p class="alert alert-success">Sửa thành công</p>
 </c:if>
 <c:if test="${param['msg'] eq 'dels'}">
-	<p class="sucess-action">Xóa thành công</p>
+	<p class="alert alert-success">Xóa thành công</p>
 </c:if>
 <c:if test="${param['msg'] eq 'delf'}">
-	<p class="fail-action">Xóa thất bại. Chỉ quản trị viên mới có quyền được xóa sân bóng. </p>
+	<p class="alert alert-danger">Xóa thất bại. Chỉ quản trị viên mới có quyền được xóa sân bóng. </p>
 </c:if>
 
 
@@ -29,14 +29,14 @@
             <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
                 <ul id="myTab" class="nav nav-tabs" role="tablist">
                     <li class="ng-scope">
-                        <a href="${contextPath}/stadium/management/booking" data-toggle="tab" aria-expanded="true">
+                        <a href="${contextPath}/stadium/management/booking" aria-expanded="true">
                             <i class="fa fa-list" aria-hidden="true"></i>
                             Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">2</b>
                         </a>
                     </li>
 
                     <li class="active">
-                        <a href="${contextPath}/stadium/management/stadium" data-toggle="tab" aria-expanded="false">
+                        <a href="${contextPath}/stadium/management" aria-expanded="false">
                             <i class="fa fa-list" aria-hidden="true"></i>
                             Danh sách sân
                         </a>
@@ -100,7 +100,7 @@
                                             <span class="ng-scope">Bóng đá</span>
                                         </td>
                                         <td>
-                                            <a href="${contextPath}/stadium/management#/stadium-info/1273">
+                                            <a href="${contextPath}/stadium/management/stadium-info/${stadium.getId()}">
                                             	<strong class="ng-binding">${stadium.getName()}</strong>
                                             </a>
                                             <div class="ng-binding">
@@ -109,7 +109,7 @@
                                             
                                             <div class="ng-scope">
                                                 <i class="fa fa-phone-square"></i> 
-                                                <a href="tel:01727272727" class="ng-binding"> ${address.getPhoneNumber()}</a>
+                                                <a href="tel:${address.getPhoneNumber()}" class="ng-binding"> ${address.getPhoneNumber()}</a>
                                             </div>
                                             
                                             <div  class="ng-scope">
@@ -124,7 +124,7 @@
                                             
                                             <div  class="ng-scope">
                                                 <i class="fa fa-envelope-o" aria-hidden="true"></i> 
-                                                <a href="mailto:uhuhuhhu@gmail.com" target="_top" class="ng-binding"> ${address.getPemail()}</a>
+                                                <a href="mailto:${address.getPemail()}" target="_top" class="ng-binding">${address.getPemail()}</a>
                                             </div>
 
                                         </td>

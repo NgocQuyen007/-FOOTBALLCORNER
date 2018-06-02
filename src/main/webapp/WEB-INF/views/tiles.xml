@@ -23,6 +23,12 @@
 		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-detail.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="pitchb.detail.ajax" extends="tiles-definition">
+		<put-attribute name="header" value="" />
+		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-detail-ajax.jsp"></put-attribute>
+		<put-attribute name="footer" value="" />
+	</definition>
+	
 	<definition name="pitchb.district" extends="tiles-definition">
 		<put-attribute name="content" value="/WEB-INF/views/gui/pitch-booking/pitchb-district.jsp"></put-attribute>
 	</definition>
@@ -108,10 +114,16 @@
 		<put-attribute name="content" value="/WEB-INF/views/management/stadium/stadium-list.jsp"></put-attribute>
 	</definition>
 	
-	<!-- Khác với yêu cầu đặt sân -->
+	<!-- Đặt sân - TAB 3 -->
 	<definition name="stadium.booking" extends="tiles-definition">
 		<put-attribute name="content" value="/WEB-INF/views/management/stadium/stadium-booking.jsp"></put-attribute>
 	</definition>
+	
+	<!-- Yêu cầu đặt sân -TAB I -->
+	<definition name="stadium.booking.request" extends="tiles-definition">
+		<put-attribute name="content" value="/WEB-INF/views/management/stadium/stadium-booking-request.jsp"></put-attribute>
+	</definition>
+	
 	
 	<definition name="stadium.new" extends="tiles-definition">
 		<put-attribute name="content" value="/WEB-INF/views/management/stadium/stadium-new.jsp"></put-attribute>

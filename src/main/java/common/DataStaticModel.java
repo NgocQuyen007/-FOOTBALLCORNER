@@ -63,6 +63,24 @@ public class DataStaticModel {
 	}};
 	
 	@SuppressWarnings("serial")
+	public static final TreeMap<Integer, String> HOUR_LESS_THAN_10 = new TreeMap<Integer, String>()
+	{{
+		put(0, "00:00"); put(13, "13:00");
+		put(1, "01:00"); put(14, "14:00"); 
+		put(2, "02:00"); put(15, "15:00"); 
+		put(3, "03:00"); put(16, "16:00"); 
+		put(4, "04:00"); put(17, "17:00");
+		put(5, "05:00"); put(18, "18:00");
+		put(6, "06:00"); put(19, "19:00");
+		put(7, "07:00"); put(20, "20:00");
+		put(8, "08:00"); put(21, "21:00");
+		put(9, "09:00"); put(22, "22:00");
+		put(10, "10:00"); put(23, "23:00");
+		put(11, "11:00"); put(24, "24:00");
+		put(12, "12:00");
+	}};
+	
+	@SuppressWarnings("serial")
 	public static final HashMap<Integer, String> WEEKLY_DATE = new HashMap<Integer, String>()
 	{{
 		put(Calendar.SUNDAY, "Chủ nhật");

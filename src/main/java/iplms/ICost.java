@@ -13,6 +13,12 @@ public interface ICost {
 	public List<Cost> getCosts();
 	
 	/**
+	 * Get cost in the system by cost Id
+	 * @return cost
+	 */
+	public Cost getCost(int id);
+	
+	/**
 	 * @return the mini pitches quantity of each specific cost
 	 */
 	public List<CostQuantityDto> getPitchesQuantityofCosts();

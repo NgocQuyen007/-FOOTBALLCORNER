@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
 <c:if test="${param['msg'] eq 'addf'}">
-	<p style='color:#ffffff;background:orange; padding-top:10px;padding-bottom:10px'>Thêm thất bại</p>
+	<p class="alert alert-danger" >Thêm thất bại</p>
 </c:if>
 
 <div>
@@ -25,14 +25,14 @@
                     <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
 
                         <ul id="myTab" class="nav nav-tabs" role="tablist">
-                            <li ng-controller="StadiumBookingNotificationCtrl" class="ng-scope">
-                                <a href="${contextPath}/stadium/management#/booking" data-toggle="tab" aria-expanded="true">
+                            <li>
+                                <a href="${contextPath}/stadium/management/booking" aria-expanded="true">
                                     <i class="fa fa-list" aria-hidden="true"></i>
-                                    Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">2</b>
+                                    Yêu cầu đặt sân <b class="badge badge-primary" style="background-color:red">2</b>
                                 </a>
                             </li>
                             <li class="active">
-                                <a href="${contextPath}/stadium/virtual.html#detail" data-toggle="tab" aria-expanded="true" class="ng-binding">
+                                <a href="${contextPath}/stadium/management/addNew" aria-expanded="true">
                                     <i class="glyphicon glyphicon-info-sign"></i>
                                     &nbsp;&nbsp;Thêm sân bóng mới
                                 </a>

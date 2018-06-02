@@ -10,6 +10,8 @@ public interface IPitchDetail {
 	
 	public List<PitchDetail> getPitchDetails();
 	
+	public PitchDetail getPitchDetail(int id);
+	
 	/**
 	 * @return the pitches quantity with the respective pitch type
 	 */

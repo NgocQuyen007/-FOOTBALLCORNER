@@ -43,6 +43,16 @@ public class CostDao implements ICost{
 		List<Cost> costs= query.getResultList();
 		return costs;
 	}
+	
+	@Override
+	public Cost getCost(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		String sql = " FROM costs WHERE id = :costId";
+		Query query = session.createQuery(sql);
+		query.setParameter("costId", id);
+		Cost cost = (Cost) query.getSingleResult();
+		return cost;
+	}
 
 	@Override
 	public List<CostQuantityDto> getPitchesQuantityofCosts() {

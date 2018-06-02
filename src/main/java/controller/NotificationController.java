@@ -19,12 +19,14 @@ import entities.District;
 import entities.Handicap;
 import entities.Level;
 import entities.Notification;
+import entities.StadiumDetailStatus;
 import entities.User;
 import service.DistrictService;
 import service.EventService;
 import service.HandicapService;
 import service.LevelService;
 import service.NotificationService;
+import service.StadiumDetailStatusService;
 import service.TeamService;
 
 @Controller
@@ -47,6 +49,9 @@ public class NotificationController {
 	
 	@Autowired
 	NotificationService notificationService;
+	
+	@Autowired
+	StadiumDetailStatusService stadiumDetailStatusService;
 	
 	@ModelAttribute
 	public void common(ModelMap modelMap, HttpSession httpSession) {
@@ -72,8 +77,15 @@ public class NotificationController {
 		/** Thông báo bắt đối trận đấu*/
 		if (httpSession.getAttribute("sessionUserInfo") != null) {
 			User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
+			
+			// Thông báo bắt đối, tìm đối thủ
 			List<Notification> findingRecipientNotifications = notificationService.getNotificationsByUserId(sessionUserInfo.getId());
 			modelMap.addAttribute("findingRecipientNotifications", findingRecipientNotifications);
+			
+			// Thông báo đặt sân, từ chối, chấp nhận => status in (1,2)
+			List<StadiumDetailStatus> stadiumDetailStatusNoti = stadiumDetailStatusService.getNotifications(sessionUserInfo.getId());
+			modelMap.addAttribute("stadiumDetailStatusNoti", stadiumDetailStatusNoti);
+			
 		}
 		
 	}

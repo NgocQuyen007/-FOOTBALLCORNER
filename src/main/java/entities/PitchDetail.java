@@ -28,6 +28,9 @@ public class PitchDetail implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "pitch_id", referencedColumnName = "id", nullable = false)
 	Pitch pitch;
+	
+	/** Số lượng miniPitch của loại sân. */
+	private Integer quantity;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pitch_detail_id", referencedColumnName = "id")
@@ -97,6 +100,14 @@ public class PitchDetail implements Serializable {
 
 	public void setCosts(Set<Cost> costs) {
 		this.costs = costs;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 	
 }

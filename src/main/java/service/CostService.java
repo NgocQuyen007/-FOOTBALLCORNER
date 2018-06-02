@@ -25,6 +25,12 @@ public class CostService implements ICost {
 	public List<Cost> getCosts() {
 		return costDao.getCosts();
 	}
+	
+	@Override
+	@Transactional
+	public Cost getCost(int id) {
+		return costDao.getCost(id);
+	}
 
 	@Override
 	@Transactional

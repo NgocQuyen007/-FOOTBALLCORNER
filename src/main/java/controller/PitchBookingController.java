@@ -12,9 +12,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import common.DataStaticModel;
 import dto.CostQuantityDto;
@@ -27,6 +27,7 @@ import entities.Handicap;
 import entities.Level;
 import entities.Notification;
 import entities.PitchDetail;
+import entities.StadiumDetailStatus;
 import entities.User;
 import service.CostService;
 import service.DistrictService;
@@ -35,6 +36,7 @@ import service.LevelService;
 import service.NotificationService;
 import service.PitchDetailService;
 import service.PitchService;
+import service.StadiumDetailStatusService;
 
 @Controller
 @RequestMapping("")
@@ -60,6 +62,9 @@ public class PitchBookingController {
 	
 	@Autowired
 	NotificationService notificationService;
+	
+	@Autowired
+	StadiumDetailStatusService stadiumDetailStatusService;
 
 	@ModelAttribute
 	public void common(ModelMap modelMap, HttpSession httpSession) {
@@ -86,11 +91,55 @@ public class PitchBookingController {
 		/** Thông báo bắt đối trận đấu*/
 		if (httpSession.getAttribute("sessionUserInfo") != null) {
 			User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
+			
+			// Thông báo bắt đối, tìm đối thủ
 			List<Notification> findingRecipientNotifications = notificationService.getNotificationsByUserId(sessionUserInfo.getId());
 			modelMap.addAttribute("findingRecipientNotifications", findingRecipientNotifications);
+			
+			// Thông báo đặt sân, từ chối, chấp nhận => status in (1,2)
+			List<StadiumDetailStatus> stadiumDetailStatusNoti = stadiumDetailStatusService.getNotifications(sessionUserInfo.getId());
+			modelMap.addAttribute("stadiumDetailStatusNoti", stadiumDetailStatusNoti);
+			
 		}
+	}
+	
+	@PostMapping("choose-the-booking-date")
+	public String chooseTheBookingDate(@RequestParam int costId, @RequestParam String matchDay, ModelMap modelMap) {
+		System.err.println("==================");
+		Cost cost = costService.getCost(costId);
+		PitchDetail pitchDetail = cost.getPitchDetail();
+		/** Số lượng sân bóng mini ứng với loại sân - quantity */
+		System.err.println(pitchDetailService + " = = = " + pitchDetail.getId());
+		int quantityOfPitchDetail = pitchDetailService.getPitchDetail(pitchDetail.getId()).getQuantity();  
 		
-
+		modelMap.addAttribute("cost", cost);
+		modelMap.addAttribute("matchDay", matchDay);
+		modelMap.addAttribute("quantityOfPitchDetail", quantityOfPitchDetail);
+		modelMap.addAttribute("stadiumDetailStatusService", stadiumDetailStatusService); 
+		
+		/*for (int matchTime = cost.getHourStart(); matchTime < cost.getHourEnd(); matchTime++) {
+			StadiumDetailStatus stadiumDetailStatus = new StadiumDetailStatus(cost, matchDay, matchTime);
+			// Nếu số lượng trong bảng stadium_detail_status < quantity trong pitch_details => khung giờ đó, ngày đó còn có sân trống
+			int count = stadiumDetailStatusService.countNumberOfPitchAvailableByTime(stadiumDetailStatus);
+			
+			
+			System.out.println("=> " + stadiumDetailStatus.getCost().getId()
+					+ ", " + stadiumDetailStatus.getMatchDay() 
+					+ ", " + stadiumDetailStatus.getMatchTime() + ": " + count + " -- " + quantityOfPitchDetail + " - " + (count < quantityOfPitchDetail ? "active" : "disable"));
+		}*/
+		return "pitchb.detail.ajax";
+	}
+	
+	@PostMapping("customer-booking")
+	public String customerBookStadium(@ModelAttribute StadiumDetailStatus stadiumDetailStatus,
+			@RequestParam String matchDayAndTime, @RequestParam int userId,
+			@RequestParam int costId, @RequestParam int pitchId) {
+		createStadiumDetailStatus(stadiumDetailStatus, matchDayAndTime, costId, userId);
+		if (stadiumDetailStatusService.saveStadiumDetailStatus(stadiumDetailStatus) > 0 ) {
+			return "redirect:/san-bong/"+pitchId + "?msg=bookStas";
+		}
+		return "redirect:/san-bong/"+pitchId + "?msg=bookStaf";
+		
 	}
 
 	@GetMapping("san-bong")
@@ -185,7 +234,7 @@ public class PitchBookingController {
 		// Thông tin sân bóng theo pid
 		PitchInfoDto pitch = getPitchByPId(pitches, pid);
 		modelMap.addAttribute("pitch", pitch);
-
+		
 		// Danh sách sân bóng cùng địa bàn <=> zipcode !pid
 		List<PitchInfoDto> connectionPitches = getConnectionPitches(pitchInfodtos, pid, pitch.getZipCode());
 		modelMap.addAttribute("connectionPitches", connectionPitches);
@@ -285,7 +334,7 @@ public class PitchBookingController {
 		
 		return "pitchb.district";
 	}
-
+	
 	public List<PitchDetail> getPitchDetailsByPitchId(int pitchId, List<PitchDetail> pitchDetails) {
 		List<PitchDetail> pitchDetailByPitchIds = new ArrayList<>();
 		for (PitchDetail item : pitchDetails) {
@@ -368,5 +417,24 @@ public class PitchBookingController {
 			}
 		}
 		return costs;
+	}
+	
+	private void createStadiumDetailStatus(StadiumDetailStatus stadiumDetailStatus, String matchDayAndTime, int costId, int userId) {
+		Cost cost = new Cost(); User user = new User();
+		cost.setId(costId); user.setId(userId);
+		stadiumDetailStatus.setCost(cost);
+		stadiumDetailStatus.setUser(user);
+		
+		int matchTime = DataStaticModel.PITCH_BEGIN_END_HOUR_MAP.get(matchDayAndTime.trim().substring(0, 5));
+		String matchDay = matchDayAndTime.trim().substring(matchDayAndTime.lastIndexOf(" "));
+		
+		stadiumDetailStatus.setMatchDay(matchDay);
+		stadiumDetailStatus.setMatchTime(matchTime);
+		stadiumDetailStatus.setMatchDateTime(matchDayAndTime);
+		
+		stadiumDetailStatus.setStatus(0);
+		stadiumDetailStatus.setCreatedAt(DataStaticModel.getCurrentTimetoSecond());
+		
+		
 	}
 }

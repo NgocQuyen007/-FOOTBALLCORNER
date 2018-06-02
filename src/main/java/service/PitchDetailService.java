@@ -32,6 +32,12 @@ public class PitchDetailService implements IPitchDetail{
 	public List<PitchDetail> getPitchDetails() {
 		return pitchDetailDao.getPitchDetails();
 	}
+	
+	@Override
+	@Transactional
+	public PitchDetail getPitchDetail(int id) {
+		return pitchDetailDao.getPitchDetail(id);
+	}
 
 	@Override
 	@Transactional

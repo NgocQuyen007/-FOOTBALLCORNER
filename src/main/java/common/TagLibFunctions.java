@@ -93,7 +93,7 @@ public class TagLibFunctions {
 		String year = time.substring(time.lastIndexOf("/")+1, time.indexOf(" "));
 		String hour = time.substring(time.indexOf(" ")+1);
 		String weekday = getDayOfWeek(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(date));
-		return hour + " " + weekday + " ngày " + date + "/" + month + "/" + year;
+		return hour.equals("") ? hour : "" + " " + weekday + " ngày " + date + "/" + month + "/" + year;
 	}
 	
 	public static Integer isDateBeforeNow(String stringDate1, String stringNow) {

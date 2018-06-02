@@ -299,23 +299,24 @@
 				        
 		                <li class="dropdown navbar-notification">
 		                      <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" id="btn-notification">
-							  <c:choose>
-		                          <c:when test="${not empty findingRecipientNotifications}">
-		                          		<i class="fa fa-bell navbar-notification-icon"></i>
+		                      <c:set var="notis" value="${findingRecipientNotifications.size() + stadiumDetailStatusNoti.size()}" />
+		                      <c:choose>
+									<c:when test="${notis == 0}">
+										<i class="fix-notification-padding fa fa-bell navbar-notification-icon"></i>
+		                          		<span class="visible-xs-inline">&nbsp;Notifications</span>	
+									</c:when>
+									<c:otherwise>
+										<i class="fa fa-bell navbar-notification-icon"></i>
 		                          		<span class="visible-xs-inline">&nbsp;Notifications</span>
 		                          		
-		                          		<c:if test="${findingRecipientNotifications.size() > 5 }">
-		                          			<b class="badge badge-primary" >${findingRecipientNotifications.size()}+ </b>		
+		                          		<c:if test="${notis > 5 }">
+		                          			<b class="badge badge-primary" >${notis}+ </b>		
 		                          		</c:if>
-		                          		<c:if test="${findingRecipientNotifications.size() <= 5 }">
-		                          			<b class="badge badge-primary" >${findingRecipientNotifications.size()} </b>		
-		                          		</c:if>
-								  </c:when>
-								  <c:otherwise>
-								  		<i class="fix-notification-padding fa fa-bell navbar-notification-icon"></i>
-		                          		<span class="visible-xs-inline">&nbsp;Notifications</span>
-								  </c:otherwise>
-		                      </c:choose>    
+		                          		<c:if test="${notis <= 5 }">
+		                          			<b class="badge badge-primary" >${notis} </b>		
+		                          		</c:if>	
+									</c:otherwise>		                      	
+		                      </c:choose>   
 		                          
 		                      </a>
 		                      <div class="dropdown-menu">
@@ -323,10 +324,12 @@
 		                          <div class="notification-list scrollbar-enabled">
 		                          
 		                          <c:choose>
-			                          <c:when test="${not empty findingRecipientNotifications}">
-			                          		<c:forEach var="frnotification" items="${findingRecipientNotifications}">
+			                          <c:when test="${notis > 0}">
+			                          
+			                          <c:if test="${not empty findingRecipientNotifications}">
+			                          	<c:forEach var="frnotification" items="${findingRecipientNotifications}">
 					                              <div class="force-overflow" >
-					                                  <a href="{{ getNotiUrl(noti.itemType,noti.itemId) }}" class="notification" >
+					                                  <a href="#" class="notification" >
 					                                      <span class="notification-icon">
 					                                      	<img src='<c:url value="/resources/common/img/sport.png" />' class="text-primary" />
 					                                      </span>
@@ -340,22 +343,46 @@
 					                                  </a>
 					                              </div>
 			                              	</c:forEach>
-			                              	<p class="text-center" style="padding-top:25px;">
-					                              <span>
-					                                  <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
-					                              </span>
-					                         </p> 
-					                         <a href="/notification/history/sessionuserId" class="notification-link-all text-center">Xem tất cả</a>
+			                          </c:if>
+			                          <c:if test="${not empty stadiumDetailStatusNoti}">
+			                          		<c:forEach var="stNoti" items="${stadiumDetailStatusNoti}">
+					                              <div class="force-overflow" >
+					                                  <a href="#" class="notification" >
+					                                      <span class="notification-icon">
+					                                      	<img src='<c:url value="/resources/common/img/sport.png" />' class="text-primary" />
+					                                      </span>
+					                                      <span class="notification-title">${stNoti.getCost().getPitchDetail().getPitch().getName()} FC</span>
+					                                      <c:if test="${stNoti.getStatus() == 2}">
+						                                      <span class="notification-description" >
+						                                       		Yêu cầu đặt sân ${stNoti.getCost().getPitchDetail().getPitch().getName()} của bạn không thành công
+						                                      		<br><strong>Thời gian diễn ra trận đấu: ${stNoti.getMatchDateTime()}</strong>
+						                                      </span>
+					                                      </c:if>
+					                                      <c:if test="${stNoti.getStatus() == 1}">
+						                                      <span class="notification-description" >
+						                                       		Bạn đã đặt sân ${stNoti.getCost().getPitchDetail().getPitch().getName()} thành công.
+						                                       		<br><strong>Thời gian diễn ra trận đấu: ${stNoti.getMatchDateTime()}</strong>
+						                                      </span>
+					                                      </c:if>
+					                                      <img style="float: left; padding-right: 10px" src="https://static.xx.fbcdn.net/rsrc.php/v3/yP/r/OaW9iVUiIFk.png?_nc_eui2=AeGPZ3QxLw1FyMPakMmVixtUaqkXuK-j2FTzbW_FJe839n6C0z4s25kSf2c9GTIGfSFZg_1qjk4ruQG6DsKMbM8Sj2PgqAzD05Ir6LMF52_3xQ" alt="">
+					                                      <span class="notification-time">${tagfunc:getTimesAge(stNoti.getCreatedAt())}</span>
+					                                  </a>
+					                              </div>
+			                              	</c:forEach>
+			                          		
+			                          		
+			                          </c:if>
+			                          
+			                          		
+					                         <a href="" class="notification-link-all text-center" style="padding-left: 20px">Xem tất cả</a>
 			                          </c:when>
 			                          <c:otherwise>
-			                          		<p class="text-center" style="padding-top:25px;">
-					                              <span>
-					                              	 	<i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
-					                              </span>
-					                         </p> 
-			                          		<a href="javascript:void(0);" class="notification-link-all text-center">&nbsp;&nbsp;Không có thông báo mới nào</a>
+			                          		<a href="javascript:void(0);" style="padding-left: 20px" class="notification-link-all text-center">&nbsp;&nbsp;Không có thông báo mới nào</a>
 			                          </c:otherwise>
 		                          </c:choose>
+		                          
+		                          
+		                          
 		                          
 		                          </div>
 		                          

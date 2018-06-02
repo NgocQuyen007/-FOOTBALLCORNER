@@ -21,24 +21,25 @@
                     <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
 
                         <ul id="myTab" class="nav nav-tabs" role="tablist">
-                            <li ng-controller="StadiumBookingNotificationCtrl" class="ng-scope">
-                                <a href="${contextPath}/stadium/management#/booking" data-toggle="tab" aria-expanded="true">
+                            <li>
+                                <a href="${contextPath}/stadium/management#/booking" aria-expanded="true">
                                     <i class="fa fa-list" aria-hidden="true"></i>
                                     Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">2</b>
                                 </a>
                             </li>
                             <li class="active">
-                                <a href="${contextPath}/stadium/virtual.html#detail" data-toggle="tab" aria-expanded="true" class="ng-binding">
+                                <a href="${contextPath}/stadium/management/stadium-info/${stadium.getId()}"  aria-expanded="true">
                                     <i class="glyphicon glyphicon-info-sign"></i>
                                     &nbsp;&nbsp;Thông tin cơ bản
                                 </a>
                             </li>
 
-                            <!-- ngIf: hasStadiumNumber --><li ng-if="hasStadiumNumber" class="ng-scope">
-                                <a href="${contextPath}/stadium/management#/bookingManager/1273" data-toggle="tab" aria-expanded="false">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Đặt sân
+                            <li>
+                                <a href="${contextPath}/stadium/management/bookingManager/${stadium.getId()}" aria-expanded="true">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    &nbsp;&nbsp;Đặt sân
                                 </a>
-                            </li><!-- end ngIf: hasStadiumNumber -->
+                            </li>
                         </ul>
                         <div id="myTab1Content" class="tab-content">
                             <div class="tab-pane fade active in" id="detail">
