@@ -92,6 +92,18 @@ public class DataStaticModel {
 		put(Calendar.SATURDAY, "Thứ bảy");
 	}};
 	
+	@SuppressWarnings("serial")
+	public static final HashMap<Integer, Integer> WEEKLY_DATE_INTEGER = new HashMap<Integer, Integer>()
+	{{
+		put(Calendar.SUNDAY, 8);
+		put(Calendar.MONDAY, 2);
+		put(Calendar.TUESDAY, 3);
+		put(Calendar.WEDNESDAY, 4);
+		put(Calendar.THURSDAY, 5);
+		put(Calendar.FRIDAY, 6);
+		put(Calendar.SATURDAY, 7);
+	}};
+	
 	public static String getCurrentTimetoSecond() {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

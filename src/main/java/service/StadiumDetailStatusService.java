@@ -44,6 +44,12 @@ public class StadiumDetailStatusService implements IStadiumDetailStatus {
 
 	@Override
 	@Transactional
+	public int approveBoookingRequest(int id) {
+		return stadiumDetailStatusDao.approveBoookingRequest(id);
+	}
+	
+	@Override
+	@Transactional
 	public int rejectBoookingRequest(int id) {
 		return stadiumDetailStatusDao.rejectBoookingRequest(id);
 	}
@@ -64,6 +70,24 @@ public class StadiumDetailStatusService implements IStadiumDetailStatus {
 	@Transactional
 	public List<StadiumDetailStatus> getListStadiumDetailStatusByMatchDayAndPitchId(String matchDay, int stadiumId) {
 		return stadiumDetailStatusDao.getListStadiumDetailStatusByMatchDayAndPitchId(matchDay, stadiumId);
+	}
+
+	@Override
+	@Transactional
+	public int getMaxPositionOfStadiimDetail(StadiumDetailStatus stadiumDetailStatus) {
+		return stadiumDetailStatusDao.getMaxPositionOfStadiimDetail(stadiumDetailStatus);
+	}
+
+	@Override
+	@Transactional
+	public int saveBooking(StadiumDetailStatus status) {
+		return stadiumDetailStatusDao.saveBooking(status);
+	}
+
+	@Override
+	@Transactional
+	public int updateNotificationsToBeSeen(int id) {
+		return stadiumDetailStatusDao.updateNotificationsToBeSeen(id);
 	}
 
 }

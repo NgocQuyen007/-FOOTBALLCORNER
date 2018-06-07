@@ -351,7 +351,7 @@
 					                                      <span class="notification-icon">
 					                                      	<img src='<c:url value="/resources/common/img/sport.png" />' class="text-primary" />
 					                                      </span>
-					                                      <span class="notification-title">${stNoti.getCost().getPitchDetail().getPitch().getName()} FC</span>
+					                                      <span class="notification-title">Đặt sân: ${stNoti.getCost().getPitchDetail().getPitch().getName()}</span>
 					                                      <c:if test="${stNoti.getStatus() == 2}">
 						                                      <span class="notification-description" >
 						                                       		Yêu cầu đặt sân ${stNoti.getCost().getPitchDetail().getPitch().getName()} của bạn không thành công

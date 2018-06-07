@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
-<div ng-view="" class="ng-scope" style="">
+<div class="ng-scope" style="">
 <div class="breadcrum ng-scope">
     <div class="container">
         <div class="breadcrum-line">
             <a href="${contextPath}/">Trang chủ</a>
             <a href="${contextPath}/stadium/management">Danh sách sân</a>
-            <a ng-show="!isCreate" href="${contextPath}/stadium/management#/stadium-info/127" class="ng-binding">Nam Hoa Vang</a>
-            <a ng-show="isCreate" class="ng-hide">Thêm mới</a>
+            <a href="${contextPath}/stadium/management/stadium-info/${stadium.getId()}">${stadium.getName()}</a>
+            <a class="ng-hide">Thêm mới</a>
         </div>
     </div>
 </div>

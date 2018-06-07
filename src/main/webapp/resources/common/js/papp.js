@@ -123,8 +123,8 @@ $(document).ready(function(){
 					$("#loginresponse").text(" Lỗi! Mật khẩu không đúng !");
 					$(".login-error").show();
 				} else {
-					$("#loginresponse").text(" Đăng nhập thành công !");
-					$(".login-error").show();
+					// $("#loginresponse").text(" Đăng nhập thành công !");
+					// $(".login-error").show();
 					$('#loginModal').modal('hide');
  						window.location.reload();
 					}

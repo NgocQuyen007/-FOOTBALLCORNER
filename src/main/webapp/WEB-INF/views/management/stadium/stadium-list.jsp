@@ -2,16 +2,16 @@
 <%@ include file="/WEB-INF/tags/taglibs.jsp"%>
 
 <c:if test="${param['msg'] eq 'adds'}">
-	<p class="alert alert-success">Thêm thành công</p>
+	<p class="alert alert-success" style="display: inline-block;width:100%">Bạn đã THÊM MỚI SÂN BÓNG thành công</p>
 </c:if>
 <c:if test="${param['msg'] eq 'updates'}">
-	<p class="alert alert-success">Sửa thành công</p>
+	<p class="alert alert-success" style="display: inline-block;width:100%">Cập nhật thông tin sân bóng thành công</p>
 </c:if>
 <c:if test="${param['msg'] eq 'dels'}">
-	<p class="alert alert-success">Xóa thành công</p>
+	<p class="alert alert-success" style="display: inline-block;width:100%">Xóa sân bóng thành công</p>
 </c:if>
 <c:if test="${param['msg'] eq 'delf'}">
-	<p class="alert alert-danger">Xóa thất bại. Chỉ quản trị viên mới có quyền được xóa sân bóng. </p>
+	<p class="alert alert-danger" style="display: inline-block;width:100%">Xóa thất bại. Chỉ quản trị viên mới có quyền được xóa sân bóng. </p>
 </c:if>
 
 
@@ -31,7 +31,7 @@
                     <li class="ng-scope">
                         <a href="${contextPath}/stadium/management/booking" aria-expanded="true">
                             <i class="fa fa-list" aria-hidden="true"></i>
-                            Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">2</b>
+                            Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red">x</b>
                         </a>
                     </li>
 
@@ -130,10 +130,10 @@
                                         </td>
                                         <td>
                                         	<c:if test="${not empty stadium.getCoverAvatar()}">
-                                        		<img height="120" src='<c:url value="/resources/files/${stadium.getCoverAvatar()}"/>' />
+                                        		<img height="120" width="180" src='<c:url value="/resources/files/${stadium.getCoverAvatar()}"/>' />
                                         	</c:if>
                                         	<c:if test="${empty stadium.getCoverAvatar()}">
-                                        		<img height="120" src='<c:url value="/resources/common/img/stadium-default.png" />'>
+                                        		<img height="120" width="180" src='<c:url value="/resources/common/img/stadium-default.png" />'>
                                         	</c:if>
                                             
                                         </td>

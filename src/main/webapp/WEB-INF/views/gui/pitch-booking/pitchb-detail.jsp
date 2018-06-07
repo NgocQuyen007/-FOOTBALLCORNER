@@ -10,10 +10,14 @@
 
 
 <c:if test="${param['msg'] eq 'bookStas'}">
-	<p class="sucess-action">Gửi thông tin đặt sân thành công. Bạn có thể gọi điện thoại trực tiếp đến chủ sân để xác nhận nhanh nhất</p>
+	<p class="sucess-action">Đặt sân thành công. Bạn có thể gọi điện thoại trực tiếp đến chủ sân để xác nhận nhanh nhất</p>
 </c:if>
 <c:if test="${param['msg'] eq 'bookStaf'}">
 	<p class="fail-action">Hiện tại hệ thống không thể đặt sân.</p>
+</c:if>
+
+<c:if test="${param['msg'] eq 'bookSorry'}">
+	<p class="alert alert-danger" style="display: inline-block;width:100%">Chào bạn. Hiện khung giờ này đã có khách vừa mới đặt. <br>Bạn có thể chọn thời gian khác giúp mình nhé</p>
 </c:if>
 
 <style>
@@ -53,8 +57,8 @@
     <div class="container">
         <div class="breadcrum-line">
             <a href="/">Trang chủ</a>
-            <a href="/san-bong" class="" title="Sân bóng">Sân bóng</a>
-            <a href="/san-bong-tai-ho-chi-minh" class="" title="Sân bóng tại ${pitch.desName}">Sân bóng tại ${pitch.desName}</a>
+            <a href="${contextPath}/san-bong" class="" title="Sân bóng">Sân bóng</a>
+            <a href=""class="" title="Sân bóng tại ${pitch.desName}">Sân bóng tại ${pitch.desName}</a>
             <a>${pitch.name}</a>
         </div>
     </div>

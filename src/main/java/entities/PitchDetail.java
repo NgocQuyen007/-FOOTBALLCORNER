@@ -47,11 +47,12 @@ public class PitchDetail implements Serializable {
 	public PitchDetail() {
 	}
 	
-	public PitchDetail(int id, PitchType pitchType, Pitch pitch) {
+	public PitchDetail(int id, PitchType pitchType, Pitch pitch, int quantity) {
 		super();
 		this.id = id;
 		this.pitchType = pitchType;
 		this.pitch = pitch;
+		this.quantity = quantity;
 	}
 
 	public int getId() {

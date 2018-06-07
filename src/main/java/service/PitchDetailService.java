@@ -45,4 +45,10 @@ public class PitchDetailService implements IPitchDetail{
 		return pitchDetailDao.insertPitchDetail(pitchDetail);
 	}
 	
+	@Override
+	@Transactional
+	public PitchDetail getPitchByPTypeAndPId(int pitchTypeId, int pitchId) {
+		return pitchDetailDao.getPitchByPTypeAndPId(pitchTypeId, pitchId);
+	}
+	
 }

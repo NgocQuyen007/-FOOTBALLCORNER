@@ -10,6 +10,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>    
 <%@ include file="/WEB-INF/tags/taglibs.jsp" %> 
 
+
+		
         <div id="calendarBookingTime">
 			<%
 				StadiumDetailStatusService stadiumDetailStatusService = (StadiumDetailStatusService)request.getAttribute("stadiumDetailStatusService");
@@ -64,6 +66,8 @@
 						            	<input type="hidden" name="costId" value="${cost.getId()}">
 						            	<input type="hidden" name="userId" value="${sessionUserInfo.getId()}">
 						            	<input type="hidden" name="pitchId" value="${cost.getPitchDetail().getPitch().getId()}">
+						            	<input type="hidden" name="quantityOfPitchDetail" value="${quantityOfPitchDetail}">
+						            	
 						            	
 						                <div class="form-group row">
 						                    <label class="control-label col-md-2 col-xs-12">Thời gian:</label>

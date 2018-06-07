@@ -12,9 +12,8 @@
     <div class="container">
         <div class="breadcrum-line">
             <a href="${contextPath}/">Trang chủ</a>
-            <a href="${contextPath}/stadium/management">Danh sách sân</a>
-            <a href="${contextPath}/stadium/management/stadium-info/1273">Cồn tộc</a>
-            <a href="${contextPath}/stadium/management/bookingManager/1273" class="">Đặt sân</a>
+            <a href="${contextPath}/stadium/management">Danh sách sân bóng</a>
+            <a href="" class="">Đặt sân</a>
         </div>
     </div>
 </div>
@@ -40,11 +39,11 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
                     <li>
                         <a href="${contextPath}/stadium/management/booking" aria-expanded="true">
                             <i class="fa fa-list" aria-hidden="true"></i>
-                            Yêu cầu đặt sân <b class="badge badge-primary" style="background-color:red">2</b>
+                            Yêu cầu đặt sân <b class="badge badge-primary" style="background-color:red">x</b>
                         </a>
                     </li>
                     <li>
-                        <a href="${contextPath}/stadium/management/stadium-info/${bookingManagerDto.getPitchId()}" aria-expanded="false" >
+                        <a href="${contextPath}/stadium/management/stadium-info/${bookingManagerDto != null ? bookingManagerDto.getPitchId() : stadiumId}" aria-expanded="false" >
                             <i class="glyphicon glyphicon-info-sign"></i>
                             &nbsp;&nbsp;Thông tin cơ bản
                         </a>
@@ -57,23 +56,25 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
                         </a>
                     </li>
                 </ul>
+                
+                <c:if test="${not empty bookingManagerDto}">
                 <div id="myTab1Content" class="tab-content stadium-booking-manager">
                     <div class="tab-pane fade active in" id="#/calendar">
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <form class="form-inline ng-pristine ng-valid">
+                                <form class="form-inline ng-pristine ng-valid" action="javascript:void(0);">
                                     <div class="form-group">
                                         <button ng-click="loadTodayBookingDates($event)" class="btn btn-info mobile-w-100p m-mtop-10">Hôm nay</button>
                                     </div>
                                     <div class="input-group date frm-date-time">
-                                        <input type="text" class="form-control jqueryDatePickerEnabled2" placeholder="04/06/2018">
+                                        <input type="text" class="form-control jqueryDatePickerEnabled2 match-day-f" placeholder="04/06/2018" value="${matchDayUrl}">
                                         <label class="input-group-addon btn" for="bookingDatePicker">
                                             <span class="glyphicon glyphicon-calendar">
                                             </span>
                                         </label>
                                     </div>
-                                    <div class="form-group">
-                                        <button ng-click="loadTodayBookingDates($event)" class="btn btn-info mobile-w-100p m-mtop-10">Thông tin sân bóng</button>
+                                   <div class="form-group">
+                                        <button onclick="loadPitchBookingDates(${bookingManagerDto.getPitchId()})" class="btn btn-info mobile-w-100p m-mtop-10">Thông tin sân bóng</button>
                                     </div>
                                 </form>
                             </div>
@@ -84,13 +85,16 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
                             
                             
                             <!-- =========================== MONDAY BEGIN ========================= -->
-                            
-                                <div class="stadiumBookingTableContainer ng-scope" ng-repeat="bookingDate in bookingDates track by $index" ng-init="dateIndex = $index">
+                            	
+                            		
+                            		<div class="stadiumBookingTableContainer">
                                     <h4>
-                                        <a class="pointer ng-binding" ng-click="bookingDate.isVisible = !bookingDate.isVisible">
+                                        <a class="pointer ng-binding">
                                             <!-- ngIf: !bookingDate.isVisible -->
                                             <!-- ngIf: bookingDate.isVisible --><i class="fa fa-minus-square ng-scope" aria-hidden="true" ng-if="bookingDate.isVisible"></i><!-- end ngIf: bookingDate.isVisible -->
-                                            Thứ Hai ngày 04/06/2018
+                                            <c:if test="${not empty matchDayThuNgay}">${matchDayThuNgay}</c:if> 
+                                            <c:if test="${empty matchDayThuNgay}">Thứ Hai ngày 04/06/2018</c:if>
+                                            
                                         </a>
                                     </h4>
                                     <br>
@@ -126,6 +130,7 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
 		                                                        	<strong class="ng-binding">Sân ${map.getKey()} số ${i}</strong>
 		                                                        </div>
 		                                                        
+		                                                        <!-- Duyệt stadiumstatusdetails by ngày và pitch id nếu != empty => Tìm thông tin sân bận -->
 		                                                        <c:if test="${not empty stadiumDetailStatusList}">
 		                                                        <% 
 		                                                        	List<StadiumDetailStatus> stadiumDetailStatusList = (List<StadiumDetailStatus>)request.getAttribute("stadiumDetailStatusList"); 
@@ -138,32 +143,43 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
 		                                                        %>
 		                                                        	<c:choose>
 		                                                        		<c:when test="${detailStatus != null }">
-			                                                        		<div class="booking-info-available-${hourStep}-${map.getKey()}-${i} ng-scope" onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide'); $(this).addClass('ng-hide')">
+			                                                        		<div class="booking-info-available-${hourStep}-${map.getKey()}-${i} ng-scope" onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide');" style="display: inline;">
 					                                                            <a class="pointer text-underline color-red"><i>Đã được đặt</i></a>
 					                                                        </div>
-			                                                        		
+					                                                        
+					                                                        <div class="btn-group" style="float:right">
+					                                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle text-center" data-toggle="dropdown">
+					                                                                    <i class="fa fa-cog mr-0" aria-hidden="true"></i>
+					                                                                </button>
+					                                                                <ul class="dropdown-menu" role="menu">
+					                                                                    <li><a onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide');" class="pointer">Sửa</a></li>
+					                                                                    <li><a onclick="cancelBookingRequest(${detailStatus.getId()}, '${detailStatus.getMatchDateTime()}')" class="pointer">Huỷ trận</a></li>
+					                                                                </ul>
+					                                                        </div>
+					                                                        
 			                                                        		<form action="javascript:void(0);" class="stadium-booking-form-${hourStep}-${map.getKey()}-${i} ng-hide">
 					                                                            <div class="form-group">
-					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                <input type="text" class="form-control input-sm customerName-${detailStatus.getId()}" 
 					                                                                placeholder="Tên Người đặt / Đội bóng" value="${detailStatus.getCustomerName()}">
 					                                                            </div>
 					                                                            <div class="form-group">
-					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                <input type="text" class="form-control input-sm phoneNumber-${detailStatus.getId()}" 
 					                                                                placeholder="Điện thoại liên hệ" value="${detailStatus.getPhoneNumber()}">
 					                                                            </div>
 					                                                            <div class="form-group">
-					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                <input type="text" class="form-control input-sm note-${detailStatus.getId()}" 
 					                                                                placeholder="Ghi chú" value="${detailStatus.getNote()}">
 					                                                            </div>
 					                                                            
 					                                                            
 					                                                            <div class="form-group text-right">
-					                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
+					                                                                <button onclick="saveBooking(${detailStatus.getId()}) " class="btn btn-success btn-sm">
 					                                                                    Lưu
 					                                                                </button>
 					                                                                <button onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').addClass('ng-hide'); $('.booking-info-available-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide')" class="btn btn-default btn-sm">Huỷ</button>
 					                                                            </div>
 					                                                        </form>
+					                                                        
 		                                                        		</c:when>
 		                                                        		<c:otherwise>
 			                                                       			<div class="booking-info-available-${hourStep}-${map.getKey()}-${i} ng-scope" onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide'); $(this).addClass('ng-hide')">
@@ -171,19 +187,20 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
 					                                                        </div>
 					                                                        <form action="javascript:void(0);" class="stadium-booking-form-${hourStep}-${map.getKey()}-${i} ng-hide">
 					                                                            <div class="form-group">
-					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                <input type="text" class="form-control input-sm customerName-${hourStep}-${map.getKey()}-${i}" 
 					                                                                placeholder="Tên Người đặt / Đội bóng" >
 					                                                            </div>
 					                                                            <div class="form-group">
-					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                <input type="text" class="form-control input-sm phoneNumber-${hourStep}-${map.getKey()}-${i}"
 					                                                                placeholder="Điện thoại liên hệ" >
 					                                                            </div>
 					                                                            <div class="form-group">
-					                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+					                                                                <input type="text" class="form-control input-sm note-${hourStep}-${map.getKey()}-${i}" 
 					                                                                placeholder="Ghi chú" >
 					                                                            </div>
 					                                                            <div class="form-group text-right">
-					                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
+					                                                            	<!-- Đặt sân nè -->
+					                                                                <button onclick="saveBookingNew(${hourStep}, '${map.getKey()}', '${i}', '${bookingManagerDto.getPitchId()}') " class="btn btn-success btn-sm">
 					                                                                    Lưu
 					                                                                </button>
 					                                                                <button onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').addClass('ng-hide'); $('.booking-info-available-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide')" class="btn btn-default btn-sm">Huỷ</button>
@@ -193,25 +210,27 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
 		                                                        	</c:choose>
 		                                                        </c:if>
 		                                                        
+		                                                        <!-- Duyệt stadiumstatusdetails by ngày và pitch id nếu = empty => Để tất cả các ô là trống hết cho khỏe -->
 		                                                        <c:if test="${empty stadiumDetailStatusList}">
 		                                                        	<div class="booking-info-available-${hourStep}-${map.getKey()}-${i} ng-scope" onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide'); $(this).addClass('ng-hide')">
 			                                                            <a class="pointer text-underline"><i>Còn trống</i></a>
 			                                                        </div>
 			                                                        <form action="javascript:void(0);" class="stadium-booking-form-${hourStep}-${map.getKey()}-${i} ng-hide">
 			                                                            <div class="form-group">
-			                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+			                                                                <input type="text" class="form-control input-sm customerName-${hourStep}-${map.getKey()}-${i}" 
 			                                                                placeholder="Tên Người đặt / Đội bóng" >
 			                                                            </div>
 			                                                            <div class="form-group">
-			                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+			                                                                <input type="text" class="form-control input-sm phoneNumber-${hourStep}-${map.getKey()}-${i}"
 			                                                                placeholder="Điện thoại liên hệ" >
 			                                                            </div>
 			                                                            <div class="form-group">
-			                                                                <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid ng-empty" 
+			                                                                <input type="text" class="form-control input-sm note-${hourStep}-${map.getKey()}-${i}" 
 			                                                                placeholder="Ghi chú" >
 			                                                            </div>
 			                                                            <div class="form-group text-right">
-			                                                                <button ng-click="saveBooking($event, dateIndex, timeFrameIndex, bookingRecordIndex)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-success btn-sm">
+			                                                            	<!-- Đặt sân nè -->
+			                                                                <button onclick="saveBookingNew(${hourStep}, '${map.getKey()}', '${i}', '${bookingManagerDto.getPitchId()}') " class="btn btn-success btn-sm">
 			                                                                    Lưu
 			                                                                </button>
 			                                                                <button onclick="$('.stadium-booking-form-${hourStep}-${map.getKey()}-${i}').addClass('ng-hide'); $('.booking-info-available-${hourStep}-${map.getKey()}-${i}').removeClass('ng-hide')" class="btn btn-default btn-sm">Huỷ</button>
@@ -240,8 +259,8 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
                                         </table>
                                     </div>
                                 </div>
-                                
-                                
+                            	
+                            	
                                 <!-- =========================== MONDAY END ========================= -->
                                 
                                 
@@ -249,6 +268,9 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
                         </div>
                     </div>
                 </div>
+                
+                </c:if>
+                
             </div>
         </div>
 
@@ -265,8 +287,8 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
             </div>
             <div class="modal-body">
                 <div class="form-group row">
-                    <label class="control-label col-sm-12"><input ng-model="onDeleteBookingRecord.isCancelRepeatDate" type="radio" value="1" class="ng-pristine ng-untouched ng-valid ng-empty" name="3308"> Hủy lịch đặt ngày <b class="ng-binding"></b></label>
-                    <label class="control-label col-sm-12"><input ng-model="onDeleteBookingRecord.isCancelRepeatDate" type="radio" value="0" class="ng-pristine ng-untouched ng-valid ng-empty" name="3309"> Hủy toàn bộ lịch cố định</label>
+                    <label class="control-label col-sm-12"><input type="radio" value="1" class="ng-pristine ng-untouched ng-valid ng-empty" name="3308"> Hủy lịch đặt ngày <b class="ng-binding"></b></label>
+                    <label class="control-label col-sm-12"><input type="radio" value="0" class="ng-pristine ng-untouched ng-valid ng-empty" name="3309"> Hủy toàn bộ lịch cố định</label>
                 </div>
             </div>
             <div class="modal-footer">
@@ -279,14 +301,151 @@ public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStat
     </div>
 </div>
 
+
+
 <script type="text/javascript" class="ng-scope">
     $(document).ready(function () {
         $('.jqueryDatePickerEnabled2').datetimepicker2({
             timepicker: false,
-            format: 'Y-m-d'
+            format: 'd/m/Y'
         });
     });
+    
+    function loadPitchBookingDates(pitchid) {
+		var contextPath = $("#contextPath").val();
+		var matchday = $(".match-day-f").val().split('/').join('_');
+		
+		$.ajax({
+			url : contextPath+"/stadium/management/bookingManager/"+pitchid+"/"+matchday,
+			type: "GET", 
+			data: {
+				
+			},
+			success: function(value) {
+				window.location.href = contextPath+"/stadium/management/bookingManager/"+pitchid+"/"+matchday;
+			},
+			
+			error: function() {
+				console.log("loadPitchBookingDates: FAIL")
+			}
+		})
+	}
+    
+    // Hủy trận đấu
+    function cancelBookingRequest(stadiumDetailStatusId, matchDateTime) {
+		var contextPath = $("#contextPath").val();
+		
+		$.ajax({
+			url : contextPath+"/stadium/management/booking/reject/"+ stadiumDetailStatusId,
+			type: "GET", 
+			data: {
+				
+			},
+				
+			success: function(value) {
+				if (value == 'success') {
+					alert("Bạn đã hủy trận đấu " + matchDateTime);
+					window.location.reload();	
+				}
+			},
+			
+			error: function() {
+				console.log("cancelBookingRequest: FAIL")
+			}
+		})
+	}
+    
+    // Chỉnh sửa thông tin trận đấu
+    function saveBooking(id) {
+		var contextPath = $("#contextPath").val();
+		var customerName = $(".customerName-"+id).val();
+		var phoneNumber  = $(".phoneNumber-"+id).val();
+		var note = $(".note-"+id).val();
+		
+		$.ajax({
+			url : contextPath+"/stadium/management/saveBooking",
+			type: "POST", 
+			data: {
+				id: id,
+				customerName: customerName,
+				phoneNumber: phoneNumber,
+				note: note,
+			},
+				
+			success: function(value) {
+				if (value == 'success') {
+					alert("Cập nhật thông tin thành công !");
+					window.location.reload();	
+				}
+			},
+			
+			error: function() {
+				console.log("cancelBookingRequest: FAIL")
+			}
+		})
+	}
+ 	
+ 	// Hủy trận đấu
+    function saveBookingNew(matchTime, pitchTypeId, position, pitchId) {
+ 		
+		var contextPath = $("#contextPath").val();
+		
+		var customerName = $(".customerName-"+matchTime+"-"+pitchTypeId+"-"+position).val();
+		var phoneNumber  = $(".phoneNumber-"+matchTime+"-"+pitchTypeId+"-"+position).val();
+		var note = $(".note-"+matchTime+"-"+pitchTypeId+"-"+position).val();
+		var matchDay = $(".match-day-f").val();
+		if (matchDay == '') {
+			matchDay = "04/06/2018";
+		}
+		
+		/*
+		alert(
+				"pitchId: " + pitchId +
+				"\npitchTypeId: " +pitchTypeId +
+				"\nmatchDay: " + matchDay +
+				"\nmatchTime: " + matchTime +
+				"\ncustomerName: " + customerName +
+				"\nphoneNumber: " + phoneNumber +
+				"\nnote: " + note +
+				"\nposition: " + position
+		);
+		*/
+		
+		$.ajax({
+			url : contextPath+"/stadium/management/saveBookingNew",
+			type: "POST", 
+			data: {
+				pitchId: pitchId,
+				pitchTypeId: pitchTypeId,
+				matchDay: matchDay,
+				matchTime: matchTime,
+				customerName: customerName,
+				phoneNumber: phoneNumber,
+				note: note,
+				position: position
+			},
+				
+			success: function(value) {
+				if (value == 'success') {
+					alert("Đặt sân bóng thành công !");
+					window.location.reload();	
+				} else {
+					alert("Thực hiện thất bại! Chủ sân vui lòng kiểm tra lại dữ liệu hợp lệ. Hoặc liên hệ admin để được hướng dẫn.");
+					window.location.reload();
+				}
+			},
+			
+			error: function() {
+				console.log("cancelBookingRequest: FAIL")
+			}
+		})
+		
+	}
+    
+    
 </script>
+
+	
 
 </div>
 

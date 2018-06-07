@@ -44,4 +44,10 @@ public class CostService implements ICost {
 		return costDao.insertCost(cost);
 	}
 
+	@Override
+	@Transactional
+	public List<Cost> getCost(int pdtailId, int hourf, int wdayf) {
+		return costDao.getCost(pdtailId, hourf, wdayf);
+	}
+
 }

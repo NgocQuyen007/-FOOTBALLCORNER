@@ -5,14 +5,22 @@
 
 <div class="top-banner-box ng-scope">
     <div class="container">
-        <h2 class="page-title">Danh sách sân bóng</h2>
+        <h2 class="page-title">XỬ LÝ ĐẶT SÂN</h2>
     </div>
 </div>
 
 <div class="breadcrum ng-scope">
     <div class="container">
-        <div class="breadcrum-line"><a href="#">Trang chủ</a><a href="#">Danh sách sân</a></div>
+        <div class="breadcrum-line">
+        	<a href="${contextPath}">Trang chủ</a>
+        	<a href="${contextPath}/stadium/management">Danh sách sân</a>
+        	<a >Yêu cầu đặt sân</a>
+        </div>
     </div>
+</div>
+
+<div class="alert alert-danger approve hidden">
+  <strong>Chấp nhận đặt sân!</strong> Thực hiện thất bại.
 </div>
 
 <div class="alert alert-danger reject hidden">
@@ -45,7 +53,8 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Sân</th>
+                                        <th>Sân bóng</th>
+                                        <th>Vị trí</th>
                                         <th>Người đặt</th>
                                         <th>Thời gian</th>
                                         <th>Nội dung</th>
@@ -58,9 +67,10 @@
                                 	
                                 		<tr class="booking-request-${stadiumStatus.getId()}">
                                         	<td>${loop.index}</td>
+                                        	<td>${stadiumStatus.getCost().getPitchDetail().getPitch().getName()}</td>
 	                                        <td>
-	                                            ${stadiumStatus.getCost().getPitchDetail().getPitch().getName()} <br>
-	                                            Sân ${stadiumStatus.getCost().getPitchDetail().getPitchType().getId()}
+	                                            Loại sân: ${stadiumStatus.getCost().getPitchDetail().getPitchType().getId()} <br>
+	                                            Sân số ${stadiumStatus.getPosition()}
 	                                        </td>
 	                                        <td>
 	                                            ${stadiumStatus.getCustomerName()}
@@ -76,7 +86,7 @@
 	                                            ${stadiumStatus.getNote()}
 	                                        </td>
 	                                        <td class="text-right" style="text-align:right">
-	                                            <button ng-click="approveBookingRequest($event, item)" data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý" class="btn btn-primary btn-primary-extra btn-sm">
+	                                            <button onclick="approveBookingRequest(${stadiumStatus.getId()}, '${stadiumStatus.getMatchDateTime()}')" class="btn btn-primary btn-primary-extra btn-sm">
 	                                                <i class="fa fa-check-square"></i>
 	                                                Chấp nhận
 	                                            </button>
@@ -105,7 +115,6 @@
         </div>
     </div>
 </div>
-</div>
 <script type="text/javascript">
 	function rejectBookingRequest(stadiumDetailStatusId, matchDateTime) {
 		var contextPath = $("#contextPath").val();
@@ -130,6 +139,31 @@
 				console.log("rejectBookingRequest: FAIL")
 			}
 		})
-		
 	}
+	
+	function approveBookingRequest(stadiumDetailStatusId, matchDateTime) {
+		var contextPath = $("#contextPath").val();
+		
+		$.ajax({
+			url : contextPath+"/stadium/management/booking/approve/"+ stadiumDetailStatusId,
+			type: "GET", 
+			data: {
+				
+			},
+				
+			success: function(value) {
+				if (value == 'success') {
+					alert("Chấp nhận yêu cầu đặt sân " + matchDateTime);
+					$(".booking-request-"+stadiumDetailStatusId).hide();	
+				} else {
+					$(".approve").removeClass("hidden");
+				}
+			},
+			
+			error: function() {
+				console.log("approveBookingRequest: FAIL")
+			}
+		})
+	}
+	
 </script>

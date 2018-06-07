@@ -166,13 +166,21 @@ public class CompetitorFindingController {
 	@PostMapping("moi-doi-giao-luu")
 	public String inviteTeams(@ModelAttribute("event") Event event, @RequestParam int level_id, 
 			@RequestParam int handicap_id, @RequestParam int dzipcode, @RequestParam String created_at_hour,
-			@RequestParam String created_at_date, HttpServletRequest request) {
+			@RequestParam String created_at_date, HttpServletRequest request, HttpSession httpSession) {
+		
+		User sessionUserInfo = (User)httpSession.getAttribute("sessionUserInfo");
+		if(sessionUserInfo == null) {
+			return "redirect:/";
+		}
 		
 		initialEvent(event, dzipcode, created_at_date, created_at_hour, handicap_id, level_id, request);
+		event.setUser(sessionUserInfo);
+		
 		if (eventService.insertEvent(event) > 0) {
 			return "redirect:/tim-doi-da-bong-tai-da-nang";
 		}
-		return "redirect:/";
+		
+		return "redirect:/tim-doi-da-bong-tai-da-nang";
 	}
 	
 	/**
@@ -219,10 +227,6 @@ public class CompetitorFindingController {
 		Level level = new Level();
 		level.setId(level_id);
 		event.setLevel(level);
-		
-		User user = new User();
-		user.setId(69);
-		event.setUser(user);
 		
 		String hasStadium = request.getParameter("CbxHasStadium");
 		if (hasStadium.equals("true")){

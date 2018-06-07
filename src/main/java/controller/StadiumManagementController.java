@@ -28,6 +28,7 @@ import com.google.common.collect.Sets;
 
 import common.DataStaticModel;
 import common.LibraryString;
+import common.TagLibFunctions;
 import dto.BookingManagerDto;
 import dto.DistrictQuantityDto;
 import dto.PitchInfoDto;
@@ -109,6 +110,8 @@ public class StadiumManagementController {
 			
 			// Thông báo đặt sân, từ chối, chấp nhận => status in (1,2)
 			List<StadiumDetailStatus> stadiumDetailStatusNoti = stadiumDetailStatusService.getNotifications(sessionUserInfo.getId());
+			// System.err.println("SISiSISISISISSI: " + stadiumDetailStatusNoti.size());
+			// System.err.println("Tên sân ========================> : " + stadiumDetailStatusNoti.get(0).getCost().getPitchDetail().getPitch().getName());
 			modelMap.addAttribute("stadiumDetailStatusNoti", stadiumDetailStatusNoti);
 			
 		}
@@ -126,11 +129,13 @@ public class StadiumManagementController {
 			return "stadium.list";
 		}
 		
+		/*
 		for(Pitch stadium: stadiums) {
 			Address address =  stadium.getAddresses().iterator().next();
 			System.out.println(stadium.getName() + ", " + address.getDetail() +", " + address.getPhoneNumber() + ", " + address.getFacebook() + ","
 					+ address.getPemail() + ", " + stadium.getCoverAvatar() + address.getDistrict().getName() + address.getWebsite());
 		}
+		*/
 		
 		/** TH chưa có sân nào cả*/
 		return "redirect:/stadium/management/addNew";
@@ -165,7 +170,7 @@ public class StadiumManagementController {
 		
 		User sessionUserInfo = (User) httpSession.getAttribute("sessionUserInfo");
 		
-		int san5 = Integer.parseInt(request.getParameter("statidum_type_5"));
+		int san5 = Integer.parseInt(request.getParameter("statidum_type_5"));;
 		int soLuongSan5 = !request.getParameter("statidum_type_5_quanties").equals("") ? Integer.parseInt(request.getParameter("statidum_type_5_quanties")) : 0;
 		String [] cost_hour_start_5 = request.getParameterValues("cost_hour_start_5");
 		String [] cost_hour_end_5 = request.getParameterValues("cost_hour_end_5");
@@ -181,14 +186,15 @@ public class StadiumManagementController {
 		String [] price_7 = request.getParameterValues("price_7");
 		int soBangGiaSan7 = price_7.length;
 		
-		int san11 = Integer.parseInt(request.getParameter("statidum_type_11"));
+		int	san11 = Integer.parseInt(request.getParameter("statidum_type_11"));
 		int soLuongSan11 = !request.getParameter("statidum_type_11_quanties").equals("") ? Integer.parseInt(request.getParameter("statidum_type_11_quanties")) : 0;
 		String [] cost_hour_start_11 = request.getParameterValues("cost_hour_start_11");
 		String [] cost_hour_end_11 = request.getParameterValues("cost_hour_end_11");
 		String [] fromDaytoDay_11 = request.getParameterValues("fromDaytoDay_11");
 		String [] price_11 = request.getParameterValues("price_11");
-		int soBangGiaSan11 = price_11.length;
+		int soBangGiaSan11 = price_11.length ;
 		
+		/*
 		System.out.println("So Luong Gia san 5: " + cost_hour_start_5.length);
 		System.out.println("So Luong Gia san 7: " + cost_hour_start_7.length);
 		System.out.println("So Luong Gia san 11: " + cost_hour_start_11.length);
@@ -196,6 +202,7 @@ public class StadiumManagementController {
 		System.out.println("San " + san5 + " SoLuong: " + soLuongSan5);
 		System.out.println("San " + san7 + " SoLuong: " + soLuongSan7);
 		System.out.println("San " + san11 + " SoLuong: " + soLuongSan11);
+		*/
 		
 		/**
 		 * insert Pitch => pitch_id => OK
@@ -220,15 +227,15 @@ public class StadiumManagementController {
 		
 		List<PitchDetail> pitchDetails = new ArrayList<>();
 		if (soLuongSan5 > 0 && soBangGiaSan5 > 2) {
-			pitchDetails.add(getPitchDetail(san5, newestPId));
+			pitchDetails.add(getPitchDetail(san5, newestPId, soLuongSan5));
 		}
 		
 		if (soLuongSan7 > 0 && soBangGiaSan7 > 2) {
-			pitchDetails.add(getPitchDetail(san7, newestPId));
+			pitchDetails.add(getPitchDetail(san7, newestPId, soLuongSan7));
 		}
 		
 		if (soLuongSan11 > 0 && soBangGiaSan11 > 2) {
-			pitchDetails.add(getPitchDetail(san11, newestPId));
+			pitchDetails.add(getPitchDetail(san11, newestPId, soLuongSan11));
 		}
 		
 		for (PitchDetail pitchDetail: pitchDetails) {
@@ -276,12 +283,78 @@ public class StadiumManagementController {
 	
 	@PostMapping("update-info")
 	public String updateInfo(@ModelAttribute("pitch") Pitch pitch, @ModelAttribute("address") Address address) {
-		System.err.println("Pitch Id: " + pitch.getId());
+		// System.err.println("Pitch Id: " + pitch.getId());
 		pitch.setAddresses(Sets.newHashSet(address));
 		if (pitchService.updatePitch(pitch) > 0 ) {
 			return "redirect:/stadium/management?msg=updates";
 		}
 		return "redirect:/stadium/management?msg=updatef";
+	}
+	
+	/** Update thông tin người thuê sân */
+	@PostMapping("saveBooking")
+	@ResponseBody
+	public String saveBooking(@RequestParam int id, @RequestParam String phoneNumber, @RequestParam String customerName, @RequestParam String note) {
+		System.out.println("===========================================");
+		StadiumDetailStatus detailStatus = new StadiumDetailStatus();
+		detailStatus.setId(id); detailStatus.setCustomerName(customerName); detailStatus.setPhoneNumber(phoneNumber); detailStatus.setNote(note);
+		
+		if (stadiumDetailStatusService.saveBooking(detailStatus) > 0) {
+			return "success";
+		}
+		return "";
+	}
+	
+	/** Admin - đặt sân */
+	@PostMapping("saveBookingNew")
+	@ResponseBody
+	public String saveBookingNew(@ModelAttribute StadiumDetailStatus stadiumDS, @RequestParam int pitchId, @RequestParam int pitchTypeId, HttpSession httpSession) {
+		User user = (User)httpSession.getAttribute("sessionUserInfo");
+		
+		if (user == null) {
+			return "redirect:/";
+		}
+		
+		stadiumDS.setUser(user);
+		stadiumDS.setCreatedAt(DataStaticModel.getCurrentTimetoSecond());
+		stadiumDS.setStatus(1);
+		stadiumDS.setMatchDateTime(calMatchDateTime(stadiumDS.getMatchDay(), stadiumDS.getMatchTime()));
+		
+		
+		PitchDetail pitchDetail = pitchDetailService.getPitchByPTypeAndPId(pitchTypeId, pitchId);
+		
+		int wdayf = getMatchDayInteger(stadiumDS.getMatchDay());
+		int hourf = stadiumDS.getMatchTime();
+		
+		// matchTime [hourStart:hourEnd] - matchDay [wdayStart: wdayEnd]
+		List<Cost> costs = costService.getCost(pitchDetail.getId(), hourf, wdayf);
+		if (costs.size() > 0) {
+			stadiumDS.setCost(costs.get(0));
+		} else {
+			// Thực hiện thất bại => Ko tìm thấy cost => Do nhập liệu k hợp lệ
+			return "fail";
+		}
+		/*
+		System.out.println(stadiumDS.toString() + "\npitch_detail_id" +
+				pitchDetail.getId() + "\nNgày đá: " + 
+				wdayf + "\nGiờ đá: " + 
+				hourf + "\nCost=> " + 
+				costs.size() + ":" + costs.get(0).getId());
+		*/
+		
+		if (stadiumDetailStatusService.saveStadiumDetailStatus(stadiumDS) > 0) {
+			return "success";
+		}
+		return "fail";
+	}
+	
+	private int getMatchDayInteger(String matchDay) {
+		String [] arrs = matchDay.split("/");
+		return TagLibFunctions.getDayOfWeekInteger(parseInt(arrs[2]), parseInt(arrs[1]), parseInt(arrs[0]));
+	}
+	
+	private String calMatchDateTime(String matchDay, int matchTime) {
+		return DataStaticModel.HOUR_LESS_THAN_10.get(matchTime) + " - " + DataStaticModel.HOUR_LESS_THAN_10.get(matchTime+1) + " ngày " + matchDay;
 	}
 	
 	@GetMapping("del/{id}")
@@ -317,7 +390,6 @@ public class StadiumManagementController {
 		Map<Integer, Integer> loaiSanVsSoLuongMap = new HashMap<>();
 		for (BookingManagerDto dto: bookingManagerDtos) {
 			loaiSanVsSoLuongMap.put(dto.getPitchType(), dto.getQuantity());
-			System.err.println(dto.toString());
 		}
 		
 		/*
@@ -330,17 +402,24 @@ public class StadiumManagementController {
 		*/
 		
 		// Get pid, hourStart, hourEnd
-		modelMap.addAttribute("bookingManagerDto", bookingManagerDtos.get(0));
+		if (bookingManagerDtos.size() > 0) {
+			modelMap.addAttribute("bookingManagerDto", bookingManagerDtos.get(0));
+		}
+		
+		modelMap.addAttribute("stadiumId", stadiumId);
+		
 		modelMap.addAttribute("loaiSanVsSoLuongMap", loaiSanVsSoLuongMap);
 		
 		
 		// GET CÁC stadium_detail_status với status = 1 và bởi pitchId
-		List<StadiumDetailStatus> stadiumDetailStatusList = stadiumDetailStatusService.getListStadiumDetailStatusByMatchDayAndPitchId("14/06/2018",stadiumId);
+		List<StadiumDetailStatus> stadiumDetailStatusList = stadiumDetailStatusService.getListStadiumDetailStatusByMatchDayAndPitchId("04/06/2018",stadiumId);
+		
 		modelMap.addAttribute("stadiumDetailStatusList", stadiumDetailStatusList);
 		// Có hết trong này nè : Hihi
 		
 		// System.out.println("SZZZ: " + stadiumDetailStatusList.get(0).toString());
 		
+		/*
 		for (int hourStep = bookingManagerDtos.get(0).getHourStart() ; hourStep < bookingManagerDtos.get(0).getHourEnd() ; hourStep++ ) {
 			for (Entry<Integer, Integer> map: loaiSanVsSoLuongMap.entrySet()) {
 				for (int i = 1 ; i <= map.getValue() ; i++) {
@@ -354,21 +433,50 @@ public class StadiumManagementController {
 				}
 			}
 		}
+		*/
+		return "stadium.booking";
+	}
+	
+	// Tìm kiếm theo ngày
+	@GetMapping("bookingManager/{pitchid}/{matchday}")
+	public String chooseTheMatchDay(@PathVariable int pitchid, @PathVariable String matchday, HttpSession httpSession, ModelMap modelMap) {
+		System.out.println("VAO DAY: " + pitchid + ", " + matchday);
+		/** Trang đặt sân => tab thứ 3*/
+		if (httpSession.getAttribute("sessionUserInfo") == null ){
+			return "redirect:/";
+		}
+		List<BookingManagerDto> bookingManagerDtos = stadiumDetailStatusService.getStadiumBookingManagers(pitchid);
+		Map<Integer, Integer> loaiSanVsSoLuongMap = new HashMap<>();
+		for (BookingManagerDto dto: bookingManagerDtos) {
+			loaiSanVsSoLuongMap.put(dto.getPitchType(), dto.getQuantity());
+		}
 		
+		// Get pid, hourStart, hourEnd
+		modelMap.addAttribute("bookingManagerDto", bookingManagerDtos.get(0));
+		modelMap.addAttribute("loaiSanVsSoLuongMap", loaiSanVsSoLuongMap);
+		
+		
+		
+		matchday = matchday.replaceAll("_", "/");
+		modelMap.addAttribute("matchDayUrl", matchday);
+		
+		// Thứ Hai ngày 4/06/2017
+		System.out.println("match day: " + matchday);
+		String matchDayThuNgay = getMatchDayThuNgay(matchday) + " ngày " + matchday;
+		modelMap.addAttribute("matchDayThuNgay", matchDayThuNgay);
+		 
+		// GET CÁC stadium_detail_status với status = 1 và bởi pitchId
+		List<StadiumDetailStatus> stadiumDetailStatusList = stadiumDetailStatusService.getListStadiumDetailStatusByMatchDayAndPitchId(matchday,pitchid);
+		modelMap.addAttribute("stadiumDetailStatusList", stadiumDetailStatusList);
 		
 		return "stadium.booking";
 	}
 	
-	public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStatusList, int hourStep, int pitchType, int position ) {
-		for (StadiumDetailStatus detailStatus: stadiumDetailStatusList) {
-			if (hourStep == detailStatus.getMatchTime() 
-					&& pitchType == detailStatus.getCost().getPitchDetail().getPitchType().getId()
-					&& position == detailStatus.getPosition()) {
-				return detailStatus;
-			}
-		}
-		return null;
+	private String getMatchDayThuNgay(String matchDay) {
+		String [] arrs = matchDay.split("/");
+		return TagLibFunctions.getDayOfWeek(parseInt(arrs[2]), parseInt(arrs[1]), parseInt(arrs[0]));
 	}
+	
 	
 	@GetMapping("booking")
 	public String bookingRequest(HttpSession httpSession, ModelMap modelMap) {
@@ -389,6 +497,15 @@ public class StadiumManagementController {
 		return "stadium.booking.request";
 	}
 	
+	@GetMapping("booking/approve/{id}")
+	@ResponseBody
+	public String approve(@PathVariable int id) {
+		if (stadiumDetailStatusService.approveBoookingRequest(id) > 0){
+			return "success";
+		}
+		return "";
+	}
+	
 	@GetMapping("booking/reject/{id}")
 	@ResponseBody
 	public String reject(@PathVariable int id) {
@@ -396,6 +513,18 @@ public class StadiumManagementController {
 			return "success";
 		}
 		return "";
+	}
+	
+	/** Nếu giờ này, loại sân này, sân thứ pos này tồn tại trong table stadiumDetailStatusList => Bận => Đã được đặt*/
+	public StadiumDetailStatus isBooking(List<StadiumDetailStatus> stadiumDetailStatusList, int hourStep, int pitchType, int position ) {
+		for (StadiumDetailStatus detailStatus: stadiumDetailStatusList) {
+			if (hourStep == detailStatus.getMatchTime() 
+					&& pitchType == detailStatus.getCost().getPitchDetail().getPitchType().getId()
+					&& position == detailStatus.getPosition()) {
+				return detailStatus;
+			}
+		}
+		return null;
 	}
 	
 	public void insertCostControl(int pdtailId, int soBangGiaItem, String[] cost_hour_start_item, String[] cost_hour_end_item, String[] fromDaytoDay_item, String[] price_item) {
@@ -435,19 +564,18 @@ public class StadiumManagementController {
 		pitch.setId(pid);
 		address.setPitch(pitch);
 		
-		System.out.println("+++++++");
 		System.out.println(address.toString());
 		
 	}
 	
-	public PitchDetail getPitchDetail(int pitchTypeId, int pitchId) {
+	public PitchDetail getPitchDetail(int pitchTypeId, int pitchId, int quantity) {
 		Pitch pitch = new Pitch();
 		pitch.setId(pitchId);
 		
 		PitchType type = new PitchType();
 		type.setId(pitchTypeId);
 		
-		return new PitchDetail(0, type, pitch);
+		return new PitchDetail(0, type, pitch, quantity);
 	}
 	
 	public int parseInt(String input) {

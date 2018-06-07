@@ -97,8 +97,9 @@ public class NotificationController {
 	@GetMapping("seen-notifications")
 	@ResponseBody
 	public String seen(@SessionAttribute("sessionUserInfo") User sessionUserInfo) {
-		System.err.println("====================== Noti seen hahaha ======================");
+		System.err.println("===================== SEEN =============== ");
 		notificationService.updateNotificationStatusToBeSeenByEventUserId(sessionUserInfo.getId());
+		stadiumDetailStatusService.updateNotificationsToBeSeen(sessionUserInfo.getId());
 		return "seen";
 	}
 }

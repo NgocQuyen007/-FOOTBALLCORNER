@@ -218,7 +218,8 @@
             	<label class="control-label col-sm-3">Thông tin <span class="required">*</span></label>
                 <div class="col-sm-9">
                 	<div style="margin-bottom:5px;">
-                    	<input type="text" class="form-control input-sm width-100p ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" readonly placeholder="Họ tên - SĐT" />
+                    	<input type="text" class="form-control input-sm width-100p ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" 
+                    	readonly placeholder="${sessionUserInfo.getFullname()} - ${sessionUserInfo.getPhoneNumber()}" />
                     </div>
                 </div>
             </div>

@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import controller.PitchBookingController;
 import dto.BookingManagerDto;
 import entities.Cost;
 import entities.Pitch;
@@ -39,7 +38,8 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 				+ "FROM stadium_detail_status "
 				+ "WHERE cost_id = ? "
 				+ "AND matchday  = ? "
-				+ "AND matchtime = ? ";
+				+ "AND matchtime = ? "
+				+ "AND status IN (0,1)";
 		try {
 			PreparedStatement pst = conn.prepareStatement(queryString);
 			pst.setInt(1, stadiumDetailStatus.getCost().getId());
@@ -61,8 +61,8 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 		final Connection conn = getConnection();
 		String queryString = 
 				  " INSERT INTO stadium_detail_status(cost_id, matchday, matchtime, user_id, status,"
-				+ " created_at, updated_at, phone_number, customer_name, note, matchdatetime) "
-				+ " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+				+ " created_at, updated_at, phone_number, customer_name, note, matchdatetime, position, is_read) "
+				+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,0)";
 		try {
 			PreparedStatement pst = conn.prepareStatement(queryString);
 			pst.setInt(1, stadiumDetailStatus.getCost().getId());
@@ -76,6 +76,7 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 			pst.setString(9, stadiumDetailStatus.getCustomerName());
 			pst.setString(10, stadiumDetailStatus.getNote());
 			pst.setString(11, stadiumDetailStatus.getMatchDateTime());
+			pst.setInt(12, stadiumDetailStatus.getPosition());
 			return pst.executeUpdate();
 			
 		} catch (final SQLException e) {
@@ -83,10 +84,11 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 		}
 	}
 	
+	// Booking Request
 	public List<StadiumDetailStatus> getListStadiumDetailStatusByUserIdAndStatus(int userId) {
 		final Connection conn = getConnection();
 		List<StadiumDetailStatus> results = new ArrayList<>();
-		String queryString = "SELECT status.*, detail.pitch_type_id LoaiSan, p.name TenSan \n" 
+		String queryString = "SELECT status.*, detail.pitch_type_id LoaiSan, p.name TenSan  \n" 
 				+"FROM stadium_detail_status status\n"
 				+"JOIN costs cost ON cost.id = status.cost_id\n"
 				+"JOIN pitches_detail detail ON detail.id = cost.pdtail_id\n"
@@ -98,17 +100,18 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 				pst.setInt(1, userId);
 				final ResultSet rs = pst.executeQuery();
 				while (rs.next()) {
-					PitchType pitchType= new PitchType(); pitchType.setId(rs.getInt(13));
-					Pitch pitch = new Pitch(); pitch.setName(rs.getString(14));
+					PitchType pitchType= new PitchType(); pitchType.setId(rs.getInt("LoaiSan"));
+					Pitch pitch = new Pitch(); pitch.setName(rs.getString("TenSan"));
 					PitchDetail pitchDetail = new PitchDetail(); 
 					pitchDetail.setPitchType(pitchType);
 					pitchDetail.setPitch(pitch);
 					
-					Cost cost = new Cost(); cost.setId(rs.getInt(2)); cost.setPitchDetail(pitchDetail);
+					Cost cost = new Cost(); cost.setId(rs.getInt("cost_id")); cost.setPitchDetail(pitchDetail);
 					
-					User user = new User(); user.setId(rs.getInt(6)); 
-					StadiumDetailStatus itemStatus = new StadiumDetailStatus(rs.getInt(1), cost, rs.getString(3), rs.getInt(4), user, rs.getInt(7), rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12));
-					itemStatus.setMatchDateTime(rs.getString(5));
+					User user = new User(); user.setId(rs.getInt("user_id")); 
+					StadiumDetailStatus itemStatus = new StadiumDetailStatus(rs.getInt("id"), cost, rs.getString("matchday"), rs.getInt("matchtime"), user, rs.getInt("status"), rs.getString("created_at"), rs.getString("customer_name"), rs.getString("phone_number"), rs.getString("note"));
+					itemStatus.setMatchDateTime(rs.getString("matchdatetime"));
+					itemStatus.setPosition(rs.getInt("position"));
 					results.add(itemStatus);
 				}
 				return results;
@@ -118,6 +121,23 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 		}
 	}
 	
+	@Override
+	public int approveBoookingRequest(int id) {
+		final Connection conn = getConnection();
+		String queryString = "UPDATE stadium_detail_status "
+				+ "SET status = 1 "
+				+ "WHERE id = ?";
+		try {
+			try(PreparedStatement pst = conn.prepareStatement(queryString)) {
+				pst.setInt(1, id);
+				return pst.executeUpdate();
+			}
+		} catch (final SQLException e) {
+			throw new HibernateException(e);
+		}
+	}
+	
+	@Override
 	public int rejectBoookingRequest(int id) {
 		final Connection conn = getConnection();
 		String queryString = "UPDATE stadium_detail_status "
@@ -134,7 +154,7 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 	}
 	
 	@Override
-	public List<StadiumDetailStatus> getNotifications(int id) {
+	public List<StadiumDetailStatus> getNotifications(int userId) {
 		final Connection conn = getConnection();
 		List<StadiumDetailStatus> results = new ArrayList<>();
 		String queryString = "SELECT status.*, detail.pitch_type_id LoaiSan, p.name TenSan \n" 
@@ -143,23 +163,25 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 				+"JOIN pitches_detail detail ON detail.id = cost.pdtail_id\n"
 				+"JOIN pitches p ON p.id = detail.pitch_id\n"
 				+"JOIN users u ON u.id = p.owner_id\n"
-				+ "WHERE status.user_id = ? AND status.status IN (1,2)";
+				+ "WHERE status.user_id = ? AND status.status IN (1,2) AND is_read = 0 \n"
+				+ "ORDER BY status.created_at DESC";
 		try {
 			try(PreparedStatement pst = conn.prepareStatement(queryString)) {
-				pst.setInt(1, id);
+				pst.setInt(1, userId);
 				final ResultSet rs = pst.executeQuery();
 				while (rs.next()) {
-					PitchType pitchType= new PitchType(); pitchType.setId(rs.getInt(13));
-					Pitch pitch = new Pitch(); pitch.setName(rs.getString(14));
+					PitchType pitchType= new PitchType(); pitchType.setId(rs.getInt("LoaiSan"));
+					Pitch pitch = new Pitch(); pitch.setName(rs.getString("TenSan"));
 					PitchDetail pitchDetail = new PitchDetail(); 
 					pitchDetail.setPitchType(pitchType);
 					pitchDetail.setPitch(pitch);
 					
-					Cost cost = new Cost(); cost.setId(rs.getInt(2)); cost.setPitchDetail(pitchDetail);
+					Cost cost = new Cost(); cost.setId(rs.getInt("cost_id")); cost.setPitchDetail(pitchDetail);
 					
-					User user = new User(); user.setId(rs.getInt(6)); 
-					StadiumDetailStatus itemStatus = new StadiumDetailStatus(rs.getInt(1), cost, rs.getString(3), rs.getInt(4), user, rs.getInt(7), rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12));
-					itemStatus.setMatchDateTime(rs.getString(5));
+					User user = new User(); user.setId(rs.getInt("user_id")); 
+					StadiumDetailStatus itemStatus = new StadiumDetailStatus(rs.getInt("id"), cost, rs.getString("matchday"), rs.getInt("matchtime"), user, rs.getInt("status"), rs.getString("created_at"), rs.getString("customer_name"), rs.getString("phone_number"), rs.getString("note"));
+					itemStatus.setMatchDateTime(rs.getString("matchdatetime"));
+					itemStatus.setPosition(rs.getInt("position"));
 					results.add(itemStatus);
 				}
 				return results;
@@ -212,18 +234,18 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 				pst.setString(2, matchDay);
 				final ResultSet rs = pst.executeQuery();
 				while (rs.next()) {
-					PitchType pitchType= new PitchType(); pitchType.setId(rs.getInt(14));
-					Pitch pitch = new Pitch(); pitch.setName(rs.getString(15));
+					PitchType pitchType= new PitchType(); pitchType.setId(rs.getInt("LoaiSan"));
+					Pitch pitch = new Pitch(); pitch.setName(rs.getString("TenSan"));
 					PitchDetail pitchDetail = new PitchDetail(); 
 					pitchDetail.setPitchType(pitchType);
 					pitchDetail.setPitch(pitch);
 					
-					Cost cost = new Cost(); cost.setId(rs.getInt(2)); cost.setPitchDetail(pitchDetail);
+					Cost cost = new Cost(); cost.setId(rs.getInt("cost_id")); cost.setPitchDetail(pitchDetail);
 					
-					User user = new User(); user.setId(rs.getInt(6)); 
-					StadiumDetailStatus itemStatus = new StadiumDetailStatus(rs.getInt(1), cost, rs.getString(3), rs.getInt(4), user, rs.getInt(7), rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12));
-					itemStatus.setMatchDateTime(rs.getString(5));
-					itemStatus.setPosition(rs.getInt(13));
+					User user = new User(); user.setId(rs.getInt("user_id")); 
+					StadiumDetailStatus itemStatus = new StadiumDetailStatus(rs.getInt("id"), cost, rs.getString("matchday"), rs.getInt("matchtime"), user, rs.getInt("status"), rs.getString("created_at"), rs.getString("customer_name"), rs.getString("phone_number"), rs.getString("note"));
+					itemStatus.setMatchDateTime(rs.getString("matchdatetime"));
+					itemStatus.setPosition(rs.getInt("position"));
 					results.add(itemStatus);
 				}
 				return results;
@@ -233,8 +255,70 @@ public class StadiumDetailStatusDao implements IStadiumDetailStatus{
 		}
 	}
 	
+	@Override
+	public int getMaxPositionOfStadiimDetail(StadiumDetailStatus stadiumDetailStatus) {
+		final Connection conn = getConnection();
+		String queryString = "SELECT MAX(position) "
+				+ "FROM stadium_detail_status "
+				+ "WHERE cost_id   = ? "
+				+ "AND matchday  = ? "
+				+ "AND matchtime = ? "
+				+ "AND status IN (0,1)";
+		try {
+			try(PreparedStatement pst = conn.prepareStatement(queryString)) {
+				pst.setInt(1, stadiumDetailStatus.getCost().getId());
+				pst.setString(2, stadiumDetailStatus.getMatchDay());
+				pst.setInt(3, stadiumDetailStatus.getMatchTime());
+				final ResultSet rs = pst.executeQuery();
+				while (rs.next()) {
+					return rs.getInt(1);
+				}
+			}
+		} catch (final SQLException e) {
+			throw new HibernateException(e);
+		}
+		return 0;
+	}
+	
+	@Override
+	public int saveBooking(StadiumDetailStatus status) {
+		final Connection conn = getConnection();
+		String queryString = "UPDATE stadium_detail_status "
+				+ "SET customer_name = ?, phone_number = ?, note = ? "
+				+ "WHERE id = ?";
+		try {
+			try(PreparedStatement pst = conn.prepareStatement(queryString)) {
+				pst.setString(1, status.getCustomerName());
+				pst.setString(2, status.getPhoneNumber());
+				pst.setString(3, status.getNote());
+				pst.setInt(4, status.getId());
+				return pst.executeUpdate();
+			}
+		} catch (final SQLException e) {
+			throw new HibernateException(e);
+		}
+	}
+	
+	@Override
+	public int updateNotificationsToBeSeen(int id) {
+		final Connection conn = getConnection();
+		String queryString = "UPDATE stadium_detail_status "
+				+ "SET is_read = 1 "
+				+ "WHERE user_id = ?";
+		try {
+			try(PreparedStatement pst = conn.prepareStatement(queryString)) {
+				pst.setInt(1, id);
+				return pst.executeUpdate();
+			}
+		} catch (final SQLException e) {
+			throw new HibernateException(e);
+		}
+	}
+	
 	private Connection getConnection() {
 		return ((SessionImpl) sessionFactory.getCurrentSession()).connection();
 	}
+
+	
 	
 }

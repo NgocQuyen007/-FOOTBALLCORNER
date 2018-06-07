@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -95,11 +96,25 @@ public class CostDao implements ICost{
 		return 0;
 	}
 	
+	@Override
+	public List<Cost> getCost(int pdtailId, int hourf, int wdayf) {
+		Session session = sessionFactory.getCurrentSession();
+		String queryString = "FROM costs "
+				+ "WHERE pdtail_id = :pdtailId "
+				+ "AND wday_start <= :wdayf AND wday_end >= :wdayf "
+				+ "AND hour_start <= :hourf AND hour_end >= :hourf";
+		Query query = session.createQuery(queryString);
+		query.setParameter("pdtailId", pdtailId);
+		query.setParameter("wdayf", wdayf);
+		query.setParameter("hourf", hourf);
+		@SuppressWarnings("unchecked")
+		List<Cost> costs = query.getResultList();
+		return costs.size() > 0 ? costs : Collections.emptyList() ;
+	}
+	
 	private Connection getConnection() {
 		return ((SessionImpl) sessionFactory.getCurrentSession()).connection();
 	}
-	
-	
 	
 
 }

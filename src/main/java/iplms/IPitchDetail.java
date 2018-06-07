@@ -21,4 +21,6 @@ public interface IPitchDetail {
 	 * insert pitchDetail
 	 */
 	public Map<Integer, Integer> insertPitchDetail(PitchDetail pitchDetail);
+	
+	public PitchDetail getPitchByPTypeAndPId(int pitchTypeId, int pitchId);
 }

@@ -227,9 +227,11 @@
 		<!-- js add pitch type none begin-->
 		<div class="col-md-12">
 			<!-- Sân 5 -->
-			<div class="snp-settings ng-scope" id="stadium-type-item-5" style="display:none">
+			<div id="container-san-5" style="display:none">
+			
+			<div class="snp-settings stadium-type-item-5">
 			    <div class="sn-settings-top row">
-			        <div class="col-md-12 ng-scope" >
+			        <div class="col-md-12 hello-5" >
 			            <div class="sn-settings-bar">
 			                <div class="pull-left sn-settings-name">
 			                    <span style="float: left;margin-top: 3px" class="ng-binding ng-scope">
@@ -258,7 +260,7 @@
 			                                </a>
 			                            </li>
 			                            <li>
-			                                <a onclick="removeStadiumNumberRow(5,this)" class="pointer">
+			                                <a onclick="removeStadiumNumberRow(5)" class="pointer">
 				                                <i class="fa fa-remove" aria-hidden="true"></i> 
 				                                &nbsp;Xóa
 			                                </a>
@@ -336,12 +338,14 @@
 			            </table>
 			    </div>
 			</div>
+			
+			</div>
 			<!-- Sân 5 -->
 			
 			
 			<!-- Sân 7 -->
-			
-			<div class="snp-settings ng-scope" id="stadium-type-item-7" style="display:none">
+			<div id="container-san-7" style="display:none">
+			<div class="snp-settings stadium-type-item-7">
 			    <div class="sn-settings-top row">
 			        <div class="col-md-12 ng-scope" >
 			            <div class="sn-settings-bar">
@@ -372,7 +376,7 @@
 			                                </a>
 			                            </li>
 			                            <li>
-			                                <a onclick="removeStadiumNumberRow(7, this)" class="pointer">
+			                                <a onclick="removeStadiumNumberRow(7)" class="pointer">
 				                                <i class="fa fa-remove" aria-hidden="true"></i> 
 				                                &nbsp;Xóa
 			                                </a>
@@ -450,12 +454,13 @@
 			        </table>
 			    </div>
 			</div>
+			</div>
 			
 			<!-- Sân 7 -->
 			
 			<!-- Sân 11 -->
-			
-			<div class="snp-settings ng-scope" id="stadium-type-item-11" style="display:none">
+			<div id="container-san-11" style="display:none">
+			<div class="snp-settings stadium-type-item-11" >
 			    <div class="sn-settings-top row">
 			        <div class="col-md-12 ng-scope" >
 			            <div class="sn-settings-bar">
@@ -487,7 +492,7 @@
 			                                </a>
 			                            </li>
 			                            <li>
-			                                <a onclick="removeStadiumNumberRow(11, this)" class="pointer">
+			                                <a onclick="removeStadiumNumberRow(11)" class="pointer">
 				                                <i class="fa fa-remove" aria-hidden="true"></i> 
 				                                &nbsp;Xóa
 			                                </a>
@@ -567,6 +572,7 @@
 			        
 			    </div>
 			</div>
+			</div>
 			<!-- Sân 11 -->
 			
 			
@@ -637,19 +643,28 @@
 	}
 	
 	
-	function removeStadiumNumberRow(loaiSan, current) {
+	function removeStadiumNumberRow(loaiSan) {
 		switch(loaiSan) {
 			case 5:
-				//current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
-				//$("#pitchType").append('<option value="5">5 người</option>');
+				$('.stadium-type-item-5').remove();
+				$('#pitchType').append($('<option>', {
+				    value: 5,
+				    text: '5 người'
+				}));
 				break;
 			case 7:
-				//current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
-				//$("#pitchType").append('<option value="7">7 người</option>');
+				$('.stadium-type-item-7').remove();
+				$('#pitchType').append($('<option>', {
+				    value: 7,
+				    text: '7 người'
+				}));
 				break;
 			case 11:
-				//current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
-				//$("#pitchType").append('<option value="11">11 người</option>');
+				$('.stadium-type-item-11').remove();
+				$('#pitchType').append($('<option>', {
+				    value: 11,
+				    text: '11 người'
+				}));
 				break;
 		}	
 	}
@@ -684,21 +699,21 @@
 					case '5':
 						$("#soLuongSan-5").text(soLuongSan);
 						$("#stadium-type-5-quantities").attr('value', soLuongSan);
-						var soLuongSan5 = $('#stadium-type-item-5').html();
+						var soLuongSan5 = $('#container-san-5').html();
 						$('#stadium-type-list').append(soLuongSan5);
 						$("#pitchType option[value='5']").remove();
 						break;
 					case '7':
 						$("#soLuongSan-7").text(soLuongSan);
 						$("#stadium-type-7-quantities").attr('value', soLuongSan);
-						var soLuongSan7 = $('#stadium-type-item-7').html();
+						var soLuongSan7 = $('#container-san-7').html();
 						$('#stadium-type-list').append(soLuongSan7);
 						$("#pitchType option[value='7']").remove();
 						break;
 					case '11':
 						$("#soLuongSan-11").text(soLuongSan);
 						$("#stadium-type-11-quantities").attr('value', soLuongSan);
-						var soLuongSan11 = $('#stadium-type-item-11').html();
+						var soLuongSan11 = $('#container-san-11').html();
 						$('#stadium-type-list').append(soLuongSan11);
 						$("#pitchType option[value='11']").remove();
 						break;	

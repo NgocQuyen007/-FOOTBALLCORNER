@@ -13,8 +13,11 @@ public interface IStadiumDetailStatus {
 	
 	public List<StadiumDetailStatus> getListStadiumDetailStatusByUserIdAndStatus(int userId);
 	
-	/** Xóa yêu cầu đặt sân <=> update status = 2*/
+	/** Từ chối yêu cầu đặt sân <=> update status = 2*/
 	public int rejectBoookingRequest(int id);
+	
+	/** Chấp nhận yêu cầu đặt sân <=> update status = 1*/
+	public int approveBoookingRequest(int id);
 	
 	/** Thông báo đến khách hàng là chủ sân đã accept hay reject*/
 	public List<StadiumDetailStatus> getNotifications(int id);
@@ -23,4 +26,12 @@ public interface IStadiumDetailStatus {
 	public List<BookingManagerDto> getStadiumBookingManagers(int stadiumId);
 	
 	public List<StadiumDetailStatus> getListStadiumDetailStatusByMatchDayAndPitchId(String matchDay, int stadiumId);
+	
+	/** Xác định vị trí sân của bạn sẽ đá nè */
+	public int getMaxPositionOfStadiimDetail(StadiumDetailStatus stadiumDetailStatus);
+	
+	public int saveBooking(StadiumDetailStatus detailStatus);
+	
+	public int updateNotificationsToBeSeen(int id);
+	
 }

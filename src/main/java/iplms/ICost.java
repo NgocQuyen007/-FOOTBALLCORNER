@@ -24,4 +24,6 @@ public interface ICost {
 	public List<CostQuantityDto> getPitchesQuantityofCosts();
 	
 	public int insertCost(Cost cost);
+	
+	public List<Cost> getCost(int pdtailId, int hourf, int wdayf);
 }

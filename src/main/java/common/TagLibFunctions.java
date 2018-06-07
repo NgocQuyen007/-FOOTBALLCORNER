@@ -85,6 +85,17 @@ public class TagLibFunctions {
 	}
 	
 	/**
+	 * @return Đổi từ ngày tháng năm sau weekday kiểu integer 2-8
+	 */
+	public static int getDayOfWeekInteger(int year, int month, int date) {
+		Calendar c = Calendar.getInstance();
+		c.set(year, (month-1), date);
+		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+		System.out.println(dayOfWeek);
+		return DataStaticModel.WEEKLY_DATE_INTEGER.get(dayOfWeek);
+	}
+	
+	/**
 	 * @return Thời gian trận đấu diễn ra
 	 */
 	public static String getMatchTime(String time) {

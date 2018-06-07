@@ -133,8 +133,21 @@ public class PitchBookingController {
 	@PostMapping("customer-booking")
 	public String customerBookStadium(@ModelAttribute StadiumDetailStatus stadiumDetailStatus,
 			@RequestParam String matchDayAndTime, @RequestParam int userId,
-			@RequestParam int costId, @RequestParam int pitchId) {
+			@RequestParam int costId, @RequestParam int pitchId, @RequestParam int quantityOfPitchDetail) {
 		createStadiumDetailStatus(stadiumDetailStatus, matchDayAndTime, costId, userId);
+		
+		// Xác định position
+		int nextPosition = stadiumDetailStatusService.getMaxPositionOfStadiimDetail(stadiumDetailStatus) + 1;
+		stadiumDetailStatus.setPosition(nextPosition);
+		
+		// Nếu nextPosition > quantityDetailByCostId => Xin lỗi đã có người đặt sân này. Hihi Vui lòng chọn giờ khác nhé.
+		if (nextPosition > quantityOfPitchDetail) {
+			return "redirect:/san-bong/"+pitchId + "?msg=bookSorry";
+		}
+		
+		System.err.println("TEST: " + stadiumDetailStatus.getCost().getId() + ", " + stadiumDetailStatus.getMatchDay() + ", " 
+				+ stadiumDetailStatus.getMatchTime() + " ::: " +nextPosition);
+		
 		if (stadiumDetailStatusService.saveStadiumDetailStatus(stadiumDetailStatus) > 0 ) {
 			return "redirect:/san-bong/"+pitchId + "?msg=bookStas";
 		}

@@ -51,7 +51,8 @@ public class NotificationDao implements INotification {
 				+ ", event.status, event.user_id, event.created_at "
 				+ "FROM notifications noti "
 				+ "JOIN events event ON noti.event_id = event.id "
-				+ "where event.user_id = ? and noti.status = 0";
+				+ "where event.user_id = ? and noti.status = 0 "
+				+ "ORDER BY noti.status DESC";
 		try {
 			PreparedStatement pst = conn.prepareStatement(queryString);
 			pst.setInt(1, userId);
@@ -101,7 +102,6 @@ public class NotificationDao implements INotification {
 
 	@Override
 	public int updateNotificationStatusToBeSeenByEventUserId(int userId) {
-		System.out.println("pêppepepepepepepe");
 		final Connection conn = getConnection();
 		// don't close the Connection ! managed via connection
 		final String preffix = " SET SQL_SAFE_UPDATES = 0 " ;

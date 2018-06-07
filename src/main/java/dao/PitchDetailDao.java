@@ -81,13 +81,14 @@ public class PitchDetailDao implements IPitchDetail{
 		Map<Integer, Integer> map = new LinkedHashMap<>();
 		int id = 0;
 		Connection conn = getConnection();
-		String queryString = " INSERT INTO pitches_detail(pitch_type_id, pitch_id) "
-						   + " VALUES(?,?)";
+		String queryString = " INSERT INTO pitches_detail(pitch_type_id, pitch_id, quantity) "
+						   + " VALUES(?,?,?)";
 		PreparedStatement pst;
 		try {
 			pst = conn.prepareStatement(queryString, PreparedStatement.RETURN_GENERATED_KEYS);
 			pst.setInt(1, pitchDetail.getPitchType().getId());
 			pst.setInt(2, pitchDetail.getPitch().getId());
+			pst.setInt(3, pitchDetail.getQuantity());
 			pst.executeUpdate();
 			ResultSet rs = pst.getGeneratedKeys();
 			while(rs.next()) {
@@ -100,10 +101,22 @@ public class PitchDetailDao implements IPitchDetail{
 		return map;
 	}
 	
+	@Override
+	public PitchDetail getPitchByPTypeAndPId(int pitchTypeId, int pitchId) {
+		Session session = sessionFactory.getCurrentSession();
+		String sql = " FROM pitches_detail WHERE pitch_type_id = :pitchTypeId AND pitch_id = :pitchId";
+		Query query = session.createQuery(sql);
+		query.setParameter("pitchTypeId", pitchTypeId);
+		query.setParameter("pitchId", pitchId);
+		PitchDetail pitchDetail = (PitchDetail) query.getSingleResult();
+		return pitchDetail;
+	} 
 		
 	private Connection getConnection() {
 		return ((SessionImpl) sessionFactory.getCurrentSession()).connection();
-	} 
+	}
+
+	
 	
 	
 	

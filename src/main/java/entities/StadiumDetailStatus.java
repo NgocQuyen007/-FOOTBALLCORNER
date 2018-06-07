@@ -76,9 +76,10 @@ public class StadiumDetailStatus implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "StadiumDetailStatus [id=" + id + ", cost=" + cost.getId() + ", matchDay=" + matchDay + ", matchTime="
-				+ matchTime + ", user=" + user.getId() + ", status=" + status + ", createdAt=" + createdAt + ", customerName="
-				+ customerName + ", phoneNumber=" + phoneNumber + ", note=" + note + ", positon=" + position + "]";
+		return "StadiumDetailStatus [id=" + id + ", cost=" + cost + ", matchDay=" + matchDay + ", matchTime="
+				+ matchTime + ", matchDateTime=" + matchDateTime + ", user=" + user + ", status=" + status
+				+ ", createdAt=" + createdAt + ", customerName=" + customerName + ", phoneNumber=" + phoneNumber
+				+ ", note=" + note + ", position=" + position + "]";
 	}
 
 	public String getMatchDateTime() {
